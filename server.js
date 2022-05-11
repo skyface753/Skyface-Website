@@ -21,7 +21,7 @@ connection.once("open", function() {
   console.log("MongoDB database connection established successfully");
 });
 
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
 
 
 const blogModel = require('./models/blog_model.js');

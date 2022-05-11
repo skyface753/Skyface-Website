@@ -15,12 +15,9 @@ let blogSchema = new Schema({
     //     required: true
     // },
     posted_by: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
     },
     categories: [{
         type: Schema.Types.ObjectId,

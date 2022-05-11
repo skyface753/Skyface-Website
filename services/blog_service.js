@@ -3,7 +3,7 @@ const blogCategoryModel = require('../models/blog_category_model.js');
 
 let BlogService = {
     getAllBlogs: async (req, res) => {
-        let blogs = await blogModel.find();
+        let blogs = await blogModel.find().sort({ createdAt: -1 });
         res.json(blogs);
     },
     getSingleBlog: async (req, res) => {
@@ -12,6 +12,10 @@ let BlogService = {
         // console.log(req.body);
         let blog = await blogModel.findOne({url: blogUrl});
         res.json(blog);
+    },
+    getLast5Blogs: async (req, res) => {
+        let blogs = await blogModel.find().sort({ createdAt: -1}).limit(5);
+        res.json(blogs);
     }
 }
 
