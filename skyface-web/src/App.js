@@ -1,22 +1,32 @@
+import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import navbar from "./components/navbar/navbar";
-import Dogs from "./pages/Dogs"
-import Cats from "./pages/Cats"
-import Sheeps from "./pages/Sheeps"
-import Goats from "./pages/Goats"
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages';
+import About from './pages/about';
+import Events from './pages/events';
+import AnnualReport from './pages/annual';
+import Teams from './pages/team';
+import Blogs from './pages/blogs';
+import SignUp from './pages/signup';
+
 function App() {
-  return (
-    <Router>
-      <navbar />
-      <Switch>
-        <Route path='/' exact component={Dogs} />
-        <Route path='/cats' component={Cats} />
-        <Route path='/sheeps' component={Sheeps} />
-        <Route path='/goats' component={Goats} />
-      </Switch>
-    </Router>
-  );
+return (
+	<Router>
+	<Navbar />
+	<Routes>
+		<Route path='/' exact element={<Home />} />
+		<Route path='/about' element={<About />} />
+		<Route path='/events'  element={<Events />} />
+		<Route path='/annual' element={<AnnualReport />} />
+		<Route path='/team' element={<Teams />} />
+		<Route path='/blogs' element={<Blogs />} />
+		<Route path='/sign-up' element={<SignUp />} />
+	</Routes>
+	<Footer />
+	</Router>
+);
 }
 
 export default App;
