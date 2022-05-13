@@ -16,6 +16,11 @@ let BlogService = {
     getLast5Blogs: async (req, res) => {
         let blogs = await blogModel.find().sort({ createdAt: -1}).limit(5);
         res.json(blogs);
+    },
+    getBlogById: async (req, res) => {
+        let blogId = req.params.id;
+        let blog = await blogModel.findById(blogId);
+        res.json(blog);
     }
 }
 

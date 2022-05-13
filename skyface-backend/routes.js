@@ -8,5 +8,6 @@ router.post('/blogs', BlogService.getAllBlogs);
 router.post('/blogs/get', BlogService.getSingleBlog);
 router.post('/blogs/last5', BlogService.getLast5Blogs);
 router.post('/blog-categories', BlogCategoryService.getBlogCategories);
-
+//Get Block by id param
+router.post('/blog/:id', BlogService.getBlogById);
 module.exports = router;

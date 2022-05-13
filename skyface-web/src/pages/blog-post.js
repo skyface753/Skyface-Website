@@ -1,25 +1,24 @@
 import React from 'react';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 
-const baseURL = "http://localhost:5000/blogs";
+const baseURL = "http://localhost:5000/blog/";
 
-function gotoBlock(id) {
-	window.location.href = `/blogs/${id}`;
-}
-
-export default function Blogs() {
+export default function BlogPost() {
+	let { id } = useParams();
+	console.log(id);
 	const [posts, setPost] = React.useState(null);
-
+	
 	React.useEffect(() => {
 		// setTimeout(() => {
-			axios.post(baseURL).then((response) => {
+			axios.post(baseURL + id).then((response) => {
 				setPost(response.data);
+				console.log(response.data);
 			});
 	}, []);
 
 	if (!posts) return <div className='loader' />;
 
-	
 	return (
 		<div
 			style={
@@ -35,8 +34,8 @@ export default function Blogs() {
 				<img src={require('../img/blogs-title.png')}
 					width="100%" alt='About-Title' />
 				<div className='title-container-text'>
-					<h1>Welcome to SkyBlog</h1>
-					<h2>Coding-Blog</h2>
+					<h1>{posts.title}</h1>
+					<h2>{posts.subtitle}</h2>
 				</div>
 			</div>
 			{/* Blog Posts */}
@@ -45,8 +44,7 @@ export default function Blogs() {
 				for(let i = 0; i < posts.length; i++) {
 					blogDivs.push(
 
-				<div key={posts[i]._id} className='blog-preview'
-				onClick={() => gotoBlock(posts[i]._id)}>
+				<div key={posts[i]._id} className='blog-preview'>
 					<div >
 						<h2>{posts[i].title}</h2>
 						<p>{posts[i].subtitle}</p>
