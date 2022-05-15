@@ -3,8 +3,8 @@ import axios from "axios";
 
 const baseURL = "http://localhost:5000/blogs";
 
-function gotoBlock(id) {
-	window.location.href = `/blogs/${id}`;
+function gotoBlock(url) {
+	window.location.href = `/blogs/${url}`;
 }
 
 export default function Blogs() {
@@ -46,7 +46,7 @@ export default function Blogs() {
 					blogDivs.push(
 
 				<div key={posts[i]._id} className='blog-preview'
-				onClick={() => gotoBlock(posts[i]._id)}>
+				onClick={() => gotoBlock(posts[i].url)}>
 					<div >
 						<h2>{posts[i].title}</h2>
 						<p>{posts[i].subtitle}</p>

@@ -4,17 +4,23 @@ import { useParams } from 'react-router-dom';
 
 const baseURL = "http://localhost:5000/blog/";
 
+const copyButtonLabel = "Copy Code";
+
+function copyCode(code){
+	navigator.clipboard.writeText(code);
+}
+
 export default function BlogPost() {
-	let { id } = useParams();
-	console.log(id);
+	let { blogUrl } = useParams();
+	// console.log(id);
 	const [posts, setPost] = React.useState(null);
-	
+
 	React.useEffect(() => {
 		// setTimeout(() => {
-			axios.post(baseURL + id).then((response) => {
-				setPost(response.data);
-				console.log(response.data);
-			});
+		axios.post(baseURL + blogUrl).then((response) => {
+			setPost(response.data);
+			console.log(response.data);
+		});
 	}, []);
 
 	if (!posts) return <div className='loader' />;
@@ -34,30 +40,50 @@ export default function BlogPost() {
 				<img src={require('../img/blogs-title.png')}
 					width="100%" alt='About-Title' />
 				<div className='title-container-text'>
-					<h1>{posts.title}</h1>
-					<h2>{posts.subtitle}</h2>
+					<h1>{posts["blog"].title}</h1>
+					<h2>{posts["blog"].subtitle}</h2>
 				</div>
 			</div>
 			{/* Blog Posts */}
 			{(() => {
-				const blogDivs = [];
-				for(let i = 0; i < posts.length; i++) {
-					blogDivs.push(
-
-				<div key={posts[i]._id} className='blog-preview'>
-					<div >
-						<h2>{posts[i].title}</h2>
-						<p>{posts[i].subtitle}</p>
-					</div>
-					
-
-					<hr className='blog-divider'></hr>
-				</div>
-					);
+				const contentDivs = [];
+				var content = posts["blogContent"];
+				for (let i = 0; i < content.length; i++) {
+					if (content[i].type === "text") {
+						contentDivs.push(
+							<div key={content[i]._id} className='content-div'>
+							<p>{content[i].content}</p>
+							</div>
+						);
+					}
+					else if(content[i].type == "code"){
+						
+						contentDivs.push(
+							// <div key={content[i]._id} >
+								<pre className="pre-code">
+									<code>{content[i].content}</code>
+									<button className="copy-code-button" onClick={() => copyCode(content[i].content)}>{copyButtonLabel}</button>
+								</pre>
+							// </div>
+						);
+						//TODO: CHANGE
+					}else if(content[i].type == "image"){
+						contentDivs.push(
+							<div key={content[i]._id} >
+								<img src={content[i].content} alt="image" />
+							</div>
+						);
+					}else if(content[i].type == "subline"){
+						contentDivs.push(
+							// <div key={content[i]._id} >
+								<h3 className='sublines'>{content[i].content}</h3>
+							// </div>
+						);
+					}
 				}
-				return blogDivs;
+				return contentDivs;
 			})()}
-        </div>
+		</div>
 	);
 
 }

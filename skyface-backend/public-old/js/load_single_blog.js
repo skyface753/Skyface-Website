@@ -5,11 +5,13 @@ var url = protocol + "//" + host
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const blogUrl = urlParams.get('blog');
-
+var content = document.getElementById('Blog-Content-Load');
 if (blogUrl == null) {
     noBlogFoundRedirect();
 }
-
+$.get("/posts-content/url-2.html", function (data) {
+    content.innerHTML = data;
+});
 function noBlogFoundRedirect() {
     console.log("Blog DB not found");
     // setTimeout(() => {
@@ -44,7 +46,7 @@ fetch(url + "/blogs/get", {
         // blogMetaLoad.innerHTML = jsonObj.posted_by;
         // blogMetaLoad.href = '/profile.html?profile=' + jsonObj.posted_by;
         // Load the blog content from folder /blogs/blog-url
-        var content = document.getElementById('Blog-Content-Load');
+       
         var blogSpanLoad = document.getElementById('Blog-Span-Load');
         var created_at = jsonObj.createdAt;
         var created_date = created_at.split('T')[0];
@@ -52,9 +54,7 @@ fetch(url + "/blogs/get", {
         // 08:11:09.442Z to 08:11:09
         created_time = created_time.split('.')[0];
         blogSpanLoad.innerHTML = 'Posted by <a href="/profile.html?profile=' + jsonObj.posted_by + '">' + jsonObj.posted_by + '</a> on ' + created_date + ' at ' + created_time;
-        $.get("/posts-content/" + jsonObj.url + ".html", function (data) {
-            content.innerHTML = data;
-        });
+       
         // setTimeout(() => {
 
 

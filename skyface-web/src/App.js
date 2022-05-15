@@ -17,7 +17,7 @@ return (
 		<Route path='/' exact element={<Home />} />
 		<Route path='/about' element={<About />} />
 		<Route path='/blogs' element={<Blogs />} />
-		<Route path='/blogs/:id' element={<BlogPost />} />
+		<Route path='/blogs/:blogUrl' element={<BlogPost />} />
 		<Route path='/sign-up' element={<SignUp />} />
 	</Routes>
 	<Footer />

@@ -8,10 +8,24 @@ NavBtn,
 NavBtnLink,
 } from './NavbarElements';
 
-const Navbar = () => {
+// import { useScroll } from '../../hooks/useScroll';
+
+export default function Navbar(){
+	// const { y, x, scrollDirection } = useScroll(); 
+	// const styles = {
+	// 	active: {
+	// 	  visibility: "visible",
+	// 	  transition: "all 0.5s"
+	// 	},
+	// 	hidden: {
+	// 	  visibility: "hidden",
+	// 	  transition: "all 0.5s",
+	// 	  transform: "translateY(-100%)"
+	// 	}
+	//   }
 return (
 	<>
-	<Nav>
+	<Nav /*style={scrollDirection === "down" ? styles.active: styles.hidden}*/ >
 		<Bars/>
 		<NavMenu>
 		<NavLink to='/about' activeStyle>
@@ -34,4 +48,3 @@ return (
 );
 };
 
-export default Navbar;
