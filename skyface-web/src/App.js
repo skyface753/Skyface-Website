@@ -8,9 +8,13 @@ import About from './pages/about';
 import Blogs from './pages/blogs';
 import SignUp from './pages/signup';
 import BlogPost from './pages/blog-post';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import getCredentials from './credentials';
 
 function App() {
 return (
+  <GoogleOAuthProvider
+    clientId={getCredentials()}>
 	<Router>
 	<Navbar />
 	<Routes>
@@ -22,6 +26,7 @@ return (
 	</Routes>
 	<Footer />
 	</Router>
+  </GoogleOAuthProvider>
 );
 }
 

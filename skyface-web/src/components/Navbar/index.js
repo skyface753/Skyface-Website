@@ -7,6 +7,7 @@ NavMenu,
 NavBtn,
 NavBtnLink,
 } from './NavbarElements';
+import { GoogleLogin } from '@react-oauth/google';
 
 // import { useScroll } from '../../hooks/useScroll';
 
@@ -34,14 +35,24 @@ return (
 		<NavLink to='/blogs' activeStyle>
 			Blogs
 		</NavLink>
-		<NavLink to='/sign-up' activeStyle>
+		{/* <NavLink to='/sign-up' activeStyle>
 			Sign Up
-		</NavLink>
+		</NavLink> */}
 		{/* Second Nav */}
 		{/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
 		</NavMenu>
-		<NavBtn>
+		{/* <NavBtn>
 		<NavBtnLink to='/signin'>Sign In</NavBtnLink>
+		</NavBtn> */}
+		<NavBtn>
+		<GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>
 		</NavBtn>
 	</Nav>
 	</>
