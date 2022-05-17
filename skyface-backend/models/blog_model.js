@@ -19,10 +19,10 @@ let blogSchema = new Schema({
         ref: 'User',
         required: true
     },
-    categories: [{
+    categories: {
         type: Schema.Types.ObjectId,
         ref: 'BlogCategory'
-    }],
+    },
     url: {
         type: String,
         required: true,

@@ -10,6 +10,7 @@ import SignUp from './pages/signup';
 import BlogPost from './pages/blog-post';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import getCredentials from './credentials';
+import EditBlogPost from './pages/edit-blog';
 
 function App() {
 return (
@@ -17,13 +18,17 @@ return (
     clientId={getCredentials()}>
 	<Router>
 	<Navbar />
+	<div
+		className='main-div'>
 	<Routes>
 		<Route path='/' exact element={<Home />} />
 		<Route path='/about' element={<About />} />
 		<Route path='/blogs' element={<Blogs />} />
 		<Route path='/blogs/:blogUrl' element={<BlogPost />} />
 		<Route path='/sign-up' element={<SignUp />} />
+		<Route path='/edit-blog/:blogUrl' element={<EditBlogPost />} />
 	</Routes>
+	</div>
 	<Footer />
 	</Router>
   </GoogleOAuthProvider>

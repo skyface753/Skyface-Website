@@ -3,13 +3,14 @@ import React from 'react';
 const About = () => {
     return (
         <div
-            style={
-                {
-                    width: '80%',
-                    margin: '0 auto',
-                    textAlign: 'center',
-                }
-            }>
+            // style={
+            //     {
+            //         width: '80%',
+            //         margin: '0 auto',
+            //         textAlign: 'center',
+            //     }
+            // }
+            >
             <div className='title-container'>
                 <img src={require('../img/about-title.png')}
                     width="100%" alt='About-Title' />
@@ -24,7 +25,7 @@ const About = () => {
             <div >
                 <div >
                     <h5>About</h5>
-                    <p>This is a blog for all the coding related stuff.</p>
+                    <p>This is a blog for coding related stuff.</p>
                 </div>
                 <div>Column 1</div>
                 <div>Column 2</div>

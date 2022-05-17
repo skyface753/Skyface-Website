@@ -93,11 +93,16 @@
 .blog-preview{
   margin: 0 auto;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: left;
   cursor: pointer;
+  padding: 3px;
+}
+/* Blog Preview on Hover */
+.blog-preview:hover {
+  background-color: #f3f3f3;
 }
 
 .pre-code{
@@ -139,3 +144,41 @@
   margin-bottom: 3%;
 }
 
+.profile-pic{
+  max-height: 50px;
+  border-radius: 50%;
+}
+
+.content-textarea{
+  width: 100%;
+  resize: none;
+}
+
+.admin-edit-container{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.content-link-div{
+  text-align: left;
+}
+
+.main-div{
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid rgb(224, 224, 224);
+  padding: 5%;
+}
+
+.categories-link{
+  background-color: #f3f3f3;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
