@@ -1,0 +1,17 @@
+{
+  "header": {
+    "title": "Welcome to SkyBlog",
+    "subtitle": "A simple blog built with React and Node.js"
+  },
+  "content": [
+    {
+      "text": "Text 1"
+    },
+    {
+      "text": "Text 2"
+    },
+    {
+      "text": "Text 3"
+    }
+  ]
+}
