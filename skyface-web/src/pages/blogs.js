@@ -1,11 +1,8 @@
 import React from "react";
 import axios from "axios";
+import BlogPreview from "../components/blog-preview";
 
 const baseURL = "http://localhost:5000/blogs";
-
-function gotoBlock(url) {
-  window.location.href = `/blogs/${url}`;
-}
 
 export default function Blogs() {
   const [posts, setPost] = React.useState(null);
@@ -46,22 +43,7 @@ export default function Blogs() {
       {(() => {
         const blogDivs = [];
         for (let i = 0; i < posts.length; i++) {
-          blogDivs.push(
-            <div>
-              <div
-                key={posts[i]._id}
-                className="blog-preview"
-                onClick={() => gotoBlock(posts[i].url)}
-              >
-                <div>
-                  <h2>{posts[i].title}</h2>
-                  <p>{posts[i].subtitle}</p>
-                </div>
-              </div>
-
-              <hr className="blog-divider"></hr>
-            </div>
-          );
+          blogDivs.push(BlogPreview(posts[i]));
         }
         return blogDivs;
       })()}

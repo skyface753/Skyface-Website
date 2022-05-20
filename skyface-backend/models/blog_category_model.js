@@ -18,6 +18,7 @@ let blogCategorySchema = new Schema(
     url: {
       type: String,
       required: true,
+      unique: true,
     },
   },
   {

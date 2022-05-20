@@ -179,6 +179,13 @@
   padding: 5px;
   margin: 5px;
   border-radius: 5px;
-  cursor: pointer;
-  
+  cursor: pointer; 
+}
+
+.category-item{
+  text-align: left;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  /* cursor: pointer;  */
 }

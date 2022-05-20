@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
+import apiService from "../services/api-service";
 
 const baseURL = "http://localhost:5000/blog/";
 
@@ -18,8 +19,9 @@ export default function BlogPost() {
   const [posts, setPost] = React.useState(null);
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL + blogUrl).then((response) => {
+    apiService("blog/" + blogUrl, {}).then((response) => {
+      // setTimeout(() => {
+      // axios.post(baseURL + blogUrl).then((response) => {
       //Order response.data["blogContent"] by position
       var blogContent = response.data["blogContent"];
       console.log(response.data);
@@ -27,6 +29,7 @@ export default function BlogPost() {
         return a.position - b.position;
       });
       setPost(response.data);
+      // });
     });
   }, []);
 
@@ -76,27 +79,20 @@ export default function BlogPost() {
           <h1>{posts["blog"].title}</h1>
           <h2>{posts["blog"].subtitle}</h2>
           <h3>{posts["blog"].updatedAt.substring(0, 10)}</h3>
-          <a
-            className="categories-link"
-            href={"/category/" + posts["blog"].categories.url}
-          >
-            {posts["blog"].categories.name}
-          </a>
+          {(() => {
+            if (posts["blog"].category != null) {
+              return (
+                <a
+                  className="categories-link"
+                  href={"/category/" + posts["blog"].category.url}
+                >
+                  {posts["blog"].category.name}
+                </a>
+              );
+            }
+          })()}
         </div>
       </div>
-      {/* {(() => {
-        var categories = posts["blog"].categories;
-        var categoryList = [];
-        for (var i = 0; i < categories.length; i++) {
-          categoryList.push(
-            <a
-              key={categories[i]._id}
-              href={"/category/" + categories[i].url}
-            >{`${categories[i].name}`}</a>
-          );
-        }
-        return categoryList;
-      })()} */}
 
       {/* Blog Posts */}
       {(() => {

@@ -32,6 +32,7 @@ export default function Navbar() {
 
           <NavLink to="/about">About</NavLink>
           <NavLink to="/blogs">Blogs</NavLink>
+          <NavLink to="/categories">Categories</NavLink>
           {/* Logout Button if isLoggedIn = true */}
 
           {/* <NavLink to='/sign-up' activeStyle>

@@ -3,24 +3,29 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
 import TextareaAutosize from "react-textarea-autosize";
+import ShowCategoriesSelect from "../components/showCategoriesSelect";
 
 const baseURL = "http://localhost:5000/blog/";
+
+function handleCategoryChange(evt) {
+  console.log(evt.target.value);
+}
 
 export default function EditBlogPost() {
   var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
   var jwt = reactLocalStorage.get("jwt", null);
-  console.log("jwt: " + jwt);
-  console.log("loggedInUser: " + loggedInUser);
-  //   if (loggedInUser == null || jwt == null) {
-  //     console.log("User not logged in");
-  //     alert("Please login to edit blog");
-  //     window.location.href = "/";
-  //   }
-  //   if (loggedInUser.user.role != "admin") {
-  //     console.log("User is not an Admin");
-  //     alert("You are not an Admin");
-  //     window.location.href = "/";
-  //   }
+  // console.log("jwt: " + jwt);
+  // console.log("loggedInUser: " + loggedInUser);
+  if (loggedInUser == null || jwt == null) {
+    //     console.log("User not logged in");
+    alert("Please login to edit blog");
+    window.location.href = "/";
+  }
+  if (loggedInUser.user.role != "admin") {
+    //     console.log("User is not an Admin");
+    alert("You are not an Admin");
+    window.location.href = "/";
+  }
   let { blogUrl } = useParams();
   // console.log(id);
   const [posts, setPost] = React.useState(null);
@@ -29,7 +34,7 @@ export default function EditBlogPost() {
     // setTimeout(() => {
     axios.post(baseURL + blogUrl).then((response) => {
       setPost(response.data);
-      // console.log(response.data);
+      console.log(response.data);
     });
   }, []);
 
@@ -253,6 +258,19 @@ export default function EditBlogPost() {
       >
         Add Content
       </button>
+      <ShowCategoriesSelect
+        selectedID={posts["blog"].category._id}
+        onChange={(e) => {
+          console.log("New Selected: " + e.target.value);
+          console.log("OLD");
+          console.log(posts);
+          posts["blog"].category = { _id: e.target.value };
+          setPost({ ...posts, blog: posts["blog"] });
+          console.log("NEW");
+          console.log(posts);
+          // setPost({ ...posts, category: e.target.value });
+        }}
+      />
       <button
         className="save-blog-button"
         onClick={() => {
@@ -270,6 +288,7 @@ export default function EditBlogPost() {
               }
             )
             .then((response) => {
+              console.log(response);
               if (response.data.success) {
                 alert("Blog saved!");
                 window.location.href = "/blogs/" + posts.blog.url;

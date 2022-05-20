@@ -11,6 +11,11 @@ router.post("/blogs/last5", BlogService.getLast5Blogs);
 router.post("/blog-categories", BlogCategoryService.getBlogCategories);
 //Get Block by url param
 router.post("/blog/:url", BlogService.getSingleBlogByUrl);
+router.post(
+  "/blog-categories/:categoryUrl",
+  BlogCategoryService.getSingleCategoryAndAllBlogs
+);
+//Authentication for admin routes
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
   console.log("UserId: " + userId);

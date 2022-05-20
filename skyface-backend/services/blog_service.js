@@ -12,7 +12,7 @@ let BlogService = {
     var blogUrl = req.params.url;
     // console.log(blogUrl);
     // console.log(req.body);
-    let blog = await blogModel.findOne({ url: blogUrl }).populate("categories");
+    let blog = await blogModel.findOne({ url: blogUrl }).populate("category");
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });
@@ -33,6 +33,7 @@ let BlogService = {
       res.json({
         error: "No blog id provided",
       });
+      return;
     }
     let newBlogContent = req.body.blogContent;
     let newBlog = req.body.blog;
@@ -46,6 +47,7 @@ let BlogService = {
         success: false,
         message: "No blog (or blog content) provided",
       });
+      return;
     }
     let blog = await blogModel.findById(blogId);
     if (!blog) {
@@ -53,11 +55,13 @@ let BlogService = {
         success: false,
         message: "No blog found",
       });
+      return;
     }
     // Update Blog
     blog.title = newBlog.title;
     blog.subtitle = newBlog.subtitle;
     blog.url = newBlog.url;
+    blog.category = newBlog.category;
     await blog.save();
 
     //Delete old blog content
