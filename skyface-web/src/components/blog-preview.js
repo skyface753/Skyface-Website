@@ -4,12 +4,8 @@ function gotoBlock(url) {
 
 export default function BlogPreview(currBlogPost) {
   return (
-    <div>
-      <div
-        key={currBlogPost._id}
-        className="blog-preview"
-        onClick={() => gotoBlock(currBlogPost.url)}
-      >
+    <div key={currBlogPost._id}>
+      <div className="blog-preview" onClick={() => gotoBlock(currBlogPost.url)}>
         <div>
           <h2>{currBlogPost.title}</h2>
           <p>{currBlogPost.subtitle}</p>

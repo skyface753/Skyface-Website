@@ -32,7 +32,7 @@ const About = () => {
         var aboutDivs = [];
         console.log(about);
         for (var i = 0; i < about.length; i++) {
-          aboutDivs.push(<p>{about[i].text}</p>);
+          aboutDivs.push(<p key={i}>{about[i].text}</p>);
         }
         return aboutDivs;
       })()}

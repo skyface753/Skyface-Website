@@ -18,7 +18,7 @@ function parentSort(fullList) {
 function getChilds(currItemId, fullList) {
   var returnList = [];
   for (var i = 0; i < fullList.length; i++) {
-    if (fullList[i].parent_category == currItemId) {
+    if (fullList[i].parent_category === currItemId) {
       var childs = getChilds(fullList[i]._id, fullList);
       if (childs) {
         fullList[i].children = childs;
@@ -26,7 +26,7 @@ function getChilds(currItemId, fullList) {
       returnList.push(fullList[i]);
     }
   }
-  if (returnList.length == 0) return null;
+  if (returnList.length === 0) return null;
   return returnList;
 }
 

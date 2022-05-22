@@ -1,60 +1,78 @@
 import React from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
+import NewBlogBlank from "./new-blog.json";
 import TextareaAutosize from "react-textarea-autosize";
-import ShowCategoriesSelect from "../components/showCategoriesSelect";
-
-const baseURL = "http://localhost:5000/blog/";
-
-function handleCategoryChange(evt) {
-  console.log(evt.target.value);
-}
-
-export default function EditBlogPost() {
+import { BACKEND_FILES_URL } from "../../consts";
+import ShowFilesComponent from "../../components/show-files";
+import ShowCategoriesSelect from "../../components/showCategoriesSelect";
+import axios from "axios";
+const baseURL = "http://localhost:5000/admin/blog/";
+export default function CreateBlog() {
   var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
   var jwt = reactLocalStorage.get("jwt", null);
-  // console.log("jwt: " + jwt);
-  // console.log("loggedInUser: " + loggedInUser);
   if (loggedInUser == null || jwt == null) {
     //     console.log("User not logged in");
     alert("Please login to edit blog");
     window.location.href = "/";
   }
-  if (loggedInUser.user.role != "admin") {
+  if (loggedInUser.role != "admin") {
     //     console.log("User is not an Admin");
     alert("You are not an Admin");
     window.location.href = "/";
   }
-  let { blogUrl } = useParams();
-  // console.log(id);
-  const [posts, setPost] = React.useState(null);
 
-  React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL + blogUrl).then((response) => {
-      setPost(response.data);
-      console.log(response.data);
-    });
-  }, []);
+  const [posts, setPost] = React.useState(NewBlogBlank);
+  const [files, setFiles] = React.useState(null);
+  const [filesLoaded, setFilesLoaded] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState(null);
 
-  if (!posts) return <div className="loader" />;
+  const [currentContentIndex, setCurrentContentIndex] = React.useState(0);
 
   return (
-    <div
-    // style={
-    // 	{
-    // 		width: '80%',
-    // 		margin: '0 auto',
-    // 		textAlign: 'center',
-    // 		border: '1px solid #e0e0e0',
-    // 		padding: '5%',
-    // 	}
-    // }
-    >
+    <div>
+      <div id="file-selector-main" className="files-selector-overlay">
+        <div className="files-selector-header">
+          <h1>Select File</h1>
+          <div
+            className="files-selector-close-button"
+            onClick={() => {
+              var fileSelector = document.getElementById("file-selector-main");
+              fileSelector.style.display = "none";
+            }}
+          >
+            Close
+            <i className="fas fa-times"></i>
+          </div>
+        </div>
+        <div className="files-selector-body">
+          {filesLoaded ? (
+            files.length === 0 ? (
+              (console.log("No files uploaded yet"),
+              (<p>No files uploaded yet</p>))
+            ) : (
+              (console.log("files: " + files),
+              files.map((file) => {
+                return ShowFilesComponent(file, () => {
+                  console.log("CurrentContentIndex: " + currentContentIndex);
+                  posts["blogContent"][currentContentIndex].content =
+                    file.generated_name;
+                  setPost(posts);
+                  console.log(posts);
+                  setSelectedFile(file);
+                  var fileSelector =
+                    document.getElementById("file-selector-main");
+                  fileSelector.style.display = "none";
+                });
+              }))
+            )
+          ) : (
+            <div className="loader" />
+          )}
+        </div>
+      </div>
       <div className="title-container">
         <img
-          src={require("../img/blogs-title.png")}
+          src={require("../../img/blogs-title.png")}
           width="100%"
           alt="About-Title"
         />
@@ -120,6 +138,10 @@ export default function EditBlogPost() {
                   content[i].type = e.target.value;
                   setPost({ ...posts, blogContent: content });
                   console.log(posts);
+                  // if (e.target.value == "image") {
+                  //   // currentContentIndex = i;
+
+                  // }
                 }}
               >
                 <option value="text">Text</option>
@@ -179,35 +201,64 @@ export default function EditBlogPost() {
                 {" "}
                 X{" "}
               </button>
-
-              <TextareaAutosize
-                value={content[i].content}
-                className="content-textarea"
-                onChange={(e) => {
-                  content[i].content = e.target.value;
-                  setPost({ ...posts, blogContent: content });
-                  console.log(posts);
-                }}
-                onKeyDown={(e) => {
-                  let caret = e.target.selectionStart;
-
-                  if (e.key === "Tab") {
-                    e.preventDefault();
-
-                    let newText =
-                      e.target.value.substring(0, caret) +
-                      " ".repeat(4) +
-                      e.target.value.substring(caret);
-                    e.target.value = newText;
-                    content[i].content = newText;
+              <div className="content-div-content">
+                <TextareaAutosize
+                  value={content[i].content}
+                  className="content-textarea"
+                  onChange={(e) => {
+                    content[i].content = e.target.value;
                     setPost({ ...posts, blogContent: content });
-                    // Go to position after the tab
-                    e.target.selectionStart = e.target.selectionEnd = caret + 4;
+                    console.log(posts);
+                  }}
+                  onKeyDown={(e) => {
+                    let caret = e.target.selectionStart;
 
-                    // setText({value: newText, caret: caret, target: e.target});
+                    if (e.key === "Tab") {
+                      e.preventDefault();
+
+                      let newText =
+                        e.target.value.substring(0, caret) +
+                        " ".repeat(4) +
+                        e.target.value.substring(caret);
+                      e.target.value = newText;
+                      content[i].content = newText;
+                      setPost({ ...posts, blogContent: content });
+                      // Go to position after the tab
+                      e.target.selectionStart = e.target.selectionEnd =
+                        caret + 4;
+
+                      // setText({value: newText, caret: caret, target: e.target});
+                    }
+                  }}
+                />
+                {(() => {
+                  if (content[i].type == "image") {
+                    return (
+                      <div className="edit-blog-image-container">
+                        <img
+                          src={BACKEND_FILES_URL + content[i].content}
+                          alt="Blog-Image"
+                          className="edit-blog-image"
+                        />
+                        <button
+                          onClick={() => {
+                            setCurrentContentIndex(i);
+                            console.log(
+                              "currentContentIndex onchange: " +
+                                currentContentIndex
+                            );
+                            var fileSelector =
+                              document.getElementById("file-selector-main");
+                            fileSelector.style.display = "block";
+                          }}
+                        >
+                          Select
+                        </button>
+                      </div>
+                    );
                   }
-                }}
-              />
+                })()}
+              </div>
             </div>
           );
           // if (content[i].type === "text") {
@@ -259,7 +310,9 @@ export default function EditBlogPost() {
         Add Content
       </button>
       <ShowCategoriesSelect
-        selectedID={posts["blog"].category._id}
+        selectedID={
+          posts["blog"].category != null ? posts["blog"].category._id : null
+        }
         onChange={(e) => {
           console.log("New Selected: " + e.target.value);
           console.log("OLD");
@@ -276,7 +329,7 @@ export default function EditBlogPost() {
         onClick={() => {
           axios
             .post(
-              baseURL + "edit/" + posts.blog._id,
+              baseURL + "create",
               {
                 blog: posts["blog"],
                 blogContent: posts["blogContent"],

@@ -1,0 +1,20 @@
+{
+  "blog": {
+    "_id": "",
+    "title": "New Blog",
+    "subtitle": "Subtitle",
+    "posted_by": null,
+    "url": "choose-a-url",
+    "category": {
+      "_id": null
+    }
+  },
+  "blogContent": [
+    {
+      "content": "Content",
+      "position": 0,
+      "type": "text"
+    }
+  ],
+  "blogComments": []
+}

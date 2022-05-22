@@ -3,7 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { reactLocalStorage } from "reactjs-localstorage";
 import apiService from "../services/api-service";
-
+import { BACKEND_FILES_URL } from "../consts";
+import ReactTextareaAutosize from "react-textarea-autosize";
 const baseURL = "http://localhost:5000/blog/";
 
 const copyButtonLabel = "Copy Code";
@@ -17,6 +18,7 @@ export default function BlogPost() {
   let { blogUrl } = useParams();
   // console.log(id);
   const [posts, setPost] = React.useState(null);
+  const [comments, setComments] = React.useState(null);
 
   React.useEffect(() => {
     apiService("blog/" + blogUrl, {}).then((response) => {
@@ -29,6 +31,7 @@ export default function BlogPost() {
         return a.position - b.position;
       });
       setPost(response.data);
+      setComments(response.data["blogComments"]);
       // });
     });
   }, []);
@@ -49,13 +52,13 @@ export default function BlogPost() {
     >
       {(() => {
         if (loggedInUser != null) {
-          if (loggedInUser.user.role == "admin") {
+          if (loggedInUser.role == "admin") {
             return (
               <div className="admin-edit-container" key="admin-edit-container">
                 <div
                   className="admin-edit-button"
                   onClick={() => {
-                    window.location.href = "/edit-blog/" + blogUrl;
+                    window.location.href = "/admin/edit-blog/" + blogUrl;
                   }}
                 >
                   <img
@@ -78,20 +81,35 @@ export default function BlogPost() {
         <div className="title-container-text">
           <h1>{posts["blog"].title}</h1>
           <h2>{posts["blog"].subtitle}</h2>
-          <h3>{posts["blog"].updatedAt.substring(0, 10)}</h3>
-          {(() => {
-            if (posts["blog"].category != null) {
-              return (
+        </div>
+      </div>
+
+      <div className="blog-meta">
+        {(() => {
+          if (posts["blog"].category != null) {
+            return (
+              <p>
                 <a
-                  className="categories-link"
                   href={"/category/" + posts["blog"].category.url}
+                  className="blog-meta-item"
                 >
                   {posts["blog"].category.name}
                 </a>
-              );
-            }
-          })()}
-        </div>
+                {" / "}
+              </p>
+            );
+          }
+        })()}
+        <p className="blog-meta-item">
+          {"By "}
+          <a href={"/users/" + posts["blog"].posted_by.username}>
+            {posts["blog"].posted_by.username}
+          </a>
+          {" / "}
+        </p>
+        <p className="blog-meta-item">
+          {posts["blog"].updatedAt.substring(0, 10)}
+        </p>
       </div>
 
       {/* Blog Posts */}
@@ -123,7 +141,11 @@ export default function BlogPost() {
           } else if (content[i].type == "image") {
             contentDivs.push(
               <div key={content[i]._id}>
-                <img src={content[i].content} alt="image" />
+                <img
+                  src={BACKEND_FILES_URL + content[i].content}
+                  alt="blog-image"
+                  className="blog-image"
+                />
               </div>
             );
           } else if (content[i].type == "subline") {
@@ -146,6 +168,72 @@ export default function BlogPost() {
         }
         return contentDivs;
       })()}
+      <hr className="blog-divider"></hr>
+      <div className="comments-container">
+        <h3>Comments</h3>
+        {(() => {
+          if (comments != null) {
+            const commentDivs = [];
+            for (let i = 0; i < comments.length; i++) {
+              commentDivs.push(
+                <div key={comments[i]._id} className="comment-div">
+                  <div className="comment-div-header">
+                    <img
+                      src={
+                        comments[i].by_user.picture ||
+                        require("../img/default-profile-pic.png")
+                      }
+                      alt="comment-user-pic"
+                      className="comment-user-pic"
+                    />
+                    <div className="comment-user-info">
+                      <a href={"/users/" + comments[i].by_user.username}>
+                        {comments[i].by_user.username}
+                      </a>
+                      <div>{comments[i].updatedAt.substring(0, 10)}</div>
+                    </div>
+                  </div>
+                  <div className="comment-div-content">
+                    <p>{comments[i].comment_text}</p>
+                  </div>
+                  <hr className="blog-divider"></hr>
+                </div>
+              );
+            }
+            return commentDivs;
+          }
+        })()}
+        {(() => {
+          if (loggedInUser != null) {
+            return (
+              <div>
+                <ReactTextareaAutosize className="comment-textarea" />
+                <button
+                  className="comment-button"
+                  onClick={() => {
+                    apiService("comment/create/" + posts["blog"]._id, {
+                      // blog_id: posts["blog"]._id,
+                      comment_text:
+                        document.getElementsByClassName("comment-textarea")[0]
+                          .value,
+                    }).then((response) => {
+                      if (response.data.success) {
+                        window.location.reload();
+                      } else {
+                        alert("Something went wrong");
+                      }
+                    });
+                  }}
+                >
+                  Comment
+                </button>
+              </div>
+            );
+          } else {
+            return <h3>You must be logged in to comment</h3>;
+          }
+        })()}
+      </div>
     </div>
   );
 }

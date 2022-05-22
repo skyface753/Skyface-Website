@@ -14,6 +14,7 @@ var cookieParser = require("cookie-parser");
 var mongoose = require("mongoose");
 const config = require("./config.js");
 var cors = require("cors");
+const multer = require("multer");
 const UserService = require("./services/user_service");
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -177,7 +178,7 @@ app.post("/api/v1/auth/google", async (req, res) => {
     });
   }
 });
-
+app.use("/uploaded-files", express.static(__dirname + "/uploaded-files"));
 const routes = require("./routes");
 app.use("/", routes);
 

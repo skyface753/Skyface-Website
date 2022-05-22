@@ -2,6 +2,7 @@ const blogModel = require("../models/blog_model.js");
 const blogContentModel = require("../models/blog_content_model.js");
 const blogCategoryModel = require("../models/blog_category_model.js");
 const UserService = require("../services/user_service.js");
+const CommentModel = require("../models/comment_model");
 
 let BlogService = {
   getAllBlogs: async (req, res) => {
@@ -12,13 +13,21 @@ let BlogService = {
     var blogUrl = req.params.url;
     // console.log(blogUrl);
     // console.log(req.body);
-    let blog = await blogModel.findOne({ url: blogUrl }).populate("category");
+    let blog = await blogModel
+      .findOne({ url: blogUrl })
+      .populate("category")
+      .populate("posted_by", "username _id");
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });
+    let blogComments = await CommentModel.find({ for_blog: blog._id }).populate(
+      "by_user",
+      "username _id picture"
+    );
     res.json({
       blog: blog,
       blogContent: blogContent,
+      blogComments: blogComments,
     });
   },
   getLast5Blogs: async (req, res) => {
@@ -79,6 +88,46 @@ let BlogService = {
     res.send({
       success: true,
       message: "Blog updated",
+    });
+  },
+  createBlog: async (req, res) => {
+    var user = req.user;
+    let newBlog = req.body.blog;
+    let newBlogContent = req.body.blogContent;
+    if (
+      !newBlog ||
+      newBlog.length === 0 ||
+      !newBlogContent ||
+      newBlogContent.length === 0
+    ) {
+      res.json({
+        success: false,
+        message: "No blog (or blog content) provided",
+      });
+      return;
+    }
+    let blog = new blogModel({
+      title: newBlog.title,
+      subtitle: newBlog.subtitle,
+      url: newBlog.url,
+      category: newBlog.category._id == null ? null : newBlog.category._id,
+      posted_by: user._id,
+    });
+    await blog.save();
+
+    //Create new blog content
+    for (let i = 0; i < newBlogContent.length; i++) {
+      let blogContent = new blogContentModel({
+        content: newBlogContent[i].content,
+        for_blog: blog._id,
+        position: newBlogContent[i].position,
+        type: newBlogContent[i].type,
+      });
+      await blogContent.save();
+    }
+    res.send({
+      success: true,
+      message: "Blog created",
     });
   },
 };
