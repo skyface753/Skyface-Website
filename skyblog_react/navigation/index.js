@@ -34,9 +34,7 @@ function RootNavigator() {
       <Stack.Screen
         name="SingleBlog"
         component={SingleBlog}
-        options={{
-          headerShown: true,
-        }}
+        options={({ route }) => ({ headerShown: true, title: route.params.name })}
       />
       <Stack.Screen
         name="NotFound"

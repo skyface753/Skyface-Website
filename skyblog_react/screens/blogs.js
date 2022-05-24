@@ -4,13 +4,14 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { BACKENDURL } from "../constants";
 
 export default function Blogs() {
   const navigation = useNavigation();
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    axios.post("http://192.168.178.130:5000/blogs").then((res) => {
+    axios.post(BACKENDURL + "blogs").then((res) => {
       setBlogs(res.data);
     });
   }, []);

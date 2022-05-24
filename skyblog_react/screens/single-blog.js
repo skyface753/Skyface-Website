@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { BACKENDURL } from "../constants.js";
 import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 export default function SingleBlog({ route, navigation }) {
   const blogFromBlogs = route.params.blog;
@@ -16,6 +17,9 @@ export default function SingleBlog({ route, navigation }) {
       console.log(response.data);
       setBlog(response.data["blog"]);
       setBlogContent(response.data["blogContent"]);
+      navigation.setOptions({
+        title: blog.title
+      })
     });
   }, []);
 
@@ -45,14 +49,25 @@ export default function SingleBlog({ route, navigation }) {
               blogDivs.push(
                 <View key={blogContent[i]._id} style={styles.blogContentView}>
                   <TouchableOpacity
-                    onLongPress={() =>
-                      Clipboard.setString(blogContent[i].content)
+                    onLongPress={() =>{
+
+                      Clipboard.setString(blogContent[i].content);
+                      showMessage({
+                        message: "Text copied",
+                        type: "info",
+                      })
+                    }}
+                    onPress={()=>
+                      showMessage({
+                        message: "Long Click to Copy",
+                        type: "info"
+                      })
                     }
+                    
                   >
                     <Text style={styles.blogContentCode}>
                       {blogContent[i].content}
                     </Text>
-                    <Text>Long Click to Copy</Text>
                   </TouchableOpacity>
                 </View>
               );
@@ -101,6 +116,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "black",
     color: "white",
+    padding: "3%",
     // padding: "2.25rm, 0.25rem 1.5rem 0.75rem",
     borderRadius: 10,
     textAlign: "left",
