@@ -6,9 +6,10 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import LoginScreen from "../screens/login";
+import SingleCategoryScreen from "../screens/SingleCategory";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import SingleBlog from "../screens/single-blog";
+import SingleBlog from "../screens/SingleBlog";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -30,11 +31,19 @@ const Stack = createStackNavigator();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
+      <Stack.Screen name="Root" component={BottomTabNavigator}
+     
+      />
       <Stack.Screen
         name="SingleBlog"
         component={SingleBlog}
         options={({ route }) => ({ headerShown: true, title: route.params.name })}
+      />
+      <Stack.Screen name="SingleCategory" component={SingleCategoryScreen} options={({ route }) => ({ headerShown: true, title: route.params.name })} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={({ route }) => ({ headerShown: true })}
       />
       <Stack.Screen
         name="NotFound"

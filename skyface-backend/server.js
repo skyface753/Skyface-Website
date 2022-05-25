@@ -4,18 +4,29 @@ const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 var express = require("express");
+var cors = require("cors");
 var app = express();
+// app.use(cors());
+// // app.options('*', cors())
 
-var http = require("http").Server(app);
+
 var port = process.env.PORT || 5000;
 var bodyParser = require("body-parser");
 var expressSession = require("express-session");
 var cookieParser = require("cookie-parser");
 var mongoose = require("mongoose");
 const config = require("./config.js");
-var cors = require("cors");
-const multer = require("multer");
+// const multer = require("multer");
 const UserService = require("./services/user_service");
+
+// var allowCrossDomain = function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', "*");
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type');
+//   next();
+// };
+
+// app.use(allowCrossDomain);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -41,27 +52,40 @@ connection.once("open", function () {
 });
 
 //CORS
-app.use(cors());
+app.use(cors(
+  {
+    origin: ["https://skyface753-skyface-website-446q6gjv2qgvr-3000.githubpreview.dev", 
+    "https://skyface753-skyface-website-446q6gjv2qgvr-19006.githubpreview.dev", "http://127.0.0.1:3000", "http://127.0.0.1:19006"],
+    // origin: "http://127.0.0.1",
+    credentials: true
+  }
+));
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//   next();
+//   });
+// app.options("*", cors());
 
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type,Authorization"
-  );
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  // Pass to next layer of middleware
-  next();
-});
+// app.use(function (req, res, next) {
+//   // Website you wish to allow to connect
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   // Request methods you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   // Request headers you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,content-type,Authorization"
+//   );
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+//   // Pass to next layer of middleware
+//   next();
+// });
 const UserModel = require("./models/user_model.js");
 
 app.use(async (req, res, next) => {
@@ -181,7 +205,7 @@ app.post("/api/v1/auth/google", async (req, res) => {
 app.use("/uploaded-files", express.static(__dirname + "/uploaded-files"));
 const routes = require("./routes");
 app.use("/", routes);
-
+var http = require("http").Server(app);
 // Start the server
 http.listen(port, function () {
   console.log("Server started on port " + port);

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { reactLocalStorage } from "reactjs-localstorage";
-const baseURL = "http://localhost:5000/";
+import { BACKENDURL } from "../consts";
 var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
 var jwt = reactLocalStorage.get("jwt", null);
 
 export default async function apiService(path, data) {
   console.log("jwt: " + jwt);
-  return await axios.post(baseURL + path, data, {
+  return await axios.post(BACKENDURL + path, data, {
     headers: {
       Authorization: jwt,
     },

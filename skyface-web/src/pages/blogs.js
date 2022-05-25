@@ -1,15 +1,14 @@
 import React from "react";
 import axios from "axios";
 import BlogPreview from "../components/blog-preview";
-
-const baseURL = "http://localhost:5000/blogs";
+import apiService from "../services/api-service";
+import CheckIfAdmin from "../services/CheckIfAdmin";
 
 export default function Blogs() {
   const [posts, setPost] = React.useState(null);
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL).then((response) => {
+    apiService("blogs").then((response) => {
       setPost(response.data);
     });
   }, []);
@@ -40,10 +39,12 @@ export default function Blogs() {
         </div>
       </div>
       {/* Blog Posts */}
+      
       {(() => {
         const blogDivs = [];
+        var UserIsAdmin = CheckIfAdmin();
         for (let i = 0; i < posts.length; i++) {
-          blogDivs.push(BlogPreview(posts[i]));
+          blogDivs.push(BlogPreview(posts[i], UserIsAdmin));
         }
         return blogDivs;
       })()}

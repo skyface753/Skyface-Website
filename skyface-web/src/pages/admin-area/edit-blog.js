@@ -9,8 +9,6 @@ import apiService from "../../services/api-service";
 import ShowFilesComponent from "../../components/show-files";
 import { BACKEND_FILES_URL } from "../../consts";
 
-const baseURL = "http://localhost:5000/blog/";
-
 function handleCategoryChange(evt) {
   console.log(evt.target.value);
 }
@@ -39,8 +37,7 @@ export default function EditBlogPost() {
   const [currentContentIndex, setCurrentContentIndex] = React.useState(0);
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL + blogUrl).then((response) => {
+    apiService("blog/" + blogUrl).then((response) => {
       setPost(response.data);
       console.log(response.data);
     });
@@ -351,23 +348,14 @@ export default function EditBlogPost() {
       <button
         className="save-blog-button"
         onClick={() => {
-          axios
-            .post(
-              baseURL + "edit/" + posts.blog._id,
-              {
-                blog: posts["blog"],
+          apiService("blog/edit/" + posts.blog._id,{
+            blog: posts["blog"],
                 blogContent: posts["blogContent"],
-              },
-              {
-                headers: {
-                  Authorization: jwt,
-                },
-              }
-            )
+          })
             .then((response) => {
               console.log(response);
               if (response.data.success) {
-                alert("Blog saved!");
+                alert("Blog saved!\n" + response.data.message);
                 window.location.href = "/blogs/" + posts.blog.url;
               }
             });

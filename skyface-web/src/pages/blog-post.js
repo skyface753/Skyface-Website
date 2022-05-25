@@ -5,7 +5,6 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import apiService from "../services/api-service";
 import { BACKEND_FILES_URL } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
-const baseURL = "http://localhost:5000/blog/";
 
 const copyButtonLabel = "Copy Code";
 

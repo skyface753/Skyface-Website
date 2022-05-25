@@ -20,6 +20,7 @@ import ShowFiles from "./pages/admin-area/show-files";
 import NotFound from "./pages/not-found";
 import SignIn from "./pages/sign-in";
 import CreateBlog from "./pages/admin-area/create-blog";
+import CreateCategory from "./pages/admin-area/CreateCategory";
 function App() {
   return (
     <GoogleOAuthProvider clientId={getCredentials()}>
@@ -44,6 +45,7 @@ function App() {
             <Route path="/admin/create-blog" element={<CreateBlog />} />
             <Route path="/admin/file-upload" element={<FileUpload />} />
             <Route path="/admin/show-files" element={<ShowFiles />} />
+            <Route path="/admin/create-category" element={<CreateCategory />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

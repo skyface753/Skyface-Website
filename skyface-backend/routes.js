@@ -86,4 +86,6 @@ const FileService = require("./services/file_service.js");
 router.post("/admin/upload", upload.single("file"), FileService.uploadFile);
 router.post("/admin/files", FileService.getAllFiles);
 router.post("/admin/files/:type", FileService.getAllFilesByType);
+router.post("/admin/blogs/delete/:blogId", BlogService.deleteBlog);
+router.post("/admin/category/create", BlogCategoryService.createBlogCategory);
 module.exports = router;

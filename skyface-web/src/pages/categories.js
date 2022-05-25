@@ -1,4 +1,5 @@
 import React from "react";
+import apiService from "../services/api-service";
 import axios from "axios";
 
 function parentSort(fullList) {
@@ -48,13 +49,12 @@ function childsToHTML(childPrefix, currList) {
 }
 
 const Categories = () => {
-  const baseURL = "http://localhost:5000/";
+  
 
   const [categories, setCategories] = React.useState(null);
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL + "blog-categories").then((response) => {
+    apiService("blog-categories").then((response) => {
       setCategories(parentSort(response.data));
     });
   }, []);

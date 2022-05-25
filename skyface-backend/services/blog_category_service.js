@@ -29,6 +29,33 @@ let BlogCategoryService = {
       blogs: blogs,
     });
   },
+  createBlogCategory: async (req, res) => {
+    let name = req.body.name;
+    let description = req.body.description;
+    let parentCategory = req.body.parentCategory;
+    let url = req.body.url;
+    if (
+      !name || !description || !url) {
+      res.json({
+        error: "No name, description or url provided",
+      });
+      return;
+    }
+    if(!parentCategory) {
+      parentCategory = null;
+    }
+    let blogCategory = new blogCategoryModel({
+      name: name,
+      description: description,
+      parent_category: parentCategory,
+      url: url,
+    });
+    let savedBlogCategory = await blogCategory.save();
+    res.json({
+      success: true,
+      blogCategory: savedBlogCategory,
+    });
+  },
 };
 
 module.exports = BlogCategoryService;

@@ -23,7 +23,7 @@ export default {
           },
         },
       },
-      NotFound: "*",
+      Root: "*",
     },
   },
 };

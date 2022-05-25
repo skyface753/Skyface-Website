@@ -7,6 +7,7 @@ const CommentModel = require("../models/comment_model");
 let BlogService = {
   getAllBlogs: async (req, res) => {
     let blogs = await blogModel.find().sort({ createdAt: -1 });
+    console.log("Returned Blogs")
     res.json(blogs);
   },
   getSingleBlogByUrl: async (req, res) => {
@@ -47,8 +48,6 @@ let BlogService = {
     let newBlogContent = req.body.blogContent;
     let newBlog = req.body.blog;
     if (
-      !newBlogContent ||
-      newBlogContent.length === 0 ||
       !newBlog ||
       newBlog.length === 0
     ) {
@@ -85,10 +84,17 @@ let BlogService = {
       });
       await blogContent.save();
     }
-    res.send({
-      success: true,
-      message: "Blog updated",
-    });
+    if(!newBlogContent || newBlogContent.length === 0) {
+      res.json({
+        success: true,
+        message: "Blog updated without content"
+      });
+    }else{
+      res.send({
+        success: true,
+        message: "Blog updated",
+      });
+      }
   },
   createBlog: async (req, res) => {
     var user = req.user;
@@ -130,6 +136,28 @@ let BlogService = {
       message: "Blog created",
     });
   },
+  deleteBlog: async (req, res) => {
+    let blogId = req.params.blogId;
+    if (!blogId) {
+      res.json({
+        error: "No blog id provided",
+      });
+      return;
+    }
+    let blog = await blogModel.findById(blogId);
+    if (!blog) {
+      res.json({
+        error: "No blog found",
+      });
+      return;
+    }
+    await blog.remove();
+    await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
+    res.json({
+      success: true,
+      message: "Blog deleted",
+    });
+  }
 };
 
 module.exports = BlogService;

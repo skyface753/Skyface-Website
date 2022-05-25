@@ -6,6 +6,7 @@ import { BACKEND_FILES_URL } from "../../consts";
 import ShowFilesComponent from "../../components/show-files";
 import ShowCategoriesSelect from "../../components/showCategoriesSelect";
 import axios from "axios";
+import apiService from "../../services/api-service";
 const baseURL = "http://localhost:5000/admin/blog/";
 export default function CreateBlog() {
   var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
@@ -327,18 +328,11 @@ export default function CreateBlog() {
       <button
         className="save-blog-button"
         onClick={() => {
-          axios
-            .post(
-              baseURL + "create",
+          apiService("admin/blog/create", 
               {
                 blog: posts["blog"],
                 blogContent: posts["blogContent"],
               },
-              {
-                headers: {
-                  Authorization: jwt,
-                },
-              }
             )
             .then((response) => {
               console.log(response);

@@ -126,6 +126,9 @@
 }
 
 .blog-preview{
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
   margin: 0 auto;
   width: 100%;
   /* max-width: 800px; */
@@ -138,6 +141,9 @@
 /* Blog Preview on Hover */
 .blog-preview:hover {
   background-color: #f3f3f3;
+}
+.blog-preview-title{
+  width: 100%;
 }
 
 .blog-image{

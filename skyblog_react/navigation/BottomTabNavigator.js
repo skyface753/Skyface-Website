@@ -3,17 +3,18 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useColorScheme } from "react-native";
-
+import { Button, useColorScheme } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import Blogs from "../screens/blogs";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import Categories from "../screens/categories";
+import SettingsScreen from "../screens/Settings";
 
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-
+  const navigation = useNavigation();
   return (
     <BottomTab.Navigator
       initialRouteName="Blogs"
@@ -24,9 +25,8 @@ export default function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="Blogs"
-        component={TabOneNavigator}
+        component={BlogsNavigator}
         options={{
-          // headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="document-text-outline" color={color} />
           ),
@@ -34,10 +34,19 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Categories"
-        component={TabTwoNavigator}
+        component={CategoriesNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="list-outline" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="settings-outline" color={color} />
           ),
         }}
       />
@@ -53,31 +62,45 @@ function TabBarIcon(props) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator();
+const BlogsStack = createStackNavigator();
 
-function TabOneNavigator() {
+function BlogsNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <BlogsStack.Navigator>
+      <BlogsStack.Screen
         name="BlogsScreen"
         component={Blogs}
         options={{ headerShown: false }}
         // options={{ headerTitle: "Blogs" }}
       />
-    </TabOneStack.Navigator>
+    </BlogsStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator();
+const CategoriesStack = createStackNavigator();
 
-function TabTwoNavigator() {
+function CategoriesNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+    <CategoriesStack.Navigator>
+      <CategoriesStack.Screen
+        name="CategoriesScreen"
+        component={Categories}
         options={{ headerShown: false }}
       />
-    </TabTwoStack.Navigator>
+    </CategoriesStack.Navigator>
+  );
+}
+
+const SettingsStack = createStackNavigator();
+
+function SettingsNavigator() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
+    </SettingsStack.Navigator>
   );
 }

@@ -7,6 +7,8 @@ export default function AdminHome() {
       <a href="/admin/show-files">Show Files</a>
       <br />
       <a href="/admin/create-blog">Create Blog</a>
+      <br />
+      <a href="/admin/create-category">Create Category</a>
     </div>
   );
 }

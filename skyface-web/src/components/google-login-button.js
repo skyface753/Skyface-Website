@@ -1,12 +1,12 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { reactLocalStorage } from "reactjs-localstorage";
-
+import { BACKENDURL } from "../consts";
 export default function GoogleLoginButton() {
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
         console.log(credentialResponse);
-        const res = await fetch("http://localhost:5000/api/v1/auth/google", {
+        const res = await fetch(BACKENDURL + "api/v1/auth/google", {
           method: "POST",
           body: JSON.stringify({
             token: credentialResponse.credential,

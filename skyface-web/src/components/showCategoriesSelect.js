@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import apiService from "../services/api-service";
 
 function parentSort(fullList) {
   var sortedList = [];
@@ -56,14 +57,12 @@ function childsToHTML(childPrefix, currList, selectedValue) {
 
 const ShowCategoriesSelect = (props) => {
   var selectedValue = props.selectedID;
-  const baseURL = "http://localhost:5000/";
 
   const [categories, setCategories] = React.useState(null);
   //   const [selectedCategory, setSelectedCategory] = React.useState(selectedValue);
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    axios.post(baseURL + "blog-categories").then((response) => {
+    apiService("blog-categories").then((response) => {
       setCategories(parentSort(response.data));
     });
   }, []);

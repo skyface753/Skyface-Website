@@ -1,5 +1,4 @@
 import React from "react";
-import { GoogleLogin } from "@react-oauth/google";
 import { reactLocalStorage } from "reactjs-localstorage";
 import GoogleLoginButton from "../components/google-login-button";
 import "../styles/sign-up-in-style.css";
