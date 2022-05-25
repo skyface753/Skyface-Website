@@ -6,9 +6,24 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 var express = require("express");
 var cors = require("cors");
 var app = express();
-// app.use(cors());
-// // app.options('*', cors())
+//CORS
+app.use(cors(
+  {
+    // origin: ["https://skyface753-skyface-website-446q6gjv2qgvr-3000.githubpreview.dev", 
+    // "https://skyface753-skyface-website-446q6gjv2qgvr-19006.githubpreview.dev", "http://127.0.0.1:3000", "http://127.0.0.1:19006"],
+    origin: "*",
+    credentials: true
+  }
+));
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 20
+});
 
+// apply rate limiter to all requests
+app.use(limiter);
 
 var port = process.env.PORT || 5000;
 var bodyParser = require("body-parser");
@@ -51,15 +66,7 @@ connection.once("open", function () {
   // initDB();
 });
 
-//CORS
-app.use(cors(
-  {
-    origin: ["https://skyface753-skyface-website-446q6gjv2qgvr-3000.githubpreview.dev", 
-    "https://skyface753-skyface-website-446q6gjv2qgvr-19006.githubpreview.dev", "http://127.0.0.1:3000", "http://127.0.0.1:19006"],
-    // origin: "http://127.0.0.1",
-    credentials: true
-  }
-));
+
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header("Access-Control-Allow-Headers", "X-Requested-With");
