@@ -7,19 +7,17 @@ var express = require("express");
 var cors = require("cors");
 var app = express();
 //CORS
-app.use(cors(
-  {
-    // origin: ["https://skyface753-skyface-website-446q6gjv2qgvr-3000.githubpreview.dev", 
-    // "https://skyface753-skyface-website-446q6gjv2qgvr-19006.githubpreview.dev", "http://127.0.0.1:3000", "http://127.0.0.1:19006"],
+app.use(
+  cors({
     origin: "*",
-    credentials: true
-  }
-));
+    credentials: true,
+  })
+);
 // set up rate limiter: maximum of five requests per minute
-var RateLimit = require('express-rate-limit');
+var RateLimit = require("express-rate-limit");
 var limiter = RateLimit({
-  windowMs: 1*60*1000, // 1 minute
-  max: 20
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 400000,
 });
 
 // apply rate limiter to all requests
@@ -65,7 +63,6 @@ connection.once("open", function () {
   // const initDB = require('./services/init_db.js');
   // initDB();
 });
-
 
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");

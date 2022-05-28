@@ -7,7 +7,7 @@ const CommentModel = require("../models/comment_model");
 let BlogService = {
   getAllBlogs: async (req, res) => {
     let blogs = await blogModel.find().sort({ createdAt: -1 });
-    console.log("Returned Blogs")
+    console.log("Returned Blogs");
     res.json(blogs);
   },
   getSingleBlogByUrl: async (req, res) => {
@@ -47,10 +47,7 @@ let BlogService = {
     }
     let newBlogContent = req.body.blogContent;
     let newBlog = req.body.blog;
-    if (
-      !newBlog ||
-      newBlog.length === 0
-    ) {
+    if (!newBlog || newBlog.length === 0) {
       res.json({
         success: false,
         message: "No blog (or blog content) provided",
@@ -84,17 +81,17 @@ let BlogService = {
       });
       await blogContent.save();
     }
-    if(!newBlogContent || newBlogContent.length === 0) {
+    if (!newBlogContent || newBlogContent.length === 0) {
       res.json({
         success: true,
-        message: "Blog updated without content"
+        message: "Blog updated without content",
       });
-    }else{
+    } else {
       res.send({
         success: true,
         message: "Blog updated",
       });
-      }
+    }
   },
   createBlog: async (req, res) => {
     var user = req.user;
@@ -157,7 +154,7 @@ let BlogService = {
       success: true,
       message: "Blog deleted",
     });
-  }
+  },
 };
 
 module.exports = BlogService;

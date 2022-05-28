@@ -33,6 +33,7 @@ export default function Navbar() {
           <NavLink to="/about">About</NavLink>
           <NavLink to="/blogs">Blogs</NavLink>
           <NavLink to="/categories">Categories</NavLink>
+          <NavLink to="/series">Series</NavLink>
           {loggedInUser != null ? (
             loggedInUser.role == "admin" ? (
               <NavLink to="/admin">Admin</NavLink>

@@ -21,6 +21,10 @@ import NotFound from "./pages/not-found";
 import SignIn from "./pages/sign-in";
 import CreateBlog from "./pages/admin-area/create-blog";
 import CreateCategory from "./pages/admin-area/CreateCategory";
+import SeriesPage from "./pages/Series";
+import SingleSeries from "./pages/SingleSeries";
+import CreateSeries from "./pages/admin-area/CreateSeries";
+
 function App() {
   return (
     <GoogleOAuthProvider clientId={getCredentials()}>
@@ -37,6 +41,8 @@ function App() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/category/:categoryUrl" element={<SingleCategory />} />
             <Route path="/users/:username" element={<ShowProfile />} />
+            <Route path="/series" element={<SeriesPage />} />
+            <Route path="/series/:seriesUrl" element={<SingleSeries />} />
             <Route
               path="/admin/edit-blog/:blogUrl"
               element={<EditBlogPost />}
@@ -46,6 +52,7 @@ function App() {
             <Route path="/admin/file-upload" element={<FileUpload />} />
             <Route path="/admin/show-files" element={<ShowFiles />} />
             <Route path="/admin/create-category" element={<CreateCategory />} />
+            <Route path="/admin/create-series" element={<CreateSeries />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

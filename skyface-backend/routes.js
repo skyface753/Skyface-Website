@@ -6,6 +6,7 @@ const BlogService = require("./services/blog_service.js");
 const BlogCategoryService = require("./services/blog_category_service.js");
 const UserService = require("./services/user_service.js");
 const UserModel = require("./models/user_model.js");
+const SeriesService = require("./services/series_service.js");
 
 router.post("/blogs", BlogService.getAllBlogs);
 router.post("/blogs/last5", BlogService.getLast5Blogs);
@@ -20,6 +21,9 @@ router.post("/users/profile/:username", UserService.getUserProfile);
 
 router.post("/sign-up", UserService.register);
 router.post("/sign-in", UserService.login);
+
+router.post("/series", SeriesService.getAllSeries);
+router.post("/series/:seriesUrl", SeriesService.getSeriesWithBlogs);
 
 //Authentication for user routes
 router.use(async (req, res, next) => {
@@ -88,4 +92,12 @@ router.post("/admin/files", FileService.getAllFiles);
 router.post("/admin/files/:type", FileService.getAllFilesByType);
 router.post("/admin/blogs/delete/:blogId", BlogService.deleteBlog);
 router.post("/admin/category/create", BlogCategoryService.createBlogCategory);
+router.post(
+  "/admin/category/checkFreeUrl/:categoryUrl",
+  BlogCategoryService.checkIfCategoryUrlIsFree
+);
+router.post(
+  "/admin/series/checkFreeUrl/:seriesUrl",
+  SeriesService.checkIfSeriesUrlIsFree
+);
 module.exports = router;

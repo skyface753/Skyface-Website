@@ -34,14 +34,13 @@ let BlogCategoryService = {
     let description = req.body.description;
     let parentCategory = req.body.parentCategory;
     let url = req.body.url;
-    if (
-      !name || !description || !url) {
+    if (!name || !description || !url) {
       res.json({
         error: "No name, description or url provided",
       });
       return;
     }
-    if(!parentCategory) {
+    if (!parentCategory) {
       parentCategory = null;
     }
     let blogCategory = new blogCategoryModel({
@@ -55,6 +54,19 @@ let BlogCategoryService = {
       success: true,
       blogCategory: savedBlogCategory,
     });
+  },
+  checkIfCategoryUrlIsFree: async (req, res) => {
+    let categoryUrl = req.params.categoryUrl;
+    let category = await blogCategoryModel.findOne({ url: categoryUrl });
+    if (category) {
+      res.json({
+        success: false,
+      });
+    } else {
+      res.json({
+        success: true,
+      });
+    }
   },
 };
 

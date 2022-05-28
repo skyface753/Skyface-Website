@@ -5,6 +5,9 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import apiService from "../services/api-service";
 import { BACKEND_FILES_URL } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
+import { useLocation } from "react-router-dom";
+// import SeriesBlogsComp from "../components/SeriesBlogsComp";
+// import SidebarSeries from "../components/SidebarSeries";
 
 const copyButtonLabel = "Copy Code";
 
@@ -12,14 +15,89 @@ function copyCode(code) {
   navigator.clipboard.writeText(code);
 }
 
+function gotoBlockFromSeries(seriesBlogUrl, fromSeries) {
+  console.log(seriesBlogUrl);
+  window.location.href = seriesBlogUrl + "?series=" + fromSeries;
+  // window.location.href = seriesBlogUrl;
+}
+
+function createSeriesBlogStepBarItem(
+  id,
+  url,
+  active = false,
+  pos,
+  title,
+  fromSeries
+) {
+  return (
+    <li
+      onClick={() => gotoBlockFromSeries(url, fromSeries)}
+      key={id}
+      className={`blogs-series-step-bar-item ${
+        active ? "blogs-series-step-bar-item-active" : ""
+      }`}
+    >
+      {pos + 1}
+      <span className="blogs-series-step-bar-item-tooltip">{title}</span>
+    </li>
+  );
+}
+
+function createSeriesBlogsStepBar(seriesBlogs, currpPostId, fromSeries) {
+  var seriesBlogsElements = [];
+  for (var i = 0; i < seriesBlogs.length; i++) {
+    var currentBlogsUrl = seriesBlogs[i]["blog"].url;
+    if (seriesBlogs[i]["blog"]._id === currpPostId) {
+      seriesBlogsElements.push(
+        createSeriesBlogStepBarItem(
+          seriesBlogs[i]["blog"]._id,
+          currentBlogsUrl,
+          true,
+          i,
+          seriesBlogs[i]["blog"].title,
+          fromSeries
+        )
+      );
+    } else {
+      seriesBlogsElements.push(
+        createSeriesBlogStepBarItem(
+          seriesBlogs[i]["blog"]._id,
+          currentBlogsUrl,
+          false,
+          i,
+          seriesBlogs[i]["blog"].title,
+          fromSeries
+        )
+      );
+    }
+  }
+  return seriesBlogsElements;
+}
+
 export default function BlogPost() {
   var loggedInUser = reactLocalStorage.getObject("loggedInUser");
   let { blogUrl } = useParams();
+  const location = useLocation();
   // console.log(id);
   const [posts, setPost] = React.useState(null);
   const [comments, setComments] = React.useState(null);
+  const [series, setSeries] = React.useState(null);
+  const [seriesBlogs, setSeriesBlogs] = React.useState(null);
 
   React.useEffect(() => {
+    try {
+      const queryParams = new URLSearchParams(location.search);
+      var seriesUrl = queryParams.get("series");
+      if (seriesUrl) {
+        apiService("series/" + seriesUrl).then((response) => {
+          console.log(response.data);
+          setSeries(response.data["series"]);
+          setSeriesBlogs(response.data["seriesBlogs"]);
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
     apiService("blog/" + blogUrl, {}).then((response) => {
       // setTimeout(() => {
       // axios.post(baseURL + blogUrl).then((response) => {
@@ -36,19 +114,55 @@ export default function BlogPost() {
   }, []);
 
   if (!posts) return <div className="loader" />;
-
+  // console.log(seriesUrl);
   return (
-    <div
-    // style={
-    // 	{
-    // 		width: '80%',
-    // 		margin: '0 auto',
-    // 		textAlign: 'center',
-    // 		border: '1px solid #e0e0e0',
-    // 		padding: '5%',
-    // 	}
-    // }
-    >
+    <div>
+      {(() => {
+        console.log("HI");
+        if (series && seriesBlogs) {
+          console.log("series");
+
+          return (
+            <div>
+              <h1>{series.name}</h1>
+              <hr className="blog-divider"></hr>
+              <ul className="blogs-series-step-bar">
+                {createSeriesBlogsStepBar(
+                  seriesBlogs,
+                  posts["blog"]._id,
+                  series.url
+                )}
+              </ul>
+            </div>
+          );
+        }
+      })()}
+
+      {/* {series ? (
+        <div>
+          <h1>{series.name}</h1>
+          <ul className="blogs-series-step-list">
+            {() => {
+              var seriesBlogsElements = [];
+              if (seriesBlogs) {
+                for (var i = 0; i < seriesBlogs.length; i++) {
+                  seriesBlogsElements.push(
+                    <li key={seriesBlogs[i]["blog"]._id}>{i}</li>
+                  );
+                }
+              }
+              return seriesBlogsElements;
+            }}
+          </ul>
+        </div>
+      ) : null} */}
+
+      {/* // <div className="blog-series-sidebar">
+      //       <h1>{series.name}</h1>
+      //       {SeriesBlogsComp(seriesBlogs, series.url)}
+      //   ) : null}
+      // </div> */}
+
       {(() => {
         if (loggedInUser != null) {
           if (loggedInUser.role == "admin") {
@@ -189,7 +303,10 @@ export default function BlogPost() {
                       <a href={"/users/" + comments[i].by_user.username}>
                         {comments[i].by_user.username}
                       </a>
-                      <div>{comments[i].updatedAt.substring(0, 10)}</div>
+                      <div>
+                        {comments[i].updatedAt.substring(0, 10)} {"/"}{" "}
+                        {comments[i].updatedAt.substring(11, 16)}
+                      </div>
                     </div>
                   </div>
                   <div className="comment-div-content">
@@ -209,6 +326,7 @@ export default function BlogPost() {
                 <ReactTextareaAutosize className="comment-textarea" />
                 <button
                   className="comment-button"
+                  placeholder="Comment"
                   onClick={() => {
                     apiService("comment/create/" + posts["blog"]._id, {
                       // blog_id: posts["blog"]._id,
