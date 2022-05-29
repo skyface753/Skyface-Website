@@ -25,7 +25,6 @@ export default function SingleSeries() {
       <div>
         <h1>{series.name}</h1>
         <p>{series.description}</p>
-        <p>{series.url}</p>
         <hr className="blog-divider"></hr>
       </div>
       {SeriesBlogsComp(seriesBlogs, series.url)}

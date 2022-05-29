@@ -1,11 +1,8 @@
 import apiService from "../services/api-service";
 
-function gotoBlock(url, fromSeriesUrl) {
-  if (fromSeriesUrl) {
-    window.location.href = `/blogs/${url}` + "?series=" + fromSeriesUrl;
-  } else {
+function gotoBlock(url) {
+  
     window.location.href = `/blogs/${url}`;
-  }
 }
 
 function deleteBlog(blogTitle, blogId) {
@@ -26,15 +23,14 @@ function deleteBlog(blogTitle, blogId) {
 export default function BlogPreview(
   currBlogPost,
   UserIsAdmin,
-  marginLeft = 0,
-  fromSeriesUrl = false
+  marginLeft = 0
 ) {
   return (
     <div key={currBlogPost._id} style={{ marginLeft: marginLeft }}>
       <div className="blog-preview">
         <div
           className="blog-preview-title"
-          onClick={() => gotoBlock(currBlogPost.url, fromSeriesUrl)}
+          onClick={() => gotoBlock(currBlogPost.url)}
         >
           <h2>{currBlogPost.title}</h2>
           <p>{currBlogPost.subtitle}</p>

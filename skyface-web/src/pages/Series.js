@@ -23,6 +23,8 @@ export default function SeriesPage() {
 
   return (
     <div>
+      <h1>Series</h1>
+      <hr className="blog-divider"></hr>
       {series.map((series) => {
         return (
           <div
@@ -30,9 +32,8 @@ export default function SeriesPage() {
             onClick={() => gotoSeries(series.url)}
             className="series-preview"
           >
-            <h1>{series.name}</h1>
+            <h2>{series.name}</h2>
             <p>{series.description}</p>
-            <p>{series.url}</p>
             <hr className="blog-divider"></hr>
           </div>
         );

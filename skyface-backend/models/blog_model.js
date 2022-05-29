@@ -29,6 +29,14 @@ let blogSchema = new Schema(
       required: true,
       unique: true,
     },
+    series: {
+      type: Schema.Types.ObjectId,
+      ref: "Series",
+    },
+    series_position: {
+      type: Number,
+      required: function () { return this.series; }
+    }
   },
   {
     timestamps: true,

@@ -4,6 +4,7 @@ const blogCategoryModel = require("../models/blog_category_model.js");
 const UserService = require("../services/user_service.js");
 const CommentModel = require("../models/comment_model");
 
+
 let BlogService = {
   getAllBlogs: async (req, res) => {
     let blogs = await blogModel.find().sort({ createdAt: -1 });
@@ -17,7 +18,11 @@ let BlogService = {
     let blog = await blogModel
       .findOne({ url: blogUrl })
       .populate("category")
-      .populate("posted_by", "username _id");
+      .populate("posted_by", "username _id")
+      .populate("series", "name url");
+    var seriesBlogs = await blogModel.find({ series: blog.series }).sort({
+      series_position: 1,
+    });
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });
@@ -29,6 +34,8 @@ let BlogService = {
       blog: blog,
       blogContent: blogContent,
       blogComments: blogComments,
+      series: blog.series,
+      seriesBlogs: seriesBlogs,
     });
   },
   getLast5Blogs: async (req, res) => {

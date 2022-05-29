@@ -1,6 +1,6 @@
-const SeriesBlogsModel = require("../models/series_blogs_model");
+// const SeriesBlogsModel = require("../models/series_blogs_model");
 const SeriesModel = require("../models/series_model");
-
+const BlogModel = require("../models/blog_model");
 let SeriesService = {
   getAllSeries: async (req, res) => {
     let series = await SeriesModel.find({});
@@ -19,11 +19,9 @@ let SeriesService = {
       });
       return;
     }
-    let seriesBlogs = await SeriesBlogsModel.find({
-      series: series._id,
-    })
-      .populate("blog")
-      .sort({ position: 1 });
+    let seriesBlogs = await BlogModel.find({ series: series._id }).sort({
+      series_position: 1,
+    });
     res.json({
       success: true,
       series: series,

@@ -8,10 +8,10 @@ export default function SeriesBlogsComp(seriesBlogs, seriesUrl) {
     <ul className="series-bar">
       {seriesBlogs.length > 0 ? (
         seriesBlogs.map((seriesBlog) => {
-          console.log(seriesBlog["blog"]);
+          console.log(seriesBlog);
           return (
-            <li key={seriesBlog["blog"]._id}>
-              {BlogPreview(seriesBlog["blog"], false, "20px", seriesUrl)}
+            <li key={seriesBlog._id}>
+              {BlogPreview(seriesBlog, false, "20px", seriesUrl)}
             </li>
           );
         })

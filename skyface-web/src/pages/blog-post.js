@@ -15,9 +15,8 @@ function copyCode(code) {
   navigator.clipboard.writeText(code);
 }
 
-function gotoBlockFromSeries(seriesBlogUrl, fromSeries) {
-  console.log(seriesBlogUrl);
-  window.location.href = seriesBlogUrl + "?series=" + fromSeries;
+function gotoBlockFromSeries(seriesBlogUrl) {
+  window.location.href = seriesBlogUrl
   // window.location.href = seriesBlogUrl;
 }
 
@@ -26,12 +25,11 @@ function createSeriesBlogStepBarItem(
   url,
   active = false,
   pos,
-  title,
-  fromSeries
+  title
 ) {
   return (
     <li
-      onClick={() => gotoBlockFromSeries(url, fromSeries)}
+      onClick={() => gotoBlockFromSeries(url)}
       key={id}
       className={`blogs-series-step-bar-item ${
         active ? "blogs-series-step-bar-item-active" : ""
@@ -43,30 +41,28 @@ function createSeriesBlogStepBarItem(
   );
 }
 
-function createSeriesBlogsStepBar(seriesBlogs, currpPostId, fromSeries) {
+function createSeriesBlogsStepBar(seriesBlogs, currpPostId) {
   var seriesBlogsElements = [];
   for (var i = 0; i < seriesBlogs.length; i++) {
-    var currentBlogsUrl = seriesBlogs[i]["blog"].url;
-    if (seriesBlogs[i]["blog"]._id === currpPostId) {
+    var currentBlogsUrl = seriesBlogs[i].url;
+    if (seriesBlogs[i]._id === currpPostId) {
       seriesBlogsElements.push(
         createSeriesBlogStepBarItem(
-          seriesBlogs[i]["blog"]._id,
+          seriesBlogs[i]._id,
           currentBlogsUrl,
           true,
           i,
-          seriesBlogs[i]["blog"].title,
-          fromSeries
+          seriesBlogs[i].title
         )
       );
     } else {
       seriesBlogsElements.push(
         createSeriesBlogStepBarItem(
-          seriesBlogs[i]["blog"]._id,
+          seriesBlogs[i]._id,
           currentBlogsUrl,
           false,
           i,
-          seriesBlogs[i]["blog"].title,
-          fromSeries
+          seriesBlogs[i].title
         )
       );
     }
@@ -85,19 +81,19 @@ export default function BlogPost() {
   const [seriesBlogs, setSeriesBlogs] = React.useState(null);
 
   React.useEffect(() => {
-    try {
-      const queryParams = new URLSearchParams(location.search);
-      var seriesUrl = queryParams.get("series");
-      if (seriesUrl) {
-        apiService("series/" + seriesUrl).then((response) => {
-          console.log(response.data);
-          setSeries(response.data["series"]);
-          setSeriesBlogs(response.data["seriesBlogs"]);
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   const queryParams = new URLSearchParams(location.search);
+    //   var seriesUrl = queryParams.get("series");
+    //   if (seriesUrl) {
+    //     apiService("series/" + seriesUrl).then((response) => {
+    //       console.log(response.data);
+    //       setSeries(response.data["series"]);
+    //       setSeriesBlogs(response.data["seriesBlogs"]);
+    //     });
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
     apiService("blog/" + blogUrl, {}).then((response) => {
       // setTimeout(() => {
       // axios.post(baseURL + blogUrl).then((response) => {
@@ -109,6 +105,10 @@ export default function BlogPost() {
       });
       setPost(response.data);
       setComments(response.data["blogComments"]);
+      if(response.data["series"]){
+        setSeries(response.data["series"]);
+        setSeriesBlogs(response.data["seriesBlogs"]);
+      }
       // });
     });
   }, []);
@@ -117,51 +117,7 @@ export default function BlogPost() {
   // console.log(seriesUrl);
   return (
     <div>
-      {(() => {
-        console.log("HI");
-        if (series && seriesBlogs) {
-          console.log("series");
-
-          return (
-            <div>
-              <h1>{series.name}</h1>
-              <hr className="blog-divider"></hr>
-              <ul className="blogs-series-step-bar">
-                {createSeriesBlogsStepBar(
-                  seriesBlogs,
-                  posts["blog"]._id,
-                  series.url
-                )}
-              </ul>
-            </div>
-          );
-        }
-      })()}
-
-      {/* {series ? (
-        <div>
-          <h1>{series.name}</h1>
-          <ul className="blogs-series-step-list">
-            {() => {
-              var seriesBlogsElements = [];
-              if (seriesBlogs) {
-                for (var i = 0; i < seriesBlogs.length; i++) {
-                  seriesBlogsElements.push(
-                    <li key={seriesBlogs[i]["blog"]._id}>{i}</li>
-                  );
-                }
-              }
-              return seriesBlogsElements;
-            }}
-          </ul>
-        </div>
-      ) : null} */}
-
-      {/* // <div className="blog-series-sidebar">
-      //       <h1>{series.name}</h1>
-      //       {SeriesBlogsComp(seriesBlogs, series.url)}
-      //   ) : null}
-      // </div> */}
+      
 
       {(() => {
         if (loggedInUser != null) {
@@ -280,6 +236,23 @@ export default function BlogPost() {
           }
         }
         return contentDivs;
+      })()}
+      {(() => {
+        if (series && seriesBlogs) {
+          return (
+            <div>
+              <hr className="blog-divider"></hr>
+      <h3>Series</h3>
+              <h4>{series.name}</h4>
+              <ul className="blogs-series-step-bar">
+                {createSeriesBlogsStepBar(
+                  seriesBlogs,
+                  posts["blog"]._id
+                )}
+              </ul>
+            </div>
+          );
+        }
       })()}
       <hr className="blog-divider"></hr>
       <div className="comments-container">
