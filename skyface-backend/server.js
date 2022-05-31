@@ -5,11 +5,13 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 
 var express = require("express");
 var cors = require("cors");
+csrf = require("csurf");
 var app = express();
 //CORS
+// app.use(cors());
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "http://localhost:19006"],
     credentials: true,
   })
 );
@@ -43,15 +45,15 @@ const UserService = require("./services/user_service");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(
-  expressSession({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
+// app.use(
+  //   expressSession({
+    //     secret: "secret",
+    //     resave: false,
+    //     saveUninitialized: false,
+    //   })
+    // );
+    app.use(cookieParser());
+    // app.use(csrf({ cookie: true }));
 var uri = "mongodb://" + config.mongodb.host + ":27017/skyfacedb";
 
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -60,110 +62,22 @@ const connection = mongoose.connection;
 
 connection.once("open", function () {
   console.log("MongoDB database connection established successfully");
-  // const initDB = require('./services/init_db.js');
-  // initDB();
 });
 
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//   next();
-//   });
-// app.options("*", cors());
-
-// app.use(function (req, res, next) {
-//   // Website you wish to allow to connect
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   // Request methods you wish to allow
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-//   // Request headers you wish to allow
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type,Authorization"
-//   );
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-//   // Pass to next layer of middleware
-//   next();
-// });
 const UserModel = require("./models/user_model.js");
 
-app.use(async (req, res, next) => {
-  console.log(req.headers.authorization);
-  const user = await UserModel.findOne({
-    _id: req.session.userId,
-  });
-  console.log(user);
-  if (user) {
-    req.user = user;
-  } else {
-    req.user = null;
-  }
-  next();
-});
-
-// app.use(express.static(__dirname + '/public-old'));
-
-// const blogModel = require('./models/blog_model.js');
-// const blogCategoryModel = require('./models/blog_category_model.js');
-// app.get('/test',async function(req, res) {
-
-//     // Create a new blog category
-//     var blogCategory = new blogCategoryModel({
-//         name: 'name 1',
-//         description: 'description 1'
-//     });
-//     await blogCategory.save();
-
-//     // Create a new blog category
-//     var blogCategory2 = new blogCategoryModel({
-//         name: 'name 2',
-//         description: 'description 2',
-//         parent_category: blogCategory._id
-//     });
-//     await blogCategory2.save();
-//     // Create a new blog
-//     var blog = new blogModel({
-//         title: 'title 1',
-//         subtitle: 'subtitle 1',
-//         content: 'content 1',
-//         posted_by: 'Skyface',
-//         categories: [blogCategory._id, blogCategory2._id],
-//         url: 'url-1'
-//     });
-//     await blog.save();
-//     // Create a new blog
-//     var blog2 = new blogModel({
-//         title: 'title 2',
-//         subtitle: 'subtitle 2',
-//         content: 'content 2',
-//         posted_by: 'Skyface',
-//         categories: [blogCategory2._id],
-//         url: 'url-2'
-//     });
-//     await blog2.save();
-//     // Get all blogs
-//     blogModel.find(function(err, blogs) {
-//         if (err) {console.log(err);}
-//         else {
-//             // Get all blog categories and populate the parent category and shot the name of the parent category
-//             blogCategoryModel.find(function(err, blogCategories) {
-//                 if (err) {console.log(err);}
-//                 else {res.json(
-//                     {
-//                         blogs: blogs,
-//                         blogCategories: blogCategories
-//                     }
-//                 );}
-//             }).populate('parent_category', 'name');
-//         }
-//     });
-
+// app.use(async (req, res, next) => {
+//   const user = await UserModel.findOne({
+//     _id: req.session.userId,
+//   });
+//   if (user) {
+//     req.user = user;
+//   } else {
+//     req.user = null;
+//   }
+//   next();
 // });
+
 
 app.post("/api/v1/auth/google", async (req, res) => {
   const { token } = req.body;
@@ -183,9 +97,11 @@ app.post("/api/v1/auth/google", async (req, res) => {
     user.familyName = family_name;
     await user.save();
     req.session.userId = user.id;
-    res.json({
+    var jwt = UserService.signTokenExport(user._id);
+    res.
+    cookie("jwt", jwt, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" }).
+         json({
       user: user,
-      token: UserService.signTokenExport(user._id),
     });
   } else if (user && user.provider !== "google") {
     res.status(400).send("User already exists with different provider");
@@ -200,9 +116,11 @@ app.post("/api/v1/auth/google", async (req, res) => {
     });
     await user.save();
     req.session.userId = user.id;
+    var jwt = UserService.signTokenExport(user._id);
+    res.
+    cookie("jwt", jwt, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" }).
     res.json({
       user: user,
-      token: UserService.signTokenExport(user._id),
     });
   }
 });

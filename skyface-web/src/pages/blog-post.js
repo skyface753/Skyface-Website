@@ -228,7 +228,7 @@ export default function BlogPost() {
           } else if (content[i].type == "link") {
             contentDivs.push(
               <div key={content[i]._id} className="content-link-div">
-                <a href={content[i].content} target="_blank">
+                <a href={content[i].content} target="_blank" rel="noopener noreferrer">
                   {content[i].content}
                 </a>
               </div>

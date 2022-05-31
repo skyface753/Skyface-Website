@@ -30,18 +30,19 @@ function getChilds(currItemId, fullList) {
   if (returnList.length === 0) return null;
   return returnList;
 }
-
-function childsToHTML(childPrefix, currList) {
+var categoryMarginValue = 15
+function childsToHTML(currList, childMargin = categoryMarginValue) {
   var returnHTML = [];
   if (currList == null) return returnHTML;
   for (var i = 0; i < currList.length; i++) {
+    var currmargin = childMargin + "px";
     returnHTML.push(
-      <div key={currList[i]._id}>
+      <div key={currList[i]._id} style={{ marginLeft: currmargin }}>
         <a href={`/category/${currList[i].url}`} className="category-item">
-          {childPrefix} {currList[i].name} - {currList[i].description}
+          {currList[i].name} - {currList[i].description}
         </a>
 
-        {childsToHTML(childPrefix + " -", currList[i].children)}
+        {childsToHTML(currList[i].children, childMargin + categoryMarginValue)}
       </div>
     );
   }
@@ -76,7 +77,7 @@ const Categories = () => {
               </a>
               {(() => {
                 if (category.children) {
-                  return <div>{childsToHTML("-", category.children)}</div>;
+                  return <div>{childsToHTML(category.children)}</div>;
                 }
               })()}
             </div>

@@ -24,7 +24,7 @@ import CreateCategory from "./pages/admin-area/CreateCategory";
 import SeriesPage from "./pages/Series";
 import SingleSeries from "./pages/SingleSeries";
 import CreateSeries from "./pages/admin-area/CreateSeries";
-
+import SearchPage from "./pages/SearchPage";
 function App() {
   return (
     <GoogleOAuthProvider clientId={getCredentials()}>
@@ -43,6 +43,8 @@ function App() {
             <Route path="/users/:username" element={<ShowProfile />} />
             <Route path="/series" element={<SeriesPage />} />
             <Route path="/series/:seriesUrl" element={<SingleSeries />} />
+            <Route path="/search" element={<SearchPage />} />
+            {/* ADMIN AREA */}
             <Route
               path="/admin/edit-blog/:blogUrl"
               element={<EditBlogPost />}

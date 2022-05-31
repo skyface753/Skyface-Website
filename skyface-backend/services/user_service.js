@@ -145,7 +145,9 @@ function signToken(user_id) {
 }
 
 function verifyToken(req) {
-  var token = getToken(req);
+  // var tokenFromCookie = req.cookies.jwt
+  // console.log("FromCookie" + tokenFromCookie)
+  var token = req.cookies.jwt;
   if (!token) {
     return false;
   }

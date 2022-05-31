@@ -1,5 +1,6 @@
 const FileModel = require("../models/file_model");
 const UserModel = require("../models/user_model");
+const fs = require("fs");
 
 let FileService = {
   uploadFile: async (req, res) => {
@@ -45,6 +46,30 @@ let FileService = {
       files: files,
     });
   },
+  deleteFile: async (req, res) => {
+    let fileId = req.params.fileId;
+    let file = await FileModel.findById(fileId);
+    if (!file) {
+      res.status(400).json({
+        success: false,
+        message: "File not found",
+      });
+      return;
+    }
+    await FileModel.findByIdAndDelete(fileId);
+    fs.unlink("./uploaded-files/" + file.generated_name, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    res.status(200).json({
+      success: true,
+      message: "File deleted",
+    });
+  },
+
+
+
 };
 
 module.exports = FileService;

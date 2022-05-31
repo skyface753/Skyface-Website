@@ -9,7 +9,7 @@ import Colors from "../constants/Colors";
 import Blogs from "../screens/blogs";
 import Categories from "../screens/categories";
 import SettingsScreen from "../screens/Settings";
-
+import Series from "../screens/Series";
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -38,6 +38,15 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="list-outline" color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Series"
+        component={SeriesNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="book-open-outline" color={color} />
           ),
         }}
       />
@@ -88,6 +97,21 @@ function CategoriesNavigator() {
         options={{ headerShown: false }}
       />
     </CategoriesStack.Navigator>
+  );
+}
+
+const SeriesStack = createStackNavigator();
+
+function SeriesNavigator() {
+  return (
+    <SeriesStack.Navigator>
+      <SeriesStack.Screen
+
+        name="SeriesScreen"
+        component={Series}
+        options={{ headerShown: false }}
+      />
+    </SeriesStack.Navigator>
   );
 }
 

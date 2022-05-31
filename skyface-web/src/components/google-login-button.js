@@ -1,24 +1,23 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { reactLocalStorage } from "reactjs-localstorage";
 import { BACKENDURL } from "../consts";
+import apiService from "../services/api-service";
+
 export default function GoogleLoginButton() {
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
         console.log(credentialResponse);
-        const res = await fetch(BACKENDURL + "api/v1/auth/google", {
-          method: "POST",
-          body: JSON.stringify({
-            token: credentialResponse.credential,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const res = await apiService("api/v1/auth/google", {
+          token: credentialResponse.credential
+        }).then((res) => {
+          console.log(res);
+          reactLocalStorage.setObject("loggedInUser", res.data.user);
         });
-        const data = await res.json();
-        console.log(data);
-        reactLocalStorage.setObject("loggedInUser", data.user);
-        reactLocalStorage.set("jwt", data.token);
+
+        // const data = await res.json();
+        // console.log(data);
+        // reactLocalStorage.set("jwt", data.token);
         window.location.href = "/";
       }}
       onError={() => {

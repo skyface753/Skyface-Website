@@ -9,13 +9,24 @@ import BlogPreview from "../components/BlogPreview";
 export default function Blogs() {
   const navigation = useNavigation();
   const [blogs, setBlogs] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     apiService("blogs").then((response) => {
       setBlogs(response.data);
-    });
+      // setError(response.data);
+    }).catch((error) => {
+      // setError(error);
+    })
   }, []);
-
+  if(error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Error</Text>
+        <Text style={styles.title}>{error.message}</Text>
+      </View>
+    )
+  }
   if(!blogs) return <ActivityIndicator />;
 
   return (

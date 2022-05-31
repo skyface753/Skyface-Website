@@ -1,5 +1,6 @@
 import React from "react";
 import { BACKEND_FILES_URL } from "../consts";
+import apiService from "../services/api-service";
 function copyText(text) {
   navigator.clipboard.writeText(text);
 }
@@ -25,12 +26,19 @@ export default function ShowFilesComponent(file, onClickCB) {
       </div>
       <div className="admin-files-list-item-actions">
         <a href={file.generated_name}>Download</a>
-        <a
-          style={{ marginLeft: "10px" }}
-          href={`/admin/delete-file/${file._id}`}
-        >
-          Delete
-        </a>
+        <button onClick={() =>{
+          if(window.confirm("Are you sure you want to delete this file?")){
+            
+          apiService("admin/files/delete/" + file._id).then(res => {
+            if(res.data.success){
+              alert("File deleted");
+              window.location.reload();
+            }else{
+              alert("Error deleting file: " + res.data.message);
+            }
+          });
+          }
+        }}>Delete</button>
       </div>
     </div>
   );
