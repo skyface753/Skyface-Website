@@ -6,3 +6,7 @@ client_secret_990529034428-4pql4ogkt6l2jsk8t2h124ai73m2a8hq.apps.googleuserconte
 skyface-web/src/credentials.js
 skyface-backend/.env
 skyblog_react/credentials.js
+targets.log
+dryrun.log
+.vscode/dryrun.log
+.vscode/targets.log
