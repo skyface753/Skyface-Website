@@ -33,11 +33,14 @@ function App() {
         <div className="main-div">
           <Routes>
             <Route path="/" exact element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blogs/:blogUrl" element={<BlogPost />} />
-            <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/register" element={<SignUp />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/category/:categoryUrl" element={<SingleCategory />} />
             <Route path="/users/:username" element={<ShowProfile />} />

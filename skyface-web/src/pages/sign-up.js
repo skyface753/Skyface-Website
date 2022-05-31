@@ -2,8 +2,11 @@ import React from "react";
 import GoogleLoginButton from "../components/google-login-button";
 import apiService from "../services/api-service";
 import "../styles/sign-up-in-style.css";
+import { reactLocalStorage } from "reactjs-localstorage";
 
 const SignUp = () => {
+  var lastPage = document.referrer;
+  // console.log("Last Page:" + document.referrer)
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [givenName, setGivenName] = React.useState("");
@@ -136,9 +139,18 @@ const SignUp = () => {
                 password,
               }).then((res) => {
                 if (!res.data.success) {
-                  setError(res.error);
+                  setError(res.data.message);
+                  // alert(res.data.message);
                 } else {
-                  alert("Sign up successful");
+
+                var user = res.data["user"];
+                  reactLocalStorage.setObject("loggedInUser", user);
+                  if(lastPage !== ""){
+                    window.location.href = lastPage;
+                  }else{
+
+                  window.location.href = "/";
+                  }
                 }
               });
             }}

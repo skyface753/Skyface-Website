@@ -1,6 +1,8 @@
 PROJECT = "SkyBlog Webpage"
 
-all: install docker-start docker-restore
+start: install docker-start docker-restore
+
+end: move-backup docker-backup
 
 install: ;@echo "Installing NPM ${PROJECT}....."; \
 	npm install -C skyface-web
@@ -15,3 +17,6 @@ docker-restore: ;@echo "Restoring docker ${PROJECT}....."; \
 
 docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
 	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongodump --archive' > latest.mongo
+
+move-backup: ;@echo "Moving backup to folder with date-name....."; \
+	mv latest.mongo mongo-backup/`date +%Y-%m-%d`.mongo

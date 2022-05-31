@@ -96,7 +96,7 @@ app.post("/api/v1/auth/google", async (req, res) => {
     user.givenName = given_name;
     user.familyName = family_name;
     await user.save();
-    req.session.userId = user.id;
+    // req.session.userId = user.id;
     var jwt = UserService.signTokenExport(user._id);
     res.
     cookie("jwt", jwt, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" }).
@@ -115,7 +115,7 @@ app.post("/api/v1/auth/google", async (req, res) => {
       provider: "google",
     });
     await user.save();
-    req.session.userId = user.id;
+    // req.session.userId = user.id;
     var jwt = UserService.signTokenExport(user._id);
     res.
     cookie("jwt", jwt, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" }).

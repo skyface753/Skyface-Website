@@ -78,7 +78,13 @@ export default function Navbar() {
             null
           )} 
           {loggedInUser ? (
-            <li>
+            <li
+            style={
+              {
+                marginLeft: "auto",
+              }
+            }
+            >
 
             
           <div className="loggedInUserMenu">
@@ -118,11 +124,18 @@ export default function Navbar() {
           </div>
           </li>
         ) : (
-          null
-          // <NavMenu>
-          //   <NavBtnLink to="/sign-in">Sign In</NavBtnLink>
-          //   <NavBtnLink to="/sign-up">Sign Up</NavBtnLink>
-          // </NavMenu>
+          <div
+          className="navbar-right"
+          
+          >
+
+          <li >
+            <a href="/login">Login</a>
+         </li>
+         <li >
+            <a href="/register">Register</a>
+            </li>
+          </div>
         )}
         </ul>
       </div>

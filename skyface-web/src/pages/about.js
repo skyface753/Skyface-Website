@@ -4,13 +4,6 @@ import aboutData from "../page-content/about-page.json";
 const About = () => {
   return (
     <div
-    // style={
-    //     {
-    //         width: '80%',
-    //         margin: '0 auto',
-    //         textAlign: 'center',
-    //     }
-    // }
     >
       <div className="title-container">
         <img

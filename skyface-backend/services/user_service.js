@@ -53,6 +53,7 @@ let UserService = {
     let token = signToken(user._id);
     //Clear password
     user.password = undefined;
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
     res.json({
       success: true,
       token: token,
@@ -96,6 +97,7 @@ let UserService = {
     let token = signToken(user._id);
     //Clear password
     user.password = undefined;
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
     res.json({
       success: true,
       token: token,

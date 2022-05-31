@@ -68,7 +68,7 @@ const ShowCategoriesSelect = (props) => {
   }, []);
 
   if (!categories) return <div className="loader" />;
-
+  console.log("Selected Value in ShowCategoriesSelect: " + selectedValue);
   return (
     <div
       style={{
@@ -76,6 +76,9 @@ const ShowCategoriesSelect = (props) => {
       }}
     >
       <fieldset onChange={props.onChange}>
+        <input type="radio" name="category" value="" checked={!selectedValue} onChange={() => {
+          props.onChange(null);
+        }} />
         {(() => {
           return categories.map((category) => {
             // console.log(selectedValue + ":" + category._id);

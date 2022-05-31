@@ -1,5 +1,6 @@
 import React from "react";
 import apiService from "../../services/api-service";
+import ShowCategoriesSelect from "../../components/showCategoriesSelect";
 
 const emptyCategory = {
   name: "",
@@ -51,6 +52,13 @@ export default function CreateCategory() {
           }}
         />
       </div>
+      <ShowCategoriesSelect selectedID={
+        category.parent_category ? category.parent_category : null
+
+      } onChange={(e) => {
+          console.log("New Selected: " + e.target.value);
+          setCategory({ ...category, parent_category: e.target.value });
+        }} />
       <div>
         <label>Parent Category</label>
         <input
