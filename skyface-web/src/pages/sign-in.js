@@ -3,6 +3,7 @@ import { reactLocalStorage } from "reactjs-localstorage";
 import GoogleLoginButton from "../components/google-login-button";
 import "../styles/sign-up-in-style.css";
 import apiService from "../services/api-service";
+import GitHubLoginButton from "../components/GitHubLoginButton";
 
 export default function SignIn() {
   const [usernameOrMail, setUsernameOrMail] = React.useState("");
@@ -16,7 +17,8 @@ export default function SignIn() {
 
   return (
     <div>
-      <GoogleLoginButton />;
+      <GoogleLoginButton />
+      <GitHubLoginButton />
       <div className="container">
         <h1>Sign In</h1>
         <button onClick={setExampleData}>Set Example Data</button>

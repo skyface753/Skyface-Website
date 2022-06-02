@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useReducer } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -9,7 +9,7 @@ import Blogs from "./pages/blogs";
 import SignUp from "./pages/sign-up";
 import BlogPost from "./pages/blog-post";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import getCredentials from "./credentials";
+import {getCredentials} from "./credentials";
 import EditBlogPost from "./pages/admin-area/edit-blog";
 import Categories from "./pages/categories";
 import SingleCategory from "./pages/single-category";
@@ -25,8 +25,22 @@ import SeriesPage from "./pages/Series";
 import SingleSeries from "./pages/SingleSeries";
 import CreateSeries from "./pages/admin-area/CreateSeries";
 import SearchPage from "./pages/SearchPage";
+import { initialState, reducer } from "./store/reducer";
+// import Login from "./components/Login";
+// import Home from "./components/Home";
+export const AuthContext = createContext();
+
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
+    <AuthContext.Provider
+      value={{
+        state,
+        dispatch
+      }}
+    >
+
     <GoogleOAuthProvider clientId={getCredentials()}>
       <Router>
         <Navbar />
@@ -38,8 +52,9 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blogs/:blogUrl" element={<BlogPost />} />
             <Route path="/sign-in" element={<SignIn />} />
+            {/* <Route path="/login/manuelly" element={<SignIn />} /> */}
             <Route path="/login" element={<SignIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
+            {/* <Route path="/sign-up" element={<SignUp />} /> */}
             <Route path="/register" element={<SignUp />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/category/:categoryUrl" element={<SingleCategory />} />
@@ -64,6 +79,8 @@ function App() {
         <Footer />
       </Router>
     </GoogleOAuthProvider>
+    </AuthContext.Provider>
+    
   );
 }
 

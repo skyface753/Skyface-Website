@@ -1,11 +1,10 @@
-import React from "react";
-import axios from "axios";
+import React, {useContext} from "react";
 import { useParams } from "react-router-dom";
-import { reactLocalStorage } from "reactjs-localstorage";
 import apiService from "../services/api-service";
 import { BACKEND_FILES_URL } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../App";
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -71,7 +70,7 @@ function createSeriesBlogsStepBar(seriesBlogs, currpPostId) {
 }
 
 export default function BlogPost() {
-  var loggedInUser = reactLocalStorage.getObject("loggedInUser");
+  const { state, dispatch } = useContext(AuthContext);
   let { blogUrl } = useParams();
   const location = useLocation();
   // console.log(id);
@@ -120,8 +119,8 @@ export default function BlogPost() {
       
 
       {(() => {
-        if (loggedInUser != null) {
-          if (loggedInUser.role == "admin") {
+        if(state.isLoggedIn){
+          if(state.user.role === "admin"){
             return (
               <div className="admin-edit-container" key="admin-edit-container">
                 <div
@@ -293,7 +292,7 @@ export default function BlogPost() {
           }
         })()}
         {(() => {
-          if (loggedInUser != null) {
+          if (state.isLoggedIn) {
             return (
               <div>
                 <ReactTextareaAutosize className="comment-textarea" />

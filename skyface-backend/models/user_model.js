@@ -6,28 +6,23 @@ let UserSchema = new Schema(
     username: {
       type: String,
       required: true,
-      // unique: true
-    },
-    givenName: {
-      type: String,
-      required: true,
-    },
-    familyName: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
       unique: true,
     },
     provider: {
-      // Manuelly, Google
+      // Manuelly, Google, GitHub
       type: String,
       required: true,
     },
+    GitHub_id: {
+      type: String,
+      required: function () { return this.provider === "GitHub"; },
+    },
+    Google_Mail: {
+      type: String,
+      required: function () { return this.provider === "Google"; },
+    },
     password: {
-      // Not required for login with Google
+      required: function () { return this.provider === "Manuelly"; },
       type: String,
     },
     role: {
@@ -42,6 +37,6 @@ let UserSchema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
 module.exports = mongoose.model("User", UserSchema);

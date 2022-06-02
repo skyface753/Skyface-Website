@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
   Nav,
   NavLink,
@@ -9,16 +9,16 @@ import {
 } from "./NavbarElements";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout } from "@react-oauth/google";
-import { reactLocalStorage } from "reactjs-localstorage";
 import "../../styles/navbar.css"
 import { useState } from "react";
+import { AuthContext } from "../../App";
 
 export default function Navbar() {
+  const { state, dispatch } = useContext(AuthContext);
   const [isNavExpanded, setIsNavExpanded] = useState(false)
 
-  var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
-  var jwt = reactLocalStorage.get("jwt", null);
-  console.log(loggedInUser);
+  console.log("State");
+  console.log(state);
   return (
     <nav className="navigation">
       <a href="/" className="brand-name">
@@ -67,8 +67,8 @@ export default function Navbar() {
           <li>
             <a href="/contact">Contact</a>
           </li>
-          {loggedInUser != null ? (
-            loggedInUser.role == "admin" ? (
+          {state.isLoggedIn ? (
+            state.user.role == "admin" ? (
               <li>
                 <a href="/admin">Admin</a>
               </li>
@@ -77,7 +77,7 @@ export default function Navbar() {
           ) : (
             null
           )} 
-          {loggedInUser ? (
+          {state.isLoggedIn ? (
             <li
             style={
               {
@@ -89,10 +89,10 @@ export default function Navbar() {
             
           <div className="loggedInUserMenu">
             <div className="loggedInUserMenu-Button">
-              {loggedInUser.picture ? (
+              {state.user.picture ? (
                 <img
                   className="profile-pic"
-                  src={loggedInUser.picture}
+                  src={state.user.picture}
                   alt="User Picture"
                 />
               ) : (
@@ -105,16 +105,21 @@ export default function Navbar() {
             </div>
             <div className="loggedInUser-dropdown-content">
               {/* <a href={"/users" + loggedInUser.user.username}>{loggedInUser.user.name}</a> */}
-              <a href={"/users/" + loggedInUser.username}>Profile</a>
+              <a href={"/users/" + state.user.username}>{state.user.username}</a>
               {/* Logout */}
               <a
                 href="/"
                 onClick={() => {
-                  if (loggedInUser.provider == "google") {
+                  if (state.user.provider == "Google") {
                     googleLogout();
-                  }
-                  reactLocalStorage.setObject("loggedInUser", null);
-                  reactLocalStorage.set("jwt", null);
+                    dispatch({
+                      type: "LOGOUT",
+                    });
+                  }else if(state.user.provider === "GitHub")
+                  {
+                    dispatch({type: "LOGOUT"})
+                  } 
+                 
                   window.location.reload();
                 }}
               >

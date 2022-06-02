@@ -20,8 +20,12 @@ router.post(
 );
 router.post("/users/profile/:username", UserService.getUserProfile);
 
-router.post("/sign-up", UserService.register);
-router.post("/sign-in", UserService.login);
+router.post("/login/manuelly", UserService.loginManuelly);
+router.post("/register/manuelly", UserService.registerManuelly);
+router.post("/login/github", UserService.loginGitHub);
+router.post("/login/google", UserService.loginGoogle);
+// router.post("/sign-up", UserService.register);
+// router.post("/sign-in", UserService.login);
 
 router.post("/series", SeriesService.getAllSeries);
 router.post("/series/:seriesUrl", SeriesService.getSeriesWithBlogs);

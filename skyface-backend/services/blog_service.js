@@ -20,9 +20,12 @@ let BlogService = {
       .populate("category")
       .populate("posted_by", "username _id")
       .populate("series", "name url");
-    var seriesBlogs = await blogModel.find({ series: blog.series }).sort({
+      var seriesBlogs = null;
+      if(blog.series){
+    seriesBlogs = await blogModel.find({ series: blog.series }).sort({
       series_position: 1,
     });
+      }
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });

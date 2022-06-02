@@ -1,18 +1,26 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { reactLocalStorage } from "reactjs-localstorage";
+import { useContext } from "react";
+import { AuthContext } from "../App";
 import { BACKENDURL } from "../consts";
 import apiService from "../services/api-service";
 
 export default function GoogleLoginButton() {
+  const { state, dispatch } = useContext(AuthContext);
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
         console.log(credentialResponse);
-        const res = await apiService("api/v1/auth/google", {
+        const res = await apiService("login/google", {
           token: credentialResponse.credential
         }).then((res) => {
           console.log(res);
-          reactLocalStorage.setObject("loggedInUser", res.data.user);
+          if (res.data.success) {
+            const { user } = res.data;
+            dispatch({
+              type: "LOGIN",
+              payload: { user, isLoggedIn: true }
+            });
+          }
         });
 
         // const data = await res.json();
