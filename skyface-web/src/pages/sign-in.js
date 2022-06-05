@@ -1,11 +1,13 @@
-import React from "react";
-import { reactLocalStorage } from "reactjs-localstorage";
+import React, { useContext } from "react";
+// import { reactLocalStorage } from "reactjs-localstorage";
 import GoogleLoginButton from "../components/google-login-button";
 import "../styles/sign-up-in-style.css";
 import apiService from "../services/api-service";
 import GitHubLoginButton from "../components/GitHubLoginButton";
+import { AuthContext } from "../App";
 
 export default function SignIn() {
+  const { state, dispatch } = useContext(AuthContext);
   const [usernameOrMail, setUsernameOrMail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -60,8 +62,13 @@ export default function SignIn() {
               if (response.data.success) {
                 var user = response.data["user"];
                 var token = response.data["token"];
-                reactLocalStorage.setObject("loggedInUser", user);
-                reactLocalStorage.set("jwt", token);
+                dispatch({
+                  type: "LOGIN",
+                  payload: {
+                    user,
+                    isLoggedIn: true,
+                  },
+                });
                 console.log("logged in");
                 window.location.href = "/";
               } else {

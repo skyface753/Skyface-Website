@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import apiService from "../services/api-service";
 import { BACKEND_FILES_URL } from "../consts";
@@ -15,17 +15,55 @@ function copyCode(code) {
 }
 
 function gotoBlockFromSeries(seriesBlogUrl) {
-  window.location.href = seriesBlogUrl
+  window.location.href = seriesBlogUrl;
   // window.location.href = seriesBlogUrl;
 }
 
-function createSeriesBlogStepBarItem(
-  id,
-  url,
-  active = false,
-  pos,
-  title
-) {
+/*{
+    "reply_to": null,
+    "_id": "6298d16cfa757c5c478c0179",
+    "by_user": {
+        "_id": "6298d13ffa757c5c478c0152",
+        "username": "skyface",
+        "picture": "https://lh3.googleusercontent.com/a-/AOh14GjXhcVexuM51Eu_wLE-e3OcX0541d1Pw-jXI2-z=s96-c"
+    },
+    "for_blog": "627fd7d2bf239402dbaef281",
+    "comment_text": "Hi from THE ADMIN",
+    "createdAt": "2022-06-02T15:04:12.266Z",
+    "updatedAt": "2022-06-02T15:04:12.266Z",
+    "__v": 0
+}*/
+
+function commentsParentSort(fullList) {
+  var sortedComments = [];
+  for (var i = 0; i < fullList.length; i++) {
+    if (fullList[i].reply_to == null) {
+      var childs = getCommetsChilds(fullList[i]._id, fullList);
+      if (childs) {
+        fullList[i].children = childs;
+      }
+      sortedComments.push(fullList[i]);
+    }
+  }
+  return sortedComments;
+}
+
+function getCommetsChilds(currItemId, fullList) {
+  var returnList = [];
+  for (var i = 0; i < fullList.length; i++) {
+    if (fullList[i].reply_to === currItemId) {
+      var childs = getCommetsChilds(fullList[i]._id, fullList);
+      if (childs) {
+        fullList[i].children = childs;
+      }
+      returnList.push(fullList[i]);
+    }
+  }
+  if (returnList.length === 0) return null;
+  return returnList;
+}
+
+function createSeriesBlogStepBarItem(id, url, active = false, pos, title) {
   return (
     <li
       onClick={() => gotoBlockFromSeries(url)}
@@ -69,42 +107,83 @@ function createSeriesBlogsStepBar(seriesBlogs, currpPostId) {
   return seriesBlogsElements;
 }
 
+var commentsMarginValue = 30;
+function commentsToHTML(currList, childMargin = commentsMarginValue) {
+  var returnHTML = [];
+  if (currList == null) return returnHTML;
+  for (var i = 0; i < currList.length; i++) {
+    var currMargin = childMargin + "px";
+    returnHTML.push(
+      <div
+        key={currList[i]._id}
+        className="comment-div"
+        style={{ marginLeft: currMargin }}
+      >
+        <div className="comment-div-header">
+          <img
+            src={
+              currList[i].by_user.picture ||
+              require("../img/default-profile-pic.png")
+            }
+            alt="comment-user-pic"
+            className="comment-user-pic"
+          />
+          <div className="comment-user-info">
+            <a href={"/users/" + currList[i].by_user.username}>
+              {currList[i].by_user.username}
+            </a>
+            <div>
+              {currList[i].updatedAt.substring(0, 10)} {"/"}{" "}
+              {currList[i].updatedAt.substring(11, 16)}
+            </div>
+          </div>
+        </div>
+        {/* {state.isLoggedIn ? (
+          <button
+            className="comment-answer-button"
+            onClick={() => {
+              setCommentAnswer(currList[i]._id);
+            }}
+          >
+            Answer to {currList[i].by_user.username}
+          </button>
+        ) : null} */}
+        <div className="comment-div-content">
+          <p>{currList[i].comment_text}</p>
+        </div>
+        <hr className="blog-divider"></hr>
+        {commentsToHTML(
+          currList[i].children,
+          childMargin + commentsMarginValue
+        )}
+      </div>
+    );
+  }
+  return returnHTML;
+}
+
 export default function BlogPost() {
   const { state, dispatch } = useContext(AuthContext);
   let { blogUrl } = useParams();
   const location = useLocation();
-  // console.log(id);
   const [posts, setPost] = React.useState(null);
   const [comments, setComments] = React.useState(null);
   const [series, setSeries] = React.useState(null);
   const [seriesBlogs, setSeriesBlogs] = React.useState(null);
+  const [commentAnswer, setCommentAnswer] = React.useState(null);
+  const [hasLiked, setHasLiked] = React.useState(false);
 
   React.useEffect(() => {
-    // try {
-    //   const queryParams = new URLSearchParams(location.search);
-    //   var seriesUrl = queryParams.get("series");
-    //   if (seriesUrl) {
-    //     apiService("series/" + seriesUrl).then((response) => {
-    //       console.log(response.data);
-    //       setSeries(response.data["series"]);
-    //       setSeriesBlogs(response.data["seriesBlogs"]);
-    //     });
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
     apiService("blog/" + blogUrl, {}).then((response) => {
-      // setTimeout(() => {
-      // axios.post(baseURL + blogUrl).then((response) => {
-      //Order response.data["blogContent"] by position
       var blogContent = response.data["blogContent"];
       console.log(response.data);
       blogContent.sort(function (a, b) {
         return a.position - b.position;
       });
       setPost(response.data);
-      setComments(response.data["blogComments"]);
-      if(response.data["series"]){
+      setComments(commentsParentSort(response.data["blogComments"]));
+      setHasLiked(response.data["hasUserLikedBlog"]);
+      if (response.data["series"]) {
         setSeries(response.data["series"]);
         setSeriesBlogs(response.data["seriesBlogs"]);
       }
@@ -113,14 +192,13 @@ export default function BlogPost() {
   }, []);
 
   if (!posts) return <div className="loader" />;
-  // console.log(seriesUrl);
+
+  console.log(commentsParentSort(posts["blogComments"]));
   return (
     <div>
-      
-
       {(() => {
-        if(state.isLoggedIn){
-          if(state.user.role === "admin"){
+        if (state.isLoggedIn) {
+          if (state.user.role === "admin") {
             return (
               <div className="admin-edit-container" key="admin-edit-container">
                 <div
@@ -130,6 +208,7 @@ export default function BlogPost() {
                   }}
                 >
                   <img
+                    className="admin-edit-button-icon"
                     src={require("../img/edit-icon.png")}
                     width="40px"
                     alt="Edit-Icon"
@@ -227,7 +306,11 @@ export default function BlogPost() {
           } else if (content[i].type == "link") {
             contentDivs.push(
               <div key={content[i]._id} className="content-link-div">
-                <a href={content[i].content} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={content[i].content}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {content[i].content}
                 </a>
               </div>
@@ -241,23 +324,107 @@ export default function BlogPost() {
           return (
             <div>
               <hr className="blog-divider"></hr>
-      <h3>Series</h3>
+              <h3>Series</h3>
               <h4>{series.name}</h4>
               <ul className="blogs-series-step-bar">
-                {createSeriesBlogsStepBar(
-                  seriesBlogs,
-                  posts["blog"]._id
-                )}
+                {createSeriesBlogsStepBar(seriesBlogs, posts["blog"]._id)}
               </ul>
             </div>
           );
         }
       })()}
       <hr className="blog-divider"></hr>
+      {state.isLoggedIn ? (
+        hasLiked ? (
+          <button
+            className="dislike-button"
+            onClick={() =>
+              apiService("blog-likes/unlike/" + posts["blog"]._id, {}).then(
+                (response) => {
+                  if (response.data.success) {
+                    setHasLiked(false);
+                  }
+                }
+              )
+            }
+          >
+            Unlike
+          </button>
+        ) : (
+          <button
+            className="like-button"
+            onClick={() =>
+              apiService("blog-likes/like/" + posts["blog"]._id).then(
+                (response) => {
+                  if (response.data.success) {
+                    setHasLiked(true);
+                  }
+                }
+              )
+            }
+          >
+            Like
+          </button>
+        )
+      ) : (
+        <p>
+          <a href="/login">Login</a> to like this blog
+        </p>
+      )}
+      <hr className="blog-divider"></hr>
       <div className="comments-container">
         <h3>Comments</h3>
         {(() => {
           if (comments != null) {
+            return comments.map((comment) => {
+              return (
+                <div key={comment._id} className="comment-div">
+                  <div className="comment-div-header">
+                    <img
+                      src={
+                        comment.by_user.picture ||
+                        require("../img/default-profile-pic.png")
+                      }
+                      alt="comment-user-pic"
+                      className="comment-user-pic"
+                    />
+                    <div className="comment-user-info">
+                      <a href={"/users/" + comment.by_user.username}>
+                        {comment.by_user.username}
+                      </a>
+                      <div>
+                        {comment.updatedAt.substring(0, 10)} {"/"}{" "}
+                        {comment.updatedAt.substring(11, 16)}
+                      </div>
+                    </div>
+                  </div>
+                  {state.isLoggedIn ? (
+                    <button
+                      className="comment-answer-button"
+                      onClick={() => {
+                        setCommentAnswer(comment._id);
+                      }}
+                    >
+                      Answer to {comment.by_user.username}
+                    </button>
+                  ) : null}
+                  <div className="comment-div-content">
+                    <p>{comment.comment_text}</p>
+                  </div>
+                  <hr className="blog-divider"></hr>
+                  {(() => {
+                    if (comment.children) {
+                      return <div>{commentsToHTML(comment.children)}</div>;
+                    } else {
+                      console.log("no children");
+                      console.log(comment.children);
+                      console.log(comment);
+                    }
+                  })()}
+                </div>
+              );
+            });
+
             const commentDivs = [];
             for (let i = 0; i < comments.length; i++) {
               commentDivs.push(
@@ -281,6 +448,16 @@ export default function BlogPost() {
                       </div>
                     </div>
                   </div>
+                  {state.isLoggedIn ? (
+                    <button
+                      className="comment-answer-button"
+                      onClick={() => {
+                        setCommentAnswer(comments[i]._id);
+                      }}
+                    >
+                      Answer to {comments[i].by_user.username}
+                    </button>
+                  ) : null}
                   <div className="comment-div-content">
                     <p>{comments[i].comment_text}</p>
                   </div>
@@ -291,6 +468,18 @@ export default function BlogPost() {
             return commentDivs;
           }
         })()}
+        {commentAnswer != null ? (
+          <div>
+            <p>Answer to {commentAnswer}</p>
+            <button
+              onClick={() => {
+                setCommentAnswer(null);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : null}
         {(() => {
           if (state.isLoggedIn) {
             return (
@@ -305,6 +494,7 @@ export default function BlogPost() {
                       comment_text:
                         document.getElementsByClassName("comment-textarea")[0]
                           .value,
+                      reply_to: commentAnswer ? commentAnswer : null,
                     }).then((response) => {
                       if (response.data.success) {
                         window.location.reload();

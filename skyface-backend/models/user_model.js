@@ -15,14 +15,20 @@ let UserSchema = new Schema(
     },
     GitHub_id: {
       type: String,
-      required: function () { return this.provider === "GitHub"; },
+      required: function () {
+        return this.provider === "GitHub";
+      },
     },
     Google_Mail: {
       type: String,
-      required: function () { return this.provider === "Google"; },
+      required: function () {
+        return this.provider === "Google";
+      },
     },
     password: {
-      required: function () { return this.provider === "Manuelly"; },
+      required: function () {
+        return this.provider === "Manuelly";
+      },
       type: String,
     },
     role: {
@@ -37,6 +43,6 @@ let UserSchema = new Schema(
   {
     timestamps: true,
   }
-)
+);
 
 module.exports = mongoose.model("User", UserSchema);

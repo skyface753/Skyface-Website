@@ -3,7 +3,7 @@ const blogContentModel = require("../models/blog_content_model.js");
 const blogCategoryModel = require("../models/blog_category_model.js");
 const UserService = require("../services/user_service.js");
 const CommentModel = require("../models/comment_model");
-
+const BlogLikesModel = require("../models/blog_likes_model");
 
 let BlogService = {
   getAllBlogs: async (req, res) => {
@@ -20,12 +20,12 @@ let BlogService = {
       .populate("category")
       .populate("posted_by", "username _id")
       .populate("series", "name url");
-      var seriesBlogs = null;
-      if(blog.series){
-    seriesBlogs = await blogModel.find({ series: blog.series }).sort({
-      series_position: 1,
-    });
-      }
+    var seriesBlogs = null;
+    if (blog.series) {
+      seriesBlogs = await blogModel.find({ series: blog.series }).sort({
+        series_position: 1,
+      });
+    }
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });
@@ -33,12 +33,31 @@ let BlogService = {
       "by_user",
       "username _id picture"
     );
+    // Blog Likes Count
+    let blogLikesCount = await BlogLikesModel.countDocuments({
+      for_blog: blog._id,
+    });
+    // Has User Liked Blog
+    let hasUserLikedBlog = false;
+    if (req.user) {
+      console.log("User is logged in");
+      var liked = await BlogLikesModel.findOne({
+        for_blog: blog._id,
+        by_user: req.user._id,
+      }).exec();
+      if (liked) {
+        hasUserLikedBlog = true;
+      }
+    }
+
     res.json({
       blog: blog,
       blogContent: blogContent,
       blogComments: blogComments,
       series: blog.series,
       seriesBlogs: seriesBlogs,
+      blogLikesCount: blogLikesCount,
+      hasUserLikedBlog: hasUserLikedBlog,
     });
   },
   getLast5Blogs: async (req, res) => {

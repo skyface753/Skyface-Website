@@ -9,6 +9,20 @@ const UserModel = require("./models/user_model.js");
 const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
 
+// Set req.user to logged in user if user is logged in
+router.use(async (req, res, next) => {
+  var userId = UserService.verifyTokenExport(req);
+  console.log("UserId: " + userId);
+  if (!userId) {
+    next();
+  } else {
+    console.log("UserId: " + userId);
+    var user = await UserModel.findById(userId);
+    req.user = user;
+    next();
+  }
+});
+
 router.post("/blogs", BlogService.getAllBlogs);
 router.post("/blogs/last5", BlogService.getLast5Blogs);
 router.post("/blog-categories", BlogCategoryService.getBlogCategories);
@@ -24,6 +38,7 @@ router.post("/login/manuelly", UserService.loginManuelly);
 router.post("/register/manuelly", UserService.registerManuelly);
 router.post("/login/github", UserService.loginGitHub);
 router.post("/login/google", UserService.loginGoogle);
+router.post("/logout", UserService.logout);
 // router.post("/sign-up", UserService.register);
 // router.post("/sign-in", UserService.login);
 
@@ -49,10 +64,19 @@ router.use(async (req, res, next) => {
   next();
 });
 
+const BlogLikesService = require("./services/blog_likes_service.js");
+router.post("/blog-likes/like/:blogID", BlogLikesService.likeABlog);
+router.post("/blog-likes/unlike/:blogID", BlogLikesService.unlikeABlog);
+
 const CommentService = require("./services/comment_service.js");
 router.post("/comment/create/:blogID", CommentService.createComment);
+router.post("/users/username/change", UserService.changeUsername);
+router.post(
+  "/users/username/free/:username",
+  UserService.checkIfUsernameIsFree
+);
 
-//Authentication for admin routes
+//Authentication for ADMIN routes
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
   console.log("UserId: " + userId);
@@ -65,6 +89,12 @@ router.use(async (req, res, next) => {
   }
   console.log("Authorized in Router");
   var user = await UserModel.findById(userId);
+  if (!user) {
+    res.status(401).json({
+      message: "Unauthorized",
+    });
+    return;
+  }
   if (user.role !== "admin") {
     console.log("Not an admin in Router");
     res.status(401).json({

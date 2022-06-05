@@ -11,6 +11,77 @@ const saltRounds = 11;
 const bycrypt = require("bcrypt");
 
 let UserService = {
+  logout: (req, res) => {
+    res.clearCookie("jwt");
+    res.json({
+      success: true,
+      message: "Logged out",
+    });
+  },
+  checkIfUsernameIsFree: async (req, res) => {
+    var username = req.params.username;
+    if (!username) {
+      res.json({
+        success: false,
+        message: "No username provided",
+      });
+      return;
+    }
+    let user = await UserModel.findOne({ username: username });
+    if (user) {
+      res.json({
+        success: false,
+        message: "Username is already taken",
+        free: false,
+      });
+      return;
+    }
+    res.json({
+      success: true,
+      message: "Username is free",
+      free: true,
+    });
+  },
+  changeUsername: async (req, res) => {
+    var newUsername = req.body.newUsername;
+    var userInReq = req.user; // From Router Middleware
+    if (!newUsername) {
+      res.json({
+        success: false,
+        message: "No new username provided",
+      });
+      return;
+    }
+    if (newUsername.length < 3 || newUsername.length > 20) {
+      res.json({
+        success: false,
+        message: "Username must be between 3 and 20 characters",
+      });
+      return;
+    }
+    if (newUsername.match(/[^a-zA-Z0-9]/)) {
+      res.json({
+        success: false,
+        message: "Username must only contain letters and numbers",
+      });
+      return;
+    }
+    let user = await UserModel.findOne({ username: newUsername });
+    if (user) {
+      res.json({
+        success: false,
+        message: "Username already taken",
+      });
+      return;
+    }
+    userInReq.username = newUsername;
+    await userInReq.save();
+    res.json({
+      success: true,
+      message: "Username changed",
+    });
+  },
+
   getUserProfile: async (req, res) => {
     var username = req.params.username;
     //User without password
@@ -32,7 +103,10 @@ let UserService = {
   loginManuelly: async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    let user = await UserModel.findOne({ username: username, provider: "Manuelly" });
+    let user = await UserModel.findOne({
+      username: username,
+      provider: "Manuelly",
+    });
     if (!user) {
       res.json({
         success: false,
@@ -40,19 +114,23 @@ let UserService = {
       });
       return;
     }
-      let isPasswordCorrect = await bycrypt.compare(password, user.password);
-      if (!isPasswordCorrect) {
-        res.json({
-          success: false,
-          message: "Password is incorrect",
-        });
-        return;
-      }
-    
+    let isPasswordCorrect = await bycrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      res.json({
+        success: false,
+        message: "Password is incorrect",
+      });
+      return;
+    }
+
     let token = signToken(user._id);
     //Clear password
     user.password = undefined;
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: "Strict",
+    });
     res.json({
       success: true,
       user: user,
@@ -87,7 +165,11 @@ let UserService = {
     let token = signToken(user._id);
     //Clear password
     user.password = undefined;
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: "Strict",
+    });
     res.json({
       success: true,
       user: user,
@@ -96,7 +178,7 @@ let UserService = {
   loginGitHub: async (req, res) => {
     const code = req.body.code;
     checkGitHubLogin(code).then((githubUser) => {
-      if(!githubUser){
+      if (!githubUser) {
         res.json({
           success: false,
           message: "GitHub login failed",
@@ -104,15 +186,19 @@ let UserService = {
         return;
       }
       let checkUser = UserModel.findOne({ GitHub_id: githubUser.id });
-      checkUser.then(async(user) => {
-        if(user){
+      checkUser.then(async (user) => {
+        if (user) {
           let token = signToken(user._id);
-          res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+          res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+            sameSite: "Strict",
+          });
           res.json({
             success: true,
             user: user,
           });
-        }else{
+        } else {
           var newRandomUsername = await getRandomUsername();
           let user = new UserModel({
             username: newRandomUsername,
@@ -122,7 +208,11 @@ let UserService = {
           });
           user.save();
           let token = signToken(user._id);
-          res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+          res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+            sameSite: "Strict",
+          });
           res.json({
             success: true,
             user: user,
@@ -130,10 +220,9 @@ let UserService = {
         }
       });
     });
-
   },
   loginGoogle: async (req, res) => {
-    const {token} = req.body;
+    const { token } = req.body;
     console.log("Client id: " + process.env.GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -141,15 +230,19 @@ let UserService = {
     });
     const { email, picture } = ticket.getPayload();
     let checkUser = UserModel.findOne({ Google_Mail: email });
-    checkUser.then(async(user) => {
-      if(user){
+    checkUser.then(async (user) => {
+      if (user) {
         let token = signToken(user._id);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+        res.cookie("jwt", token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          sameSite: "Strict",
+        });
         res.json({
           success: true,
           user: user,
         });
-      }else{
+      } else {
         var newRandomUsername = await getRandomUsername();
         console.log("New random username: " + newRandomUsername);
         let user = new UserModel({
@@ -160,7 +253,11 @@ let UserService = {
         });
         user.save();
         let token = signToken(user._id);
-        res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: "Strict" })
+        res.cookie("jwt", token, {
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60 * 24 * 7,
+          sameSite: "Strict",
+        });
         res.json({
           success: true,
           user: user,
@@ -168,7 +265,7 @@ let UserService = {
       }
     });
   },
-  
+
   signTokenExport: signToken,
   verifyTokenExport: verifyToken,
 };
@@ -237,51 +334,55 @@ const axios = require("axios");
 const github_client_id = process.env.CLIENT_ID;
 const github_client_secret = process.env.CLIENT_SECRET;
 
-async function checkGitHubLogin(code){
+async function checkGitHubLogin(code) {
   var access_token = await axios({
-    method: 'post',
+    method: "post",
     url: `https://github.com/login/oauth/access_token?client_id=${github_client_id}&client_secret=${github_client_secret}&code=${code}`,
     // Set the content type header, so that we get the response in JSON
     headers: {
-         accept: 'application/json'
-    }
-  }).then((response) => {
-    return response.data.access_token;
-  }).catch((error) => {
-    console.log(error);
-    return false;
-  });
-  if(!access_token){
+      accept: "application/json",
+    },
+  })
+    .then((response) => {
+      return response.data.access_token;
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
+  if (!access_token) {
     return false;
   }
   console.log("Access token:");
   console.log(access_token);
   var githubUser = await axios({
-    method: 'get',
+    method: "get",
     url: `https://api.github.com/user`,
     headers: {
-      Authorization: 'token ' + access_token
-    }
-  }).then((response) => {
-    console.log(response.data);
-    return response.data;
-  }).catch((error) => {
-    console.log(error);
-    return false;
-  });
-  if(!githubUser){
+      Authorization: "token " + access_token,
+    },
+  })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
+  if (!githubUser) {
     return false;
   }
   return githubUser;
 }
 
-async function getRandomUsername(){
+async function getRandomUsername() {
   var usernameIsFree = false;
   var username = "";
-  while(!usernameIsFree){
+  while (!usernameIsFree) {
     var randomUsername = makeString(10);
     var user = await UserModel.findOne({ username: randomUsername }).exec();
-    if(!user){
+    if (!user) {
       usernameIsFree = true;
       username = randomUsername;
     }
@@ -290,12 +391,12 @@ async function getRandomUsername(){
 }
 
 function makeString(length) {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * 
-charactersLength));
- }
- return result;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }

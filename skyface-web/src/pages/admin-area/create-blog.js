@@ -1,5 +1,4 @@
 import React from "react";
-import { reactLocalStorage } from "reactjs-localstorage";
 import NewBlogBlank from "./new-blog.json";
 import TextareaAutosize from "react-textarea-autosize";
 import { BACKEND_FILES_URL } from "../../consts";
@@ -9,19 +8,6 @@ import axios from "axios";
 import apiService from "../../services/api-service";
 const baseURL = "http://localhost:5000/admin/blog/";
 export default function CreateBlog() {
-  var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
-  var jwt = reactLocalStorage.get("jwt", null);
-  if (loggedInUser == null || jwt == null) {
-    //     console.log("User not logged in");
-    alert("Please login to edit blog");
-    window.location.href = "/";
-  }
-  if (loggedInUser.role != "admin") {
-    //     console.log("User is not an Admin");
-    alert("You are not an Admin");
-    window.location.href = "/";
-  }
-
   const [posts, setPost] = React.useState(NewBlogBlank);
   const [files, setFiles] = React.useState(null);
   const [filesLoaded, setFilesLoaded] = React.useState(false);
@@ -328,19 +314,16 @@ export default function CreateBlog() {
       <button
         className="save-blog-button"
         onClick={() => {
-          apiService("admin/blog/create", 
-              {
-                blog: posts["blog"],
-                blogContent: posts["blogContent"],
-              },
-            )
-            .then((response) => {
-              console.log(response);
-              if (response.data.success) {
-                alert("Blog saved!");
-                window.location.href = "/blogs/" + posts.blog.url;
-              }
-            });
+          apiService("admin/blog/create", {
+            blog: posts["blog"],
+            blogContent: posts["blogContent"],
+          }).then((response) => {
+            console.log(response);
+            if (response.data.success) {
+              alert("Blog saved!");
+              window.location.href = "/blogs/" + posts.blog.url;
+            }
+          });
         }}
       >
         Save Blog

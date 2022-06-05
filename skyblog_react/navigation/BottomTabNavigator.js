@@ -46,7 +46,7 @@ export default function BottomTabNavigator() {
         component={SeriesNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="book-open-outline" color={color} />
+            <TabBarIcon name="book-outline" color={color} />
           ),
         }}
       />
@@ -106,7 +106,6 @@ function SeriesNavigator() {
   return (
     <SeriesStack.Navigator>
       <SeriesStack.Screen
-
         name="SeriesScreen"
         component={Series}
         options={{ headerShown: false }}

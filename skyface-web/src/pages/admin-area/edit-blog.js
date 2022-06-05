@@ -1,33 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { reactLocalStorage } from "reactjs-localstorage";
 import TextareaAutosize from "react-textarea-autosize";
 import ShowCategoriesSelect from "../../components/showCategoriesSelect";
 import FilesSelector from "../../components/files-selector";
 import apiService from "../../services/api-service";
 import ShowFilesComponent from "../../components/show-files";
 import { BACKEND_FILES_URL } from "../../consts";
-
+import { AuthContext } from "../../App";
 function handleCategoryChange(evt) {
   console.log(evt.target.value);
 }
 
 export default function EditBlogPost() {
-  var loggedInUser = reactLocalStorage.getObject("loggedInUser", null);
-  var jwt = reactLocalStorage.get("jwt", null);
-  // console.log("jwt: " + jwt);
-  // console.log("loggedInUser: " + loggedInUser);
-  if (loggedInUser == null || jwt == null) {
-    //     console.log("User not logged in");
-    alert("Please login to edit blog");
-    window.location.href = "/";
+  const { state, dispatch } = useContext(AuthContext);
+  if (!state.isLoggedIn) {
+    alert("You must be logged in to edit a blog post");
+    // return <div></div>;
   }
-  if (loggedInUser.role != "admin") {
-    //     console.log("User is not an Admin");
-    alert("You are not an Admin");
-    window.location.href = "/";
+  if (state.user.role != "admin") {
+    alert("You must be an admin to edit a blog post");
+    // return <div></div>;
   }
+  // if (loggedInUser == null || jwt == null) {
+  //   //     console.log("User not logged in");
+  //   alert("Please login to edit blog");
+  //   window.location.href = "/";
+  // }
+  // if (loggedInUser.role != "admin") {
+  //   //     console.log("User is not an Admin");
+  //   alert("You are not an Admin");
+  //   window.location.href = "/";
+  // }
   let { blogUrl } = useParams();
   // console.log(id);
   const [posts, setPost] = React.useState(null);
@@ -348,17 +352,16 @@ export default function EditBlogPost() {
       <button
         className="save-blog-button"
         onClick={() => {
-          apiService("blog/edit/" + posts.blog._id,{
+          apiService("blog/edit/" + posts.blog._id, {
             blog: posts["blog"],
-                blogContent: posts["blogContent"],
-          })
-            .then((response) => {
-              console.log(response);
-              if (response.data.success) {
-                alert("Blog saved!\n" + response.data.message);
-                window.location.href = "/blogs/" + posts.blog.url;
-              }
-            });
+            blogContent: posts["blogContent"],
+          }).then((response) => {
+            console.log(response);
+            if (response.data.success) {
+              alert("Blog saved!\n" + response.data.message);
+              window.location.href = "/blogs/" + posts.blog.url;
+            }
+          });
         }}
       >
         Save Blog

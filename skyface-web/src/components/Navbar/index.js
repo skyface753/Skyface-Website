@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import {
   Nav,
   NavLink,
@@ -9,13 +9,14 @@ import {
 } from "./NavbarElements";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout } from "@react-oauth/google";
-import "../../styles/navbar.css"
+import "../../styles/navbar.css";
 import { useState } from "react";
 import { AuthContext } from "../../App";
+import apiService from "../../services/api-service";
 
 export default function Navbar() {
   const { state, dispatch } = useContext(AuthContext);
-  const [isNavExpanded, setIsNavExpanded] = useState(false)
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   console.log("State");
   console.log(state);
@@ -24,10 +25,11 @@ export default function Navbar() {
       <a href="/" className="brand-name">
         SkyBlog
       </a>
-      <button className="hamburger"
-      onClick={() => {
-        setIsNavExpanded(!isNavExpanded);
-      }}
+      <button
+        className="hamburger"
+        onClick={() => {
+          setIsNavExpanded(!isNavExpanded);
+        }}
       >
         {/* icon from heroicons.com */}
         <svg
@@ -52,9 +54,7 @@ export default function Navbar() {
           <li>
             <a href="/home">Home</a>
           </li>
-          <li>
-            <a href="/about">About</a>
-          </li>
+
           <li>
             <a href="/blogs">Blogs</a>
           </li>
@@ -72,76 +72,85 @@ export default function Navbar() {
               <li>
                 <a href="/admin">Admin</a>
               </li>
-            ) : (
-              null)
-          ) : (
-            null
-          )} 
+            ) : null
+          ) : null}
+          <li>
+            <input
+              type="text"
+              placeholder="Search"
+              className="search-nav-input"
+              onKeyDown={(e) => {
+                // Enter key
+                if (e.key === "Enter") {
+                  window.location.href =
+                    "/search/?searchString=" + e.target.value;
+                }
+              }}
+            />
+          </li>
           {state.isLoggedIn ? (
             <li
-            style={
-              {
+              style={{
                 marginLeft: "auto",
-              }
-            }
+              }}
             >
+              <div className="loggedInUserMenu">
+                <div className="loggedInUserMenu-Button">
+                  {state.user.picture ? (
+                    <img
+                      className="profile-pic"
+                      src={state.user.picture}
+                      alt="User Picture"
+                    />
+                  ) : (
+                    <img
+                      className="profile-pic"
+                      src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                      alt="User Picture"
+                    />
+                  )}
+                </div>
+                <div className="loggedInUser-dropdown-content">
+                  {/* <a href={"/users" + loggedInUser.user.username}>{loggedInUser.user.name}</a> */}
+                  <a href={"/users/" + state.user.username}>
+                    {state.user.username}
+                  </a>
+                  {/* Logout */}
+                  <a
+                    href="#"
+                    onClick={() => {
+                      apiService("logout").then((res) => {
+                        if (res.data.success) {
+                          console.log("Logged out");
+                          if (state.user.provider == "Google") {
+                            googleLogout();
+                            dispatch({
+                              type: "LOGOUT",
+                            });
+                          } else if (state.user.provider === "GitHub") {
+                            dispatch({ type: "LOGOUT" });
+                          }
 
-            
-          <div className="loggedInUserMenu">
-            <div className="loggedInUserMenu-Button">
-              {state.user.picture ? (
-                <img
-                  className="profile-pic"
-                  src={state.user.picture}
-                  alt="User Picture"
-                />
-              ) : (
-                <img
-                  className="profile-pic"
-                  src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                  alt="User Picture"
-                />
-              )}
-            </div>
-            <div className="loggedInUser-dropdown-content">
-              {/* <a href={"/users" + loggedInUser.user.username}>{loggedInUser.user.name}</a> */}
-              <a href={"/users/" + state.user.username}>{state.user.username}</a>
-              {/* Logout */}
-              <a
-                href="/"
-                onClick={() => {
-                  if (state.user.provider == "Google") {
-                    googleLogout();
-                    dispatch({
-                      type: "LOGOUT",
-                    });
-                  }else if(state.user.provider === "GitHub")
-                  {
-                    dispatch({type: "LOGOUT"})
-                  } 
-                 
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </a>
-            </div>
-          </div>
-          </li>
-        ) : (
-          <div
-          className="navbar-right"
-          
-          >
-
-          <li >
-            <a href="/login">Login</a>
-         </li>
-         <li >
-            <a href="/register">Register</a>
+                          window.location.reload();
+                        }
+                      });
+                    }}
+                  >
+                    Logout
+                  </a>
+                </div>
+              </div>
             </li>
-          </div>
-        )}
+          ) : (
+            <div className="navbar-right">
+              <li>
+                <a href="/login">Login</a>
+              </li>
+              <li>
+                <a href="/register">Register</a>
+              </li>
+            </div>
+          )}
         </ul>
       </div>
     </nav>

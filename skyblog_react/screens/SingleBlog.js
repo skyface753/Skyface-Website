@@ -1,4 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useState, useEffect } from "react";
 import * as Clipboard from "expo-clipboard";
 import { ScrollView } from "react-native-gesture-handler";
@@ -17,16 +23,16 @@ export default function SingleBlog({ route, navigation }) {
       setBlogContent(response.data["blogContent"]);
     });
   }, []);
-  
+
   if (!blog) return <ActivityIndicator />;
-  
+
   navigation.setOptions({
-    title: blog.title
-  })
+    title: blog.title,
+  });
   if (!blogContent) return <ActivityIndicator />;
-  
+
   return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.title}>{blog.title}</Text>
         <Text style={styles.subtitle}>{blog.subtitle}</Text>
@@ -34,40 +40,43 @@ export default function SingleBlog({ route, navigation }) {
         {(() => {
           const blogDivs = [];
           console.log(blogContent);
-          if(blogContent.length == 0) {
-            return <Text style={styles.blogContent}>No content</Text>
+          if (blogContent.length == 0) {
+            return <Text style={styles.blogContent}>No content</Text>;
           }
           for (let i = 0; i < blogContent.length; i++) {
             if (blogContent[i].type == "text") {
               blogDivs.push(
                 <View key={blogContent[i]._id} style={styles.blogContentView}>
-                  <Text style={{
-                    color: "white",
-                    fontSize: 18,
-                  }}>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 18,
+                    }}
+                  >
                     {blogContent[i].content}
                   </Text>
                 </View>
               );
             } else if (blogContent[i].type == "code") {
               blogDivs.push(
-                <View key={blogContent[i]._id} style={styles.blogContentCodeView}>
+                <View
+                  key={blogContent[i]._id}
+                  style={styles.blogContentCodeView}
+                >
                   <TouchableOpacity
-                    onLongPress={() =>{
-
+                    onLongPress={() => {
                       Clipboard.setString(blogContent[i].content);
                       showMessage({
                         message: "Text copied",
                         type: "info",
-                      })
+                      });
                     }}
-                    onPress={()=>
+                    onPress={() =>
                       showMessage({
                         message: "Long Click to Copy",
-                        type: "info"
+                        type: "info",
                       })
                     }
-                    
                   >
                     <Text style={styles.blogContentCode}>
                       {blogContent[i].content}
@@ -135,11 +144,11 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderStyle: "solid",
   },
-  blogContentCodeView:{
+  blogContentCodeView: {
     margin: "0.3%",
     marginBottom: "2%",
     width: "100%",
     backgroundColor: "gray",
     borderRadius: 10,
-  }
+  },
 });

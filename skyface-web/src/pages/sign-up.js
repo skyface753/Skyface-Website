@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import GoogleLoginButton from "../components/google-login-button";
 import apiService from "../services/api-service";
 import "../styles/sign-up-in-style.css";
-import { reactLocalStorage } from "reactjs-localstorage";
+import { AuthContext } from "../App";
 
 const SignUp = () => {
+  const { state, dispatch } = useContext(AuthContext);
   var lastPage = document.referrer;
   // console.log("Last Page:" + document.referrer)
   const [username, setUsername] = React.useState("");
@@ -142,14 +143,15 @@ const SignUp = () => {
                   setError(res.data.message);
                   // alert(res.data.message);
                 } else {
-
-                var user = res.data["user"];
-                  reactLocalStorage.setObject("loggedInUser", user);
-                  if(lastPage !== ""){
+                  var user = res.data["user"];
+                  dispatch({
+                    type: "LOGIN",
+                    payload: { user, isLoggedIn: true },
+                  });
+                  if (lastPage !== "") {
                     window.location.href = lastPage;
-                  }else{
-
-                  window.location.href = "/";
+                  } else {
+                    window.location.href = "/";
                   }
                 }
               });
