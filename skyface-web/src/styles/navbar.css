@@ -61,10 +61,15 @@
 }
 
 
-
+.navigation a{
+  text-decoration: none!important;
+  box-shadow: none!important;
+  
+}
 .navigation-menu li a {
   /* // increases the surface area of the anchor tag to span more than just the anchor text */
-  text-decoration: none;
+  /* text-decoration: none!important;
+  box-shadow: none!important; */
   display: block;
   width: 100%;
   color: white;

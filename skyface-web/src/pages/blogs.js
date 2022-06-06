@@ -3,17 +3,21 @@ import axios from "axios";
 import BlogPreview from "../components/blog-preview";
 import apiService from "../services/api-service";
 import CheckIfAdmin from "../services/CheckIfAdmin";
+import { MeetupLoader } from "../components/Loader";
 
 export default function Blogs() {
   const [posts, setPost] = React.useState(null);
 
   React.useEffect(() => {
+    //Timeout 2 seconds to simulate loading
+    // setTimeout(() => {
     apiService("blogs").then((response) => {
       setPost(response.data);
     });
+    // }, 2000);
   }, []);
 
-  if (!posts) return <div className="loader" />;
+  if (!posts) return <MeetupLoader />;
 
   return (
     <div
@@ -27,7 +31,8 @@ export default function Blogs() {
     // 	}
     // }
     >
-      <div className="title-container">
+      <h1 className="blog-title">{posts.length} Blog Posts</h1>
+      {/* <div className="title-container">
         <img
           src={require("../img/blogs-title.png")}
           width="100%"
@@ -37,9 +42,9 @@ export default function Blogs() {
           <h1>Welcome to SkyBlog</h1>
           <h2>Coding-Blog</h2>
         </div>
-      </div>
+      </div> */}
       {/* Blog Posts */}
-      
+
       {(() => {
         const blogDivs = [];
         var UserIsAdmin = CheckIfAdmin();

@@ -1,6 +1,7 @@
 import React from "react";
 import Star from "../img/star";
 import Arrow from "../img/arrow";
+// import { Meetup as Loader } from "../components/Loader";
 
 var ProjectArticles = [
   {
@@ -47,7 +48,7 @@ var ProjectArticles = [
   },
 ];
 
-function createArticle(title, links, text) {
+function createProjectsArticle(title, links, text) {
   var articleLinks = [];
   for (var i = 0; i < links.length; i++) {
     articleLinks.push(
@@ -72,6 +73,22 @@ function createArticle(title, links, text) {
   );
 }
 
+function createPostsArticle(title, url, datetime) {
+  return (
+    <li>
+      <article class="home-latest-posts-article">
+        <Star />{" "}
+        <div class="home-latest-posts-article-title">
+          <a href="/blogs/{url}">{title}</a>
+        </div>
+        <time class="home-latest-posts-time" datetime={datetime}>
+          {datetime}
+        </time>
+      </article>
+    </li>
+  );
+}
+
 const Home = () => {
   document.title = "SkyBlog - Home";
   return (
@@ -89,8 +106,8 @@ const Home = () => {
         I'm a <strong>computer science student </strong>
         in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{" "}
         <strong>fullstack </strong>developer. This is my site,{" "}
-        <strong>SkyBlog</strong>, where I blog and share whatever side projects
-        I've been working on.
+        <strong>SkyBlog</strong> (build with React and NodeJS), where I blog and
+        share whatever side projects I've been working on.
       </p>
       {/* <div class="y"> */}
       <div class="home-connect">
@@ -136,11 +153,30 @@ const Home = () => {
           .
         </p>
       </div>
+      {/* Latest Blogs */}
+      <section class="home-latest-posts">
+        <h2 class="home-latest-posts-title">Latest Blog Posts</h2>
+        <ol class="home-latest-posts-elemets">
+          {createPostsArticle(
+            "SkyBlog - A Blog for Myself",
+            "url-test-12",
+            "2022-06-04"
+          )}
+        </ol>
+        <a href="/blogs/" class="home-latest-posts-more">
+          <span class="home-latest-posts-text">more blog posts</span> <Arrow />
+        </a>
+      </section>
+      {/* Projects */}
       <section class="hc">
         <h2 class="d">Favorite Projects</h2>
         <ol class="home-project-grid">
           {ProjectArticles.map((article) => {
-            return createArticle(article.title, article.links, article.text);
+            return createProjectsArticle(
+              article.title,
+              article.links,
+              article.text
+            );
           })}
         </ol>
         <a href="/projects/" class="home-more-projects">
