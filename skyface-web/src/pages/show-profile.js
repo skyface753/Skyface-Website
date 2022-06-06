@@ -19,6 +19,10 @@ export default function ShowProfile() {
   const [error, setError] = React.useState(null);
   const [usernameChangeError, setUsernameChangeError] = React.useState(null);
 
+  const [oldPassword, setOldPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [newPassword2, setNewPassword2] = React.useState("");
+
   React.useEffect(() => {
     apiService("users/profile/" + username, {}).then((response) => {
       console.log(response.data);
@@ -46,7 +50,11 @@ export default function ShowProfile() {
           />
           {state.isLoggedIn && state.user._id == user._id ? (
             <div>
+              <label htmlFor="usernameEdit" className="username-edit">
+                <b>Username</b>
+              </label>
               <input
+                id="usernameEdit"
                 type="text"
                 value={user.username}
                 onChange={(e) => {
@@ -103,6 +111,72 @@ export default function ShowProfile() {
           ) : (
             <h1>{user.username}</h1>
           )}
+          {state.isLoggedIn && state.user._id == user._id ? (
+            state.user.provider == "Manuelly" ? (
+              <div>
+                <h4>Change Password</h4>
+                <label htmlFor="oldPassword">
+                  <b>Old Password</b>
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter Old Password"
+                  name="oldPassword"
+                  required
+                  value={oldPassword}
+                  onChange={(e) => {
+                    setOldPassword(e.target.value);
+                  }}
+                />
+                <label htmlFor="newPassword">
+                  <b>New Password</b>
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  name="newPassword"
+                  required
+                  value={newPassword}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                  }}
+                />
+                <label htmlFor="newPassword2">
+                  <b>Confirm New Password</b>
+                </label>
+                <input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  name="newPassword2"
+                  required
+                  value={newPassword2}
+                  onChange={(e) => {
+                    setNewPassword2(e.target.value);
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (newPassword == newPassword2) {
+                      apiService("users/password/change", {
+                        oldPassword: oldPassword,
+                        newPassword: newPassword,
+                      }).then((res) => {
+                        if (res.data.success) {
+                          alert("Password changed successfully");
+                        } else {
+                          alert(res.data.message);
+                        }
+                      });
+                    } else {
+                      alert("Passwords do not match");
+                    }
+                  }}
+                >
+                  Change Password
+                </button>
+              </div>
+            ) : null
+          ) : null}
           <p>{user.email}</p>
           <hr className="blog-divider"></hr>
         </div>

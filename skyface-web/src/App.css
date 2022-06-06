@@ -563,3 +563,107 @@ body {
   border: none;
 
 }
+
+.username-edit{
+  float: left;
+}
+
+.home-title{
+  font-size: clamp(3.5rem,7.4666vw + 1.5rem,7rem);
+  margin: 0;
+}
+.home-description{
+margin: 40px 0 0;
+font-size: 1.5rem;
+font-family: "Roboto Slab",serif;
+line-height: 1.5;
+}
+
+.home-connect{
+  margin-top: 40px;
+  padding: 10px 15px;
+  border: 1px solid #edf2f5;
+  border-radius: 10px;
+  background-color: #404040;
+  line-height: 1.5;
+  text-align: left;
+}
+.home-connect a{
+  font-weight: 700;
+    color: #d80b77;
+    text-decoration: none;
+    box-shadow: inset 0 -.1em 0 rgba(216,11,119,.2);
+    transition: box-shadow .1s ease-out;
+}
+.home-connect-text{
+  margin: 0;
+  font-size: 1.125rem;
+}
+.home-project-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+  gap: 20px;
+  margin: 20px 0 0;
+  padding: 20px 0 0;
+  border-top: 4px dotted #233742;
+  list-style: none;
+}
+.home-project-grid>li{
+  padding: 20px;
+  border: 1px solid #edf2f5;
+  border-radius: 10px;
+  box-shadow: 0 0 7px #f1f5f7;
+}
+.home-project-article{
+  display: grid;
+  grid-template-columns: max-content auto;
+  align-items: baseline;
+  column-gap: 10px;
+}
+
+.home-project-star{
+  align-self: flex-start;
+  transform: translateY(4px) rotate(18deg);
+}
+
+.home-project-article-title{
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.home-project-article-links{
+  display: flex;
+  margin: 5px 0 0;
+  padding: 0;
+  font-size: 1.125rem;
+  list-style: none;
+}
+.home-project-article-links>li>a{
+  color: #d80b77;
+}
+.home-project-article-links>li:not(:first-child)::before{
+  content: "/";
+  margin: 0 5px;
+}
+.home-project-article-text{
+  margin: 15px 0 0;
+  font-size: 1.125rem;
+  font-family: "Roboto Slab",serif;
+  line-height: 1.5;
+  text-align: left;
+}
+.home-more-projects{
+  display: flex;
+  float: right;
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: none;
+  height: 22px;
+}
+
+.home-more-project-text{
+  transition: box-shadow .1s ease-out;
+  font-size: 1.125rem;
+}

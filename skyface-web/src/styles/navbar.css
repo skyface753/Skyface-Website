@@ -39,13 +39,13 @@
   text-decoration: none;
   color: white;
   font-size: 1.3rem;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
 }
 
 .navigation-menu {
   margin-right: auto;
   width: 100%;
-  margin-left: 2%;
+  /* margin-left: 2%; */
 }
 
 .navigation-menu ul {

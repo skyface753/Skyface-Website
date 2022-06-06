@@ -1,4 +1,76 @@
 import React from "react";
+import Star from "../img/star";
+import Arrow from "../img/arrow";
+
+var ProjectArticles = [
+  {
+    title: "SkyManager",
+    links: [
+      {
+        text: "backend",
+        href: "https://github.com/skyface753/SkyManager",
+      },
+      {
+        text: "frontend",
+        href: "https://github.com/skyface753/SkyManager-Frontend-Public",
+      },
+      {
+        text: "demo",
+        href: "https://demo.skymanager.net",
+      },
+    ],
+    text: "A Web, IOS and Android App for managing tickets, customers and documents build with Flutter and NodeJS",
+  },
+  {
+    title: "SkyTok",
+    links: [
+      {
+        text: "code",
+        href: "https://github.com/skyface753/SkyTok-Public",
+      },
+    ],
+    text: "A Replica of the TikTok App, build with Flutter and NodeJS",
+  },
+  {
+    title: "SkyBlog (this)",
+    links: [
+      {
+        text: "code",
+        href: "https://github.com/skyface753/Skyface-Website",
+      },
+      {
+        text: "Blog",
+        href: "https://www.skyface.de/index.php/blog/",
+      },
+    ],
+    text: "My personal blog, build with React and NodeJS",
+  },
+];
+
+function createArticle(title, links, text) {
+  var articleLinks = [];
+  for (var i = 0; i < links.length; i++) {
+    articleLinks.push(
+      <li>
+        <a href={links[i].href} target="_blank" rel="noopener noreferrer">
+          {links[i].text}
+        </a>
+      </li>
+    );
+  }
+  return (
+    <li>
+      <article class="home-project-article">
+        <Star />
+        <div>
+          <div class="home-project-article-title">{title}</div>
+          <ul class="home-project-article-links">{articleLinks}</ul>
+          <p class="home-project-article-text">{text}</p>
+        </div>
+      </article>
+    </li>
+  );
+}
 
 const Home = () => {
   document.title = "SkyBlog - Home";
@@ -6,12 +78,80 @@ const Home = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "Right",
-        height: "100vh",
+        justifyContent: "flex-start",
+        // alignItems: "Right",
+        // height: "100vh",
+        flexDirection: "column",
       }}
     >
-      <h1>Coding-Blog by Skyface</h1>
+      <h1 className="home-title">Hi, I'm Sebastian</h1>
+      <p class="home-description">
+        I'm a <strong>computer science student </strong>
+        in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{" "}
+        <strong>fullstack </strong>developer. This is my site,{" "}
+        <strong>SkyBlog</strong>, where I blog and share whatever side projects
+        I've been working on.
+      </p>
+      {/* <div class="y"> */}
+      <div class="home-connect">
+        <Star />
+        <strong
+          style={{
+            marginLeft: "10px",
+          }}
+        >
+          Let's Connect
+        </strong>
+        <p class="home-connect-text">
+          You can find me on{" "}
+          <strong>
+            <a
+              href="https://twitter.com/skyface_99"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Twitter
+            </a>
+          </strong>
+          ,{" "}
+          <strong>
+            <a
+              href="https://github.com/skyface753"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+          </strong>
+          , and{" "}
+          <strong>
+            <a
+              href="https://www.linkedin.com/in/sebastian-j%C3%B6rz-01a708232/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </strong>
+          .
+        </p>
+      </div>
+      <section class="hc">
+        <h2 class="d">Favorite Projects</h2>
+        <ol class="home-project-grid">
+          {ProjectArticles.map((article) => {
+            return createArticle(article.title, article.links, article.text);
+          })}
+        </ol>
+        <a href="/projects/" class="home-more-projects">
+          <span class="home-more-project-text">more side projects</span>{" "}
+          <Arrow />
+          {/* <svg aria-hidden="true" class="kc">
+            <use xlink:href="#arrow"></use>
+          </svg> */}
+        </a>
+      </section>
+      {/* </div> */}
     </div>
   );
 };

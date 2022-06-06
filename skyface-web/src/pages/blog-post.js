@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import apiService from "../services/api-service";
-import { BACKEND_FILES_URL } from "../consts";
+import { BACKEND_FILES_URL, TITLEPREFIX } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
@@ -19,20 +19,9 @@ function gotoBlockFromSeries(seriesBlogUrl) {
   // window.location.href = seriesBlogUrl;
 }
 
-/*{
-    "reply_to": null,
-    "_id": "6298d16cfa757c5c478c0179",
-    "by_user": {
-        "_id": "6298d13ffa757c5c478c0152",
-        "username": "skyface",
-        "picture": "https://lh3.googleusercontent.com/a-/AOh14GjXhcVexuM51Eu_wLE-e3OcX0541d1Pw-jXI2-z=s96-c"
-    },
-    "for_blog": "627fd7d2bf239402dbaef281",
-    "comment_text": "Hi from THE ADMIN",
-    "createdAt": "2022-06-02T15:04:12.266Z",
-    "updatedAt": "2022-06-02T15:04:12.266Z",
-    "__v": 0
-}*/
+function focusCommentTextBox() {
+  document.getElementById("comment-text-box").focus();
+}
 
 function commentsParentSort(fullList) {
   var sortedComments = [];
@@ -107,8 +96,28 @@ function createSeriesBlogsStepBar(seriesBlogs, currpPostId) {
   return seriesBlogsElements;
 }
 
+function getCommentAnswerButton(commentID, by_username, setCommentAnswer) {
+  return (
+    <button
+      className="comment-answer-button"
+      onClick={() => {
+        console.log("setCommentAnswer", commentID);
+        setCommentAnswer(commentID);
+        focusCommentTextBox();
+      }}
+    >
+      Answer to {by_username}
+    </button>
+  );
+}
+
 var commentsMarginValue = 30;
-function commentsToHTML(currList, childMargin = commentsMarginValue) {
+function commentsToHTML(
+  currList,
+  childMargin = commentsMarginValue,
+  state,
+  setCommentAnswer
+) {
   var returnHTML = [];
   if (currList == null) return returnHTML;
   for (var i = 0; i < currList.length; i++) {
@@ -138,23 +147,22 @@ function commentsToHTML(currList, childMargin = commentsMarginValue) {
             </div>
           </div>
         </div>
-        {/* {state.isLoggedIn ? (
-          <button
-            className="comment-answer-button"
-            onClick={() => {
-              setCommentAnswer(currList[i]._id);
-            }}
-          >
-            Answer to {currList[i].by_user.username}
-          </button>
-        ) : null} */}
+        {state.isLoggedIn
+          ? getCommentAnswerButton(
+              currList[i]._id,
+              currList[i].by_user.username,
+              setCommentAnswer
+            )
+          : null}
         <div className="comment-div-content">
           <p>{currList[i].comment_text}</p>
         </div>
         <hr className="blog-divider"></hr>
         {commentsToHTML(
           currList[i].children,
-          childMargin + commentsMarginValue
+          childMargin + commentsMarginValue,
+          state,
+          setCommentAnswer
         )}
       </div>
     );
@@ -192,6 +200,8 @@ export default function BlogPost() {
   }, []);
 
   if (!posts) return <div className="loader" />;
+
+  document.title = TITLEPREFIX + posts["blog"].title;
 
   console.log(commentsParentSort(posts["blogComments"]));
   return (
@@ -403,6 +413,7 @@ export default function BlogPost() {
                       className="comment-answer-button"
                       onClick={() => {
                         setCommentAnswer(comment._id);
+                        focusCommentTextBox();
                       }}
                     >
                       Answer to {comment.by_user.username}
@@ -414,58 +425,21 @@ export default function BlogPost() {
                   <hr className="blog-divider"></hr>
                   {(() => {
                     if (comment.children) {
-                      return <div>{commentsToHTML(comment.children)}</div>;
-                    } else {
-                      console.log("no children");
-                      console.log(comment.children);
-                      console.log(comment);
+                      return (
+                        <div>
+                          {commentsToHTML(
+                            comment.children,
+                            commentsMarginValue,
+                            state,
+                            setCommentAnswer
+                          )}
+                        </div>
+                      );
                     }
                   })()}
                 </div>
               );
             });
-
-            const commentDivs = [];
-            for (let i = 0; i < comments.length; i++) {
-              commentDivs.push(
-                <div key={comments[i]._id} className="comment-div">
-                  <div className="comment-div-header">
-                    <img
-                      src={
-                        comments[i].by_user.picture ||
-                        require("../img/default-profile-pic.png")
-                      }
-                      alt="comment-user-pic"
-                      className="comment-user-pic"
-                    />
-                    <div className="comment-user-info">
-                      <a href={"/users/" + comments[i].by_user.username}>
-                        {comments[i].by_user.username}
-                      </a>
-                      <div>
-                        {comments[i].updatedAt.substring(0, 10)} {"/"}{" "}
-                        {comments[i].updatedAt.substring(11, 16)}
-                      </div>
-                    </div>
-                  </div>
-                  {state.isLoggedIn ? (
-                    <button
-                      className="comment-answer-button"
-                      onClick={() => {
-                        setCommentAnswer(comments[i]._id);
-                      }}
-                    >
-                      Answer to {comments[i].by_user.username}
-                    </button>
-                  ) : null}
-                  <div className="comment-div-content">
-                    <p>{comments[i].comment_text}</p>
-                  </div>
-                  <hr className="blog-divider"></hr>
-                </div>
-              );
-            }
-            return commentDivs;
           }
         })()}
         {commentAnswer != null ? (
@@ -484,7 +458,10 @@ export default function BlogPost() {
           if (state.isLoggedIn) {
             return (
               <div>
-                <ReactTextareaAutosize className="comment-textarea" />
+                <ReactTextareaAutosize
+                  className="comment-textarea"
+                  id="comment-text-box"
+                />
                 <button
                   className="comment-button"
                   placeholder="Comment"

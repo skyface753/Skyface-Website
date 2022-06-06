@@ -8,12 +8,12 @@ import { AuthContext } from "../App";
 
 export default function SignIn() {
   const { state, dispatch } = useContext(AuthContext);
-  const [usernameOrMail, setUsernameOrMail] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
 
   const setExampleData = () => {
-    setUsernameOrMail("example");
+    setUsername("example");
     setPassword("example");
   };
 
@@ -26,16 +26,16 @@ export default function SignIn() {
         <button onClick={setExampleData}>Set Example Data</button>
         <hr />
 
-        <label htmlFor="usernameOrMail">
-          <b>Username or Email</b>
+        <label htmlFor="username">
+          <b>Username</b>
         </label>
         <input
           type="text"
-          placeholder="Enter Username or Email"
-          name="usernameOrMail"
+          placeholder="Enter Username"
+          name="username"
           required
-          value={usernameOrMail}
-          onChange={(e) => setUsernameOrMail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <label htmlFor="password">
@@ -55,13 +55,12 @@ export default function SignIn() {
         <button
           className="sign-in-up-btn"
           onClick={() => {
-            apiService("sign-in", {
-              usernameOrMail,
+            apiService("login/manuelly", {
+              username,
               password,
             }).then((response) => {
               if (response.data.success) {
                 var user = response.data["user"];
-                var token = response.data["token"];
                 dispatch({
                   type: "LOGIN",
                   payload: {

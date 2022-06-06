@@ -81,6 +81,46 @@ let UserService = {
       message: "Username changed",
     });
   },
+  changePassword: async (req, res) => {
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
+    var userInReq = req.user; // From Router Middleware
+    if (!oldPassword || !newPassword) {
+      res.json({
+        success: false,
+        message: "No password provided",
+      });
+      return;
+    }
+    if (newPassword.length < 6 || newPassword.length > 20) {
+      res.json({
+        success: false,
+        message: "Password must be between 6 and 20 characters",
+      });
+      return;
+    }
+    var userFromDB = await UserModel.findOne({ _id: userInReq._id });
+    if (!userFromDB) {
+      res.json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+    if (!bycrypt.compareSync(oldPassword, userFromDB.password)) {
+      res.json({
+        success: false,
+        message: "Wrong old password",
+      });
+      return;
+    }
+    userFromDB.password = bycrypt.hashSync(newPassword, saltRounds);
+    await userFromDB.save();
+    res.json({
+      success: true,
+      message: "Password changed",
+    });
+  },
 
   getUserProfile: async (req, res) => {
     var username = req.params.username;

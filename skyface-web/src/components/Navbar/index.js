@@ -13,6 +13,7 @@ import "../../styles/navbar.css";
 import { useState } from "react";
 import { AuthContext } from "../../App";
 import apiService from "../../services/api-service";
+import { ReactComponent as Logo } from "../../img/SkyBlog-Logo.svg";
 
 export default function Navbar() {
   const { state, dispatch } = useContext(AuthContext);
@@ -23,7 +24,8 @@ export default function Navbar() {
   return (
     <nav className="navigation">
       <a href="/" className="brand-name">
-        SkyBlog
+        {/* SkyBlog */}
+        <Logo />
       </a>
       <button
         className="hamburger"
@@ -105,7 +107,7 @@ export default function Navbar() {
                   ) : (
                     <img
                       className="profile-pic"
-                      src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                      src={require("../../img/default-profile-pic.png")}
                       alt="User Picture"
                     />
                   )}
@@ -124,12 +126,10 @@ export default function Navbar() {
                           console.log("Logged out");
                           if (state.user.provider == "Google") {
                             googleLogout();
-                            dispatch({
-                              type: "LOGOUT",
-                            });
-                          } else if (state.user.provider === "GitHub") {
-                            dispatch({ type: "LOGOUT" });
                           }
+                          dispatch({
+                            type: "LOGOUT",
+                          });
 
                           window.location.reload();
                         }

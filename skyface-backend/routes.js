@@ -9,6 +9,9 @@ const UserModel = require("./models/user_model.js");
 const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
 
+const RssService = require("./services/rss_service.js");
+router.get("/rss", RssService.getRss);
+
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
@@ -39,7 +42,7 @@ router.post("/register/manuelly", UserService.registerManuelly);
 router.post("/login/github", UserService.loginGitHub);
 router.post("/login/google", UserService.loginGoogle);
 router.post("/logout", UserService.logout);
-// router.post("/sign-up", UserService.register);
+// router.post("/register", UserService.register);
 // router.post("/sign-in", UserService.login);
 
 router.post("/series", SeriesService.getAllSeries);
@@ -75,6 +78,7 @@ router.post(
   "/users/username/free/:username",
   UserService.checkIfUsernameIsFree
 );
+router.post("/users/password/change", UserService.changePassword);
 
 //Authentication for ADMIN routes
 router.use(async (req, res, next) => {

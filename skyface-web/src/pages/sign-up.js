@@ -132,11 +132,8 @@ const SignUp = () => {
               if (password !== confirmPassword) {
                 setError("Passwords do not match");
               }
-              apiService("sign-up", {
+              apiService("register/manuelly", {
                 username,
-                email,
-                givenName,
-                familyName,
                 password,
               }).then((res) => {
                 if (!res.data.success) {
