@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/Skyface-Website/static/css/main.59efcede.css",
-    "main.js": "/Skyface-Website/static/js/main.a11c9dc2.js",
-    "static/js/787.e9760d9e.chunk.js": "/Skyface-Website/static/js/787.e9760d9e.chunk.js",
-    "static/media/blogs-title.png": "/Skyface-Website/static/media/blogs-title.686ff20cf19f7b156b76.png",
-    "static/media/default-profile-pic.png": "/Skyface-Website/static/media/default-profile-pic.9ed112aea12ab96e4c56.png",
-    "static/media/SkyBlog-Logo.svg": "/Skyface-Website/static/media/SkyBlog-Logo.b68496f14c6443e056891c64845f04f2.svg",
-    "index.html": "/Skyface-Website/index.html",
-    "main.59efcede.css.map": "/Skyface-Website/static/css/main.59efcede.css.map",
-    "main.a11c9dc2.js.map": "/Skyface-Website/static/js/main.a11c9dc2.js.map",
-    "787.e9760d9e.chunk.js.map": "/Skyface-Website/static/js/787.e9760d9e.chunk.js.map"
+    "main.css": "/static/css/main.59efcede.css",
+    "main.js": "/static/js/main.e9473fa3.js",
+    "static/js/787.e9760d9e.chunk.js": "/static/js/787.e9760d9e.chunk.js",
+    "static/media/blogs-title.png": "/static/media/blogs-title.686ff20cf19f7b156b76.png",
+    "static/media/default-profile-pic.png": "/static/media/default-profile-pic.9ed112aea12ab96e4c56.png",
+    "static/media/SkyBlog-Logo.svg": "/static/media/SkyBlog-Logo.b68496f14c6443e056891c64845f04f2.svg",
+    "index.html": "/index.html",
+    "main.59efcede.css.map": "/static/css/main.59efcede.css.map",
+    "main.e9473fa3.js.map": "/static/js/main.e9473fa3.js.map",
+    "787.e9760d9e.chunk.js.map": "/static/js/787.e9760d9e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.59efcede.css",
-    "static/js/main.a11c9dc2.js"
+    "static/js/main.e9473fa3.js"
   ]
 }
