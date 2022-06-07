@@ -4,14 +4,14 @@ import Styled from "styled-components";
 import GithubIcon from "mdi-react/GithubIcon";
 import { AuthContext } from "../App";
 import apiService from "../services/api-service";
-import { getClientId, getRedirectUri} from "../credentials"
+import { getClientId, getRedirectUri } from "../credentials";
 
 export default function GitHubLoginButton() {
-    const { state, dispatch } = useContext(AuthContext);
-    const [data, setData] = useState({ errorMessage: "", isLoading: false });
-        
-    const client_id = getClientId();
-    const redirect_uri = getRedirectUri();
+  const { state, dispatch } = useContext(AuthContext);
+  const [data, setData] = useState({ errorMessage: "", isLoading: false });
+
+  const client_id = getClientId();
+  const redirect_uri = getRedirectUri();
   useEffect(() => {
     // After requesting Github access, Github redirects back to your app with a code parameter
     const url = window.location.href;
@@ -24,56 +24,56 @@ export default function GitHubLoginButton() {
       setData({ ...data, isLoading: true });
 
       const requestData = {
-        code: newUrl[1]
+        code: newUrl[1],
       };
 
       console.log("Request data");
-        console.log(requestData);
-        apiService("login/github", {
-            "code": requestData.code,
-        }).then(response => {
-            console.log("Response data axios");
-            console.log(response);
-            if(response.data.success){
-                console.log("Login success");
-                console.log(response.data.user);
-                const { user } = response.data;
-                dispatch({
-                    type: "LOGIN",
-                    payload: { user, isLoggedIn: true }
-                });
-                // window.location.href = "/";
-            }
-        });
+      console.log(requestData);
+      apiService("login/github", {
+        code: requestData.code,
+      }).then((response) => {
+        console.log("Response data axios");
+        console.log(response);
+        if (response.data.success) {
+          console.log("Login success");
+          console.log(response.data.user);
+          const { user } = response.data;
+          dispatch({
+            type: "LOGIN",
+            payload: { user, isLoggedIn: true },
+          });
+          // window.location.href = "/";
+        }
+      });
     }
-    }, []);
-    if (state.isLoggedIn) {
-        return <Navigate to="/" />;
-      }
+  }, []);
+  if (state.isLoggedIn) {
+    return <Navigate to="/" />;
+  }
   return (
-          <div className="login-container">
-            {/* {data.isLoading ? (
+    <div className="github-login-container">
+      {/* {data.isLoading ? (
               <div className="loader-container">
                 <div className="loader"></div>
               </div>
             ) : ( */}
-              <>
-                {
-                  // Link to request GitHub access
-                }
-                <a
-                  className="login-link"
-                  href={`https://github.com/login/oauth/authorize?scope=user&client_id=${client_id}&redirect_uri=${redirect_uri}`}
-                  onClick={() => {
-                    // setData({ ...data, errorMessage: "" });
-                  }}
-                >
-                  <GithubIcon />
-                  <span>Login with GitHub</span>
-                </a>
-              </>
-            
-          </div>
+      <>
+        {
+          // Link to request GitHub access
+        }
+
+        <a
+          className="github-login-link"
+          href={`https://github.com/login/oauth/authorize?scope=user&client_id=${client_id}&redirect_uri=${redirect_uri}`}
+          onClick={() => {
+            // setData({ ...data, errorMessage: "" });
+          }}
+        >
+          <GithubIcon />
+          <span>Login with GitHub</span>
+        </a>
+      </>
+    </div>
   );
 }
 

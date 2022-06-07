@@ -3,7 +3,7 @@ import "../styles/loader.css";
 export const CombineLoader = () => {
   return (
     <div className="loader-container">
-      <div class="combine">
+      <div className="combine">
         <div></div>
         <div></div>
         <div></div>
@@ -15,8 +15,8 @@ export const CombineLoader = () => {
 
 export const MeetupLoader = () => {
   return (
-    <div class="loader-container">
-      <div class="meetup">
+    <div className="loader-container" style={{ marginTop: "8%" }}>
+      <div className="meetup">
         <div></div>
         <div></div>
         <div></div>

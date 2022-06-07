@@ -8,6 +8,7 @@ import apiService from "../../services/api-service";
 import ShowFilesComponent from "../../components/show-files";
 import { BACKEND_FILES_URL } from "../../consts";
 import { AuthContext } from "../../App";
+import { SeriesSelect } from "../../components/SeriesSelect";
 function handleCategoryChange(evt) {
   console.log(evt.target.value);
 }
@@ -347,6 +348,26 @@ export default function EditBlogPost() {
           console.log("NEW");
           console.log(posts);
           // setPost({ ...posts, category: e.target.value });
+        }}
+      />
+      <SeriesSelect
+        selectedSeries={
+          posts["blog"].series != null && posts["blog"].series._id != null
+            ? posts["blog"].series._id
+            : null
+        }
+        onChange={(seriesID) => {
+          console.log("New Selected: " + seriesID);
+          posts["blog"].series = { _id: seriesID };
+          setPost({ ...posts, blog: posts["blog"] });
+          console.log("NEW");
+          console.log(posts);
+          // console.log("OLD");
+          // console.log(posts);
+          // posts["blog"].series = { _id: e.target.value };
+          // setPost({ ...posts, blog: posts["blog"] });
+          // console.log("NEW");
+          // console.log(posts);
         }}
       />
       <button

@@ -62,7 +62,10 @@ let BlogService = {
   },
   getLast5Blogs: async (req, res) => {
     let blogs = await blogModel.find().sort({ createdAt: -1 }).limit(5);
-    res.json(blogs);
+    res.json({
+      success: true,
+      blogs: blogs,
+    });
   },
   updateBlog: async (req, res) => {
     var user = req.user;
@@ -96,6 +99,9 @@ let BlogService = {
     blog.subtitle = newBlog.subtitle;
     blog.url = newBlog.url;
     blog.category = newBlog.category;
+    console.log("Series");
+    console.log(newBlog.series);
+    blog.series = newBlog.series._id || null;
     await blog.save();
 
     //Delete old blog content

@@ -5,6 +5,7 @@ import { BACKEND_FILES_URL, TITLEPREFIX } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
+import { IsLikedButton, NeutralLikeButton } from "../img/like";
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -180,6 +181,7 @@ export default function BlogPost() {
   const [seriesBlogs, setSeriesBlogs] = React.useState(null);
   const [commentAnswer, setCommentAnswer] = React.useState(null);
   const [hasLiked, setHasLiked] = React.useState(false);
+  const [blogLikesCount, setBlogLikesCount] = React.useState(0);
 
   React.useEffect(() => {
     apiService("blog/" + blogUrl, {}).then((response) => {
@@ -191,6 +193,7 @@ export default function BlogPost() {
       setPost(response.data);
       setComments(commentsParentSort(response.data["blogComments"]));
       setHasLiked(response.data["hasUserLikedBlog"]);
+      setBlogLikesCount(response.data["blogLikesCount"]);
       if (response.data["series"]) {
         setSeries(response.data["series"]);
         setSeriesBlogs(response.data["seriesBlogs"]);
@@ -347,18 +350,19 @@ export default function BlogPost() {
       {state.isLoggedIn ? (
         hasLiked ? (
           <button
-            className="dislike-button"
+            className="unlike-button"
             onClick={() =>
               apiService("blog-likes/unlike/" + posts["blog"]._id, {}).then(
                 (response) => {
                   if (response.data.success) {
                     setHasLiked(false);
+                    setBlogLikesCount(blogLikesCount - 1);
                   }
                 }
               )
             }
           >
-            Unlike
+            <IsLikedButton />
           </button>
         ) : (
           <button
@@ -368,19 +372,28 @@ export default function BlogPost() {
                 (response) => {
                   if (response.data.success) {
                     setHasLiked(true);
+                    setBlogLikesCount(blogLikesCount + 1);
                   }
                 }
               )
             }
           >
-            Like
+            <NeutralLikeButton />
           </button>
         )
       ) : (
-        <p>
-          <a href="/login">Login</a> to like this blog
-        </p>
+        // Redirect to login page
+        <button
+          className="like-button"
+          onClick={() =>
+            (window.location.href =
+              "/login?redirect=" + window.location.pathname)
+          }
+        >
+          <NeutralLikeButton />
+        </button>
       )}
+      <p>{blogLikesCount} likes</p>
       <hr className="blog-divider"></hr>
       <div className="comments-container">
         <h3>Comments</h3>

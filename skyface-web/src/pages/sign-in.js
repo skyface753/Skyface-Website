@@ -18,7 +18,7 @@ export default function SignIn() {
   };
 
   return (
-    <div>
+    <div className="sign-in-container">
       <GoogleLoginButton />
       <GitHubLoginButton />
       <div className="container">

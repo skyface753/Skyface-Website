@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import apiService from "../services/api-service";
 import { useParams } from "react-router-dom";
-import BlogPreview from "../components/blog-preview";
+import BlogPreviewOL from "../components/blog-preview";
 import { AuthContext } from "../App";
 
 async function checkUsernameFree(username) {
@@ -178,18 +178,23 @@ export default function ShowProfile() {
             ) : null
           ) : null}
           <p>{user.email}</p>
-          <hr className="blog-divider"></hr>
+          {/* <hr className="blog-divider"></hr> */}
         </div>
       ) : (
         <div>Loading...</div>
       )}
-      {(() => {
+      <BlogPreviewOL
+        blogList={userBlogs}
+        UserIsAdmin={false}
+        marginLeft="0px"
+      />
+      {/* {(() => {
         const blogsDiv = [];
         for (var i = 0; i < userBlogs.length; i++) {
           blogsDiv.push(BlogPreview(userBlogs[i]));
         }
         return blogsDiv;
-      })()}
+      })()} */}
     </div>
   );
 }

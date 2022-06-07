@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import apiService from "../services/api-service";
-import BlogPreview from "../components/blog-preview";
+import BlogPreviewOL from "../components/blog-preview";
 
 export default function SingleCategory() {
   var { categoryUrl } = useParams();
@@ -30,12 +30,7 @@ export default function SingleCategory() {
         <div>Loading...</div>
       )}
       {posts ? (
-        <div>
-          {posts.map((post) => {
-            console.log(post);
-            return BlogPreview(post);
-          })}
-        </div>
+        <BlogPreviewOL blogList={posts} UserIsAdmin={false} marginLeft="0px" />
       ) : (
         <div>Loading...</div>
       )}

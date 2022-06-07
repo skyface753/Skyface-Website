@@ -25,7 +25,7 @@ export default function SingleSeries() {
       <div>
         <h1>{series.name}</h1>
         <p>{series.description}</p>
-        <hr className="blog-divider"></hr>
+        {/* <hr className="blog-divider"></hr> */}
       </div>
       {SeriesBlogsComp(seriesBlogs, series.url)}
       {/* <ul className="series-bar">

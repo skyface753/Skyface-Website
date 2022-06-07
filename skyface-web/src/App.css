@@ -1,3 +1,7 @@
+:root{
+  --border-top-color: #538199;
+}
+
 .App {
   text-align: center;
 }
@@ -623,7 +627,7 @@ line-height: 1.5;
   gap: 20px;
   margin: 20px 0 0;
   padding: 20px 0 0;
-  border-top: 4px dotted #233742;
+  border-top: 4px dotted var(--border-top-color);
   list-style: none;
 }
 .home-project-grid>li{
@@ -703,7 +707,7 @@ line-height: 1.5;
 .home-latest-posts-elemets{
   margin: 20px 0 0;
   padding: 0;
-  border-top: 4px dotted #233742;
+  border-top: 4px dotted var(--border-top-color);
   list-style: none;
 }
 .home-latest-posts-elemets>li{
@@ -725,13 +729,7 @@ line-height: 1.5;
   row-gap: 5px;
 }
 
-@media (min-width: 600px){
 
-  .home-latest-posts-article{
-    grid-template-areas: "p-i p-t p-d";
-    grid-template-columns: max-content auto max-content;
-  }
-}
 
 .home-latest-posts-article-title{
   grid-area: p-t;
@@ -770,4 +768,130 @@ line-height: 1.5;
 
 section>ol>li{
   background-color: #404040;
+}
+
+.blogs-section{
+  margin-top: 40px;
+  border-top: 4px dotted var(--border-top-color);
+}
+
+.blogs-list{
+  list-style: none;
+  padding: 0;
+}
+
+.blogs-article{
+  display: grid;
+  grid-template-areas: "p-i p-t p-d"
+  ".   p-s p-d";
+  grid-template-columns: max-content auto;
+  align-items: baseline;
+  column-gap: 10px;
+  row-gap: 5px;
+}
+
+.blogs-list>li{
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #edf2f5;
+  border-radius: 10px;
+  box-shadow: 0 0 7px #f1f5f7;
+}
+
+.blogs-article-title{
+  grid-area: p-t;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: left;
+  font-size: 1.5rem;
+}
+
+.blogs-article-subtitle{
+  grid-area: p-s;
+  font-size: 1.125rem;
+  text-align: left;
+  font-family: "Roboto Slab",serif;
+  font-weight: 500;
+}
+
+.home-latest-posts-time{
+  grid-area: p-d;
+  font-size: 1.125rem;
+  text-align: end;
+}
+
+/* 
+.blog-preview-li{
+  border: 1px solid #edf2f5;
+  border-radius: 10px;
+  box-shadow: 0 0 7px #f1f5f7;
+}
+
+.blog-preview-article{
+  display: grid;
+  grid-template-areas: "p-i p-t" ".   p-d";
+  grid-template-columns: max-content auto;
+  align-items: baseline;
+  column-gap: 10px;
+  row-gap: 5px;
+}
+
+.blog-preview-tusBox{
+  grid-area: p-t;
+  font-weight: 700;
+  line-height: 1.25;
+} */
+
+
+@media (min-width: 600px){
+
+  .home-latest-posts-article{
+    grid-template-areas: "p-i p-t p-d";
+    grid-template-columns: max-content auto max-content;
+  }
+.blogs-article
+  {
+    grid-template-areas: "p-i p-t p-d"
+    ".   p-s p-d";
+    grid-template-columns: max-content auto max-content;
+  }
+}
+
+.like-button, .unlike-button{
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.sign-in-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.github-login-container{
+  display: inline-flex;
+  align-items: center;
+  background-color: #121212;
+  border-radius: 5px;
+  padding: 8px;
+  margin-top: 15px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+}
+.github-login-container>a{
+  color: #fff;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-right: 10px;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  
+
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import Star from "../img/star";
 import Arrow from "../img/arrow";
+import apiService from "../services/api-service";
+import { MeetupLoader } from "../components/Loader";
 // import { Meetup as Loader } from "../components/Loader";
 
 var ProjectArticles = [
@@ -50,7 +52,9 @@ var ProjectArticles = [
 
 function createProjectsArticle(title, links, text) {
   var articleLinks = [];
+
   for (var i = 0; i < links.length; i++) {
+    var linkKey = "project-" + title + "-" + i;
     articleLinks.push(
       <li>
         <a href={links[i].href} target="_blank" rel="noopener noreferrer">
@@ -59,14 +63,15 @@ function createProjectsArticle(title, links, text) {
       </li>
     );
   }
+  var key = "project-" + title;
   return (
-    <li>
-      <article class="home-project-article">
+    <li key={key}>
+      <article className="home-project-article">
         <Star />
         <div>
-          <div class="home-project-article-title">{title}</div>
-          <ul class="home-project-article-links">{articleLinks}</ul>
-          <p class="home-project-article-text">{text}</p>
+          <div className="home-project-article-title">{title}</div>
+          <ul className="home-project-article-links">{articleLinks}</ul>
+          <p className="home-project-article-text">{text}</p>
         </div>
       </article>
     </li>
@@ -74,14 +79,15 @@ function createProjectsArticle(title, links, text) {
 }
 
 function createPostsArticle(title, url, datetime) {
+  var url = "/blogs/" + url;
   return (
-    <li>
-      <article class="home-latest-posts-article">
+    <li key={url}>
+      <article className="home-latest-posts-article">
         <Star />{" "}
-        <div class="home-latest-posts-article-title">
-          <a href="/blogs/{url}">{title}</a>
+        <div className="home-latest-posts-article-title">
+          <a href={url}>{title}</a>
         </div>
-        <time class="home-latest-posts-time" datetime={datetime}>
+        <time className="home-latest-posts-time" dateTime={datetime}>
           {datetime}
         </time>
       </article>
@@ -90,6 +96,20 @@ function createPostsArticle(title, url, datetime) {
 }
 
 const Home = () => {
+  const [latestPosts, setLatestPosts] = React.useState(null);
+
+  React.useEffect(() => {
+    //Timeout 2 seconds to simulate loading
+    setTimeout(() => {
+      apiService("blogs/last5").then((response) => {
+        if (response.data.success) {
+          setLatestPosts(response.data["blogs"]);
+        }
+      });
+    }, 2000);
+  }, []);
+  console.log(latestPosts);
+
   document.title = "SkyBlog - Home";
   return (
     <div
@@ -102,15 +122,15 @@ const Home = () => {
       }}
     >
       <h1 className="home-title">Hi, I'm Sebastian</h1>
-      <p class="home-description">
+      <p className="home-description">
         I'm a <strong>computer science student </strong>
         in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{" "}
         <strong>fullstack </strong>developer. This is my site,{" "}
         <strong>SkyBlog</strong> (build with React and NodeJS), where I blog and
         share whatever side projects I've been working on.
       </p>
-      {/* <div class="y"> */}
-      <div class="home-connect">
+      {/* <div className="y"> */}
+      <div className="home-connect">
         <Star />
         <strong
           style={{
@@ -119,7 +139,7 @@ const Home = () => {
         >
           Let's Connect
         </strong>
-        <p class="home-connect-text">
+        <p className="home-connect-text">
           You can find me on{" "}
           <strong>
             <a
@@ -154,23 +174,35 @@ const Home = () => {
         </p>
       </div>
       {/* Latest Blogs */}
-      <section class="home-latest-posts">
-        <h2 class="home-latest-posts-title">Latest Blog Posts</h2>
-        <ol class="home-latest-posts-elemets">
-          {createPostsArticle(
+      <section className="home-latest-posts">
+        <h2 className="home-latest-posts-title">Latest Blog Posts</h2>
+        <ol className="home-latest-posts-elemets">
+          {latestPosts ? (
+            latestPosts.map((post) => {
+              return createPostsArticle(
+                post.title,
+                post.url,
+                post.createdAt.substring(0, 10)
+              );
+            })
+          ) : (
+            <MeetupLoader />
+          )}
+          {/* {createPostsArticle(
             "SkyBlog - A Blog for Myself",
             "url-test-12",
             "2022-06-04"
-          )}
+          )} */}
         </ol>
-        <a href="/blogs/" class="home-latest-posts-more">
-          <span class="home-latest-posts-text">more blog posts</span> <Arrow />
+        <a href="/blogs/" className="home-latest-posts-more">
+          <span className="home-latest-posts-text">more blog posts</span>{" "}
+          <Arrow />
         </a>
       </section>
       {/* Projects */}
-      <section class="hc">
-        <h2 class="d">Favorite Projects</h2>
-        <ol class="home-project-grid">
+      <section className="hc">
+        <h2 className="d">Favorite Projects</h2>
+        <ol className="home-project-grid">
           {ProjectArticles.map((article) => {
             return createProjectsArticle(
               article.title,
@@ -179,10 +211,10 @@ const Home = () => {
             );
           })}
         </ol>
-        <a href="/projects/" class="home-more-projects">
-          <span class="home-more-project-text">more side projects</span>{" "}
+        <a href="/projects/" className="home-more-projects">
+          <span className="home-more-project-text">more side projects</span>{" "}
           <Arrow />
-          {/* <svg aria-hidden="true" class="kc">
+          {/* <svg aria-hidden="true" className="kc">
             <use xlink:href="#arrow"></use>
           </svg> */}
         </a>
