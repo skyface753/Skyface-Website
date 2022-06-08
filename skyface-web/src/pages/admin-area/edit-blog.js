@@ -370,9 +370,37 @@ export default function EditBlogPost() {
           // console.log(posts);
         }}
       />
+      {posts["blog"].series != null && posts["blog"].series._id != null ? (
+        <input
+          type="number"
+          placeholder="Series Position"
+          value={
+            posts["blog"].series_position != null
+              ? posts["blog"].series_position
+              : ""
+          }
+          onChange={(e) => {
+            posts["blog"].series_position = e.target.value;
+            setPost({ ...posts, blog: posts["blog"] });
+          }}
+        />
+      ) : null}
       <button
         className="save-blog-button"
         onClick={() => {
+          if (
+            posts["blog"].series != null &&
+            posts["blog"].series._id != null
+          ) {
+            if (
+              posts["blog"].series_position == null ||
+              posts["blog"].series_position == ""
+            ) {
+              alert("Please enter a series position");
+              return;
+            }
+          }
+
           apiService("blog/edit/" + posts.blog._id, {
             blog: posts["blog"],
             blogContent: posts["blogContent"],

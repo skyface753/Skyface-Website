@@ -101,7 +101,24 @@ let BlogService = {
     blog.category = newBlog.category;
     console.log("Series");
     console.log(newBlog.series);
-    blog.series = newBlog.series._id || null;
+    try {
+      if (newBlog.series) {
+        if (newBlog.series_position) {
+          blog.series = newBlog.series._id || null;
+          blog.series_position = newBlog.series_position || null;
+        } else {
+          blog.series = null;
+          blog.series_position = null;
+        }
+      } else {
+        blog.series = null;
+        blog.series_position = null;
+      }
+      if (blog.series == null) {
+        blog.series_position = null;
+      }
+    } catch (e) {}
+
     await blog.save();
 
     //Delete old blog content

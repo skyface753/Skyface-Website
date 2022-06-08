@@ -1,17 +1,6 @@
-# BACKUP
+# DEMO
 
-docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongodump --archive' > compose-backup
-
-docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongorestore --archive' <
-
-./credentials.js
-var clientId = "";
-
-export default function getCredentials(){
-return clientId;
-}
-
-CHANGE RSS FRONTEND URL
+https://www.skyface.de
 
 # Environment Vars
 
@@ -19,7 +8,7 @@ CHANGE RSS FRONTEND URL
 
 ./skyface-web/src/consts.js
 
-- Change BACKENDHOST
+- Change BACKENDHOST (With "/" at the end)
 
 ./skyface-web/src/credentials.js
 (Optional for Oauth, but you need to remove it from ./src/App.js and from ./src/components/GitHubLoginButton.js)
@@ -59,9 +48,11 @@ docker-compose -> backend -> frontendurl = cors & rss
 
 # Build (My Notes :D)
 
+make build
+
 ## Web
 
-`cd skyface-web && npm build && docker build -t skyface753/skyblog-web .`
+`cd skyface-web && npm install && npm run build && docker build -t skyface753/skyblog-web .`
 
 ## Backend
 

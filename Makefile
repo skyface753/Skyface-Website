@@ -4,6 +4,8 @@ start: install docker-start docker-restore
 
 end: move-backup docker-backup
 
+build: install reactjs-build docker-build-web docker-build-backend
+
 install: ;@echo "Installing NPM ${PROJECT}....."; \
 	npm install -C skyface-web
 	npm install -C skyface-backend
@@ -20,3 +22,13 @@ docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
 
 move-backup: ;@echo "Moving backup to folder with date-name....."; \
 	mv latest.mongo mongo-backup/`date +%Y-%m-%d`.mongo
+
+reactjs-build: ;@echo "Building reactjs ${PROJECT}....."; \
+	npm install -C skyface-web
+	npm run build -C skyface-web
+
+docker-build-web: ;@echo "Building docker ${PROJECT}....."; \
+	docker build -t skyface753/skyblog-web ./skyface-web
+
+docker-build-backend: ;@echo "Building docker ${PROJECT}....."; \
+	docker build -t skyface753/skyblog-backend ./skyface-backend
