@@ -11,7 +11,13 @@ var app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:19006", "http://127.0.0.1:3000"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:19006",
+      "http://127.0.0.1:3000",
+      "http://skyface.de",
+      "http://skyface.de:3000",
+    ],
     credentials: true,
   })
 );
@@ -46,14 +52,14 @@ const UserService = require("./services/user_service");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(
-  //   expressSession({
-    //     secret: "secret",
-    //     resave: false,
-    //     saveUninitialized: false,
-    //   })
-    // );
-    app.use(cookieParser());
-    // app.use(csrf({ cookie: true }));
+//   expressSession({
+//     secret: "secret",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
+app.use(cookieParser());
+// app.use(csrf({ cookie: true }));
 var uri = "mongodb://" + config.mongodb.host + ":27017/skyfacedb";
 
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -93,7 +99,7 @@ const UserModel = require("./models/user_model.js");
 //   console.log("Github auth code:");
 //   console.log(req.body.code);
 //   const code = req.body.code;
-  
+
 //   var access_token = await axios({
 //     method: 'post',
 //     url: `https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}`,
@@ -179,12 +185,8 @@ const UserModel = require("./models/user_model.js");
 //     //     await createProvidedAccount("github", newUser, res);
 //     //   }
 
-
 //     // })
 //   })
-
-
-
 
 // app.post("/api/v1/auth/google", async (req, res) => {
 //   const { token } = req.body;
@@ -241,8 +243,6 @@ const UserModel = require("./models/user_model.js");
 //     // });
 //   }
 // });
-
-
 
 app.use("/uploaded-files", express.static(__dirname + "/uploaded-files"));
 const { response } = require("express");
