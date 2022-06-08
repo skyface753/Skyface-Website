@@ -1,8 +1,9 @@
 const BlogModel = require("../models/blog_model");
 const BlogContentModel = require("../models/blog_content_model");
 const Feed = require("feed").Feed;
+const config = require("../config");
 
-const frontendURL = "http://localhost:3000";
+const frontendURL = config.frontend_url;
 
 let RssService = {
   getRss: async (req, res) => {

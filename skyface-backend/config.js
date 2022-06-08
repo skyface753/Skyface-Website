@@ -1,15 +1,10 @@
 const env = process.env;
 
 const config = {
-  // postgres: {
-  //   host: env.POSTGRES_HOST || null,
-  // },
   mongodb: {
-    host: env.MONGO_HOST || "localhost",
+    host: env.MONGO_HOST || "mongo",
   },
-  // redis: {
-  //   host: env.REDIS_HOST || null,
-  // }
+  frontend_url: env.FRONTEND_URL || "https://skyface.de",
 };
 
 module.exports = config;

@@ -371,8 +371,8 @@ function verifyToken(req) {
 
 const axios = require("axios");
 
-const github_client_id = process.env.CLIENT_ID;
-const github_client_secret = process.env.CLIENT_SECRET;
+const github_client_id = process.env.GITHUB_CLIENT_ID;
+const github_client_secret = process.env.GITHUB_CLIENT_SECRET;
 
 async function checkGitHubLogin(code) {
   var access_token = await axios({

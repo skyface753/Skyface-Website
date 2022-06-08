@@ -17,6 +17,7 @@ app.use(
       "http://127.0.0.1:3000",
       "http://skyface.de",
       "http://skyface.de:3000",
+      process.env.FRONTEND_URL || "https://skyface.de",
     ],
     credentials: true,
   })
