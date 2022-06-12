@@ -1,0 +1,25 @@
+.pending-comment-user{
+    display: flex;
+    align-items: center;
+}
+.pending-comment-user-picture{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.pending-comments-table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.pending-comment-approve{
+    color: #006637;
+}
+.pending-comment-delete{
+    color: #dd4b39;
+}

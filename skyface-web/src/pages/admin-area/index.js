@@ -11,6 +11,8 @@ export default function AdminHome() {
       <a href="/admin/create-category">Create Category</a>
       <br />
       <a href="/admin/create-series">Create Series</a>
+      <br />
+      <a href="/admin/pending-comments">Pending Comments</a>
     </div>
   );
 }

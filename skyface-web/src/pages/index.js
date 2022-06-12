@@ -2,7 +2,12 @@ import React from "react";
 import Star from "../img/star";
 import Arrow from "../img/arrow";
 import apiService from "../services/api-service";
-import { MeetupLoader } from "../components/Loader";
+import {
+  CloudLoader,
+  CloudsRainLoader,
+  MeetupLoader,
+  SkyCloudLoader,
+} from "../components/Loader";
 // import { Meetup as Loader } from "../components/Loader";
 
 var ProjectArticles = [
@@ -42,8 +47,8 @@ var ProjectArticles = [
         href: "https://github.com/skyface753/Skyface-Website",
       },
       {
-        text: "Blog",
-        href: "https://www.skyface.de/index.php/blog/",
+        text: "web",
+        href: "https://www.skyface.de/",
       },
     ],
     text: "My personal blog, build with React and NodeJS",
@@ -100,13 +105,13 @@ const Home = () => {
 
   React.useEffect(() => {
     //Timeout 2 seconds to simulate loading
-    setTimeout(() => {
-      apiService("blogs/last5").then((response) => {
-        if (response.data.success) {
-          setLatestPosts(response.data["blogs"]);
-        }
-      });
-    }, 2000);
+    // setTimeout(() => {
+    apiService("blogs/last5").then((response) => {
+      if (response.data.success) {
+        setLatestPosts(response.data["blogs"]);
+      }
+    });
+    // }, 500);
   }, []);
   console.log(latestPosts);
 
@@ -121,6 +126,9 @@ const Home = () => {
         flexDirection: "column",
       }}
     >
+      {/* <CloudLoader /> */}
+      {/* <CloudsRainLoader /> */}
+
       <h1 className="home-title">Hi, I'm Sebastian</h1>
       <p className="home-description">
         I'm a <strong>computer science student </strong>
@@ -137,7 +145,7 @@ const Home = () => {
             marginLeft: "10px",
           }}
         >
-          Let's Connect
+          Socials
         </strong>
         <p className="home-connect-text">
           You can find me on{" "}
@@ -186,7 +194,7 @@ const Home = () => {
               );
             })
           ) : (
-            <MeetupLoader />
+            <SkyCloudLoader />
           )}
           {/* {createPostsArticle(
             "SkyBlog - A Blog for Myself",

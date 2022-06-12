@@ -6,6 +6,7 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
 import { IsLikedButton, NeutralLikeButton } from "../img/like";
+import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -202,7 +203,7 @@ export default function BlogPost() {
     });
   }, []);
 
-  if (!posts) return <div className="loader" />;
+  if (!posts) return <SkyCloudLoader />;
 
   document.title = TITLEPREFIX + posts["blog"].title;
 

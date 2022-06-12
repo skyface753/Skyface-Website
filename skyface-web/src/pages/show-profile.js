@@ -3,6 +3,7 @@ import apiService from "../services/api-service";
 import { useParams } from "react-router-dom";
 import BlogPreviewOL from "../components/blog-preview";
 import { AuthContext } from "../App";
+import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 
 async function checkUsernameFree(username) {
   return await apiService("users/username/free/" + username).then((res) => {
@@ -37,7 +38,7 @@ export default function ShowProfile() {
   if (error) {
     return <h1>{error}</h1>;
   }
-  if (!user) return <div className="loader" />;
+  if (!user) return <SkyCloudLoader />;
 
   return (
     <div>

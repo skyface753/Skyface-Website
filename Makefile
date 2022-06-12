@@ -4,7 +4,7 @@ start: install docker-start docker-restore
 
 end: move-backup docker-backup
 
-build: install reactjs-build docker-build-web docker-build-backend
+build: build-web docker-build-web docker-build-backend
 
 install: ;@echo "Installing NPM ${PROJECT}....."; \
 	npm install -C skyface-web
@@ -27,8 +27,13 @@ reactjs-build: ;@echo "Building reactjs ${PROJECT}....."; \
 	npm install -C skyface-web
 	npm run build -C skyface-web
 
-docker-build-web: ;@echo "Building docker ${PROJECT}....."; \
-	docker build -t skyface753/skyblog-web ./skyface-web
+build-web: ;@echo "Installing reactjs ${PROJECT}....."; \
+	npm install -C skyface-web
+	npm run build -C skyface-web
 
+docker-build-web: ;@echo "Building docker ${PROJECT}....."; \
+	# docker build -t skyface753/skyblog-web ./skyface-web
+	docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skyblog-web ./skyface-web
 docker-build-backend: ;@echo "Building docker ${PROJECT}....."; \
-	docker build -t skyface753/skyblog-backend ./skyface-backend
+	# docker build -t skyface753/skyblog-backend ./skyface-backend
+	docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t skyface753/skyblog-backend ./skyface-backend

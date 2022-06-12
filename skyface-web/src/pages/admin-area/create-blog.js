@@ -6,6 +6,7 @@ import ShowFilesComponent from "../../components/show-files";
 import ShowCategoriesSelect from "../../components/showCategoriesSelect";
 import axios from "axios";
 import apiService from "../../services/api-service";
+import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
 const baseURL = "http://localhost:5000/admin/blog/";
 export default function CreateBlog() {
   const [posts, setPost] = React.useState(NewBlogBlank);
@@ -53,7 +54,7 @@ export default function CreateBlog() {
               }))
             )
           ) : (
-            <div className="loader" />
+            <SkyCloudLoader />
           )}
         </div>
       </div>

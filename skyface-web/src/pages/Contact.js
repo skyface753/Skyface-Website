@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import apiService from "../services/api-service";
+import { useState } from "react";
+
+import "../styles/contact_form.css";
 
 const ContactForm = () => {
   const {
@@ -9,6 +13,7 @@ const ContactForm = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const [reqResponse, setReqResponse] = useState(null);
 
   const onSubmit = async (data) => {
     const { name, email, subject, message } = data;
@@ -17,6 +22,21 @@ const ContactForm = () => {
     console.log("Email: ", email);
     console.log("Subject: ", subject);
     console.log("Message: ", message);
+    apiService("contact", {
+      name,
+      email,
+      subject,
+      message,
+    }).then((res) => {
+      if (res.data.success) {
+        toast.success("Message sent");
+        setReqResponse(res.data.message);
+        reset();
+      } else {
+        toast.error("Error sending message");
+        setReqResponse(res.data.message);
+      }
+    });
   };
 
   return (
@@ -45,6 +65,10 @@ const ContactForm = () => {
                           value: 30,
                           message: "Please use 30 characters or less",
                         },
+                        minLength: {
+                          value: 2,
+                          message: "Please use at least 2 characters",
+                        },
                       })}
                       className="form-control formInput"
                       placeholder="Name"
@@ -64,7 +88,7 @@ const ContactForm = () => {
                         pattern:
                           /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                       })}
-                      className="form-control formInput"
+                      className="form-control formInput contact-form-input-mail"
                       placeholder="Email address"
                     ></input>
                     {errors.email && (
@@ -109,7 +133,7 @@ const ContactForm = () => {
                       {...register("message", {
                         required: true,
                       })}
-                      className="form-control formInput"
+                      className="form-control formInput contact-form-input-message"
                       placeholder="Message"
                     ></textarea>
                     {errors.message && (
@@ -119,7 +143,8 @@ const ContactForm = () => {
                     )}
                   </div>
                 </div>
-                <button className="submit-btn" type="submit">
+                {reqResponse && <p>{reqResponse}</p>}
+                <button className="submit-btn glow-on-hover" type="submit">
                   Submit
                 </button>
               </form>

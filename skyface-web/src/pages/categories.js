@@ -1,6 +1,8 @@
 import React from "react";
 import apiService from "../services/api-service";
 import axios from "axios";
+import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import Star from "../img/star";
 
 function parentSort(fullList) {
   var sortedList = [];
@@ -30,28 +32,62 @@ function getChilds(currItemId, fullList) {
   if (returnList.length === 0) return null;
   return returnList;
 }
-var categoryMarginValue = 15
+var categoryMarginValue = 20;
 function childsToHTML(currList, childMargin = categoryMarginValue) {
   var returnHTML = [];
   if (currList == null) return returnHTML;
+
   for (var i = 0; i < currList.length; i++) {
     var currmargin = childMargin + "px";
-    returnHTML.push(
-      <div key={currList[i]._id} style={{ marginLeft: currmargin }}>
-        <a href={`/category/${currList[i].url}`} className="category-item">
-          {currList[i].name} - {currList[i].description}
-        </a>
-
-        {childsToHTML(currList[i].children, childMargin + categoryMarginValue)}
-      </div>
-    );
+    if (currList[i].children) {
+      returnHTML.push(
+        // <details open key={currList[i]._id} style={{ marginLeft: currmargin }}>
+        //   <summary>
+        <ol
+          className="categories-list"
+          key={currList[i]._id}
+          style={{ marginLeft: currmargin }}
+        >
+          <CategoriesPreview category={currList[i]} currmargin={currmargin} />
+          {childsToHTML(
+            currList[i].children,
+            childMargin + categoryMarginValue
+          )}
+        </ol>
+        // </summary>
+        // </details>
+      );
+    } else {
+      returnHTML.push(
+        <CategoriesPreview category={currList[i]} currmargin={currmargin} />
+      );
+    }
   }
   return returnHTML;
 }
 
-const Categories = () => {
-  
+const CategoriesPreview = ({ category, currmargin }) => {
+  return (
+    // <li key={category._id} style={{ marginLeft: currmargin }}>
+    <article
+      className="categories-article"
+      key={category._id}
+      style={{ marginLeft: currmargin }}
+    >
+      {/* <Star />{" "} */}
+      <div className="categories-article-title">
+        <a href={`/category/${category.url}`}>{category.name}</a>
+      </div>
+      {/* <div className="categories-article-description">
+        {category.description}
+      </div> */}
+      <div className="categories-article-count">{category.blogCount} Blogs</div>
+    </article>
+    // </li>
+  );
+};
 
+const Categories = () => {
   const [categories, setCategories] = React.useState(null);
 
   React.useEffect(() => {
@@ -60,30 +96,40 @@ const Categories = () => {
     });
   }, []);
 
-  if (!categories) return <div className="loader" />;
-
+  if (!categories) return <SkyCloudLoader />;
+  console.log(categories);
   return (
     <div
       style={{
         textAlign: "left",
       }}
     >
-      {(() => {
-        return categories.map((category) => {
-          return (
-            <div key={category._id}>
-              <a href={`/category/${category.url}`} className="category-item">
-                {category.name} - {category.description}
-              </a>
-              {(() => {
-                if (category.children) {
-                  return <div>{childsToHTML(category.children)}</div>;
-                }
-              })()}
-            </div>
-          );
-        });
-      })()}
+      <h1 className="categories-title">Categories</h1>
+      {/* <AllCategories categories={categories} /> */}
+      <section className="categories-section">
+        {(() => {
+          return categories.map((category) => {
+            if (category.children) {
+              return (
+                // <details open key={category._id}>
+                //   <summary>
+                <ol className="categories-list" key={category._id}>
+                  <CategoriesPreview category={category} currmargin="0px" />
+                  {/* // </summary> */}
+                  {(() => {
+                    if (category.children) {
+                      return childsToHTML(category.children);
+                    }
+                  })()}
+                </ol>
+                // </details>
+              );
+            } else {
+              return <CategoriesPreview category={category} currmargin="0px" />;
+            }
+          });
+        })()}
+      </section>
     </div>
   );
 };

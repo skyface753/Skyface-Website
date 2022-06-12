@@ -22,6 +22,10 @@ let CommentSchema = new Schema(
       ref: "Comment",
       default: null,
     },
+    approved: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -3,7 +3,7 @@ import axios from "axios";
 import BlogPreviewOL from "../components/blog-preview";
 import apiService from "../services/api-service";
 import CheckIfAdmin from "../services/CheckIfAdmin";
-import { MeetupLoader } from "../components/Loader";
+import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 
 export default function Blogs() {
   const [posts, setPost] = React.useState(null);
@@ -17,7 +17,7 @@ export default function Blogs() {
     // }, 2000);
   }, []);
 
-  if (!posts) return <MeetupLoader />;
+  if (!posts) return <SkyCloudLoader />;
 
   return (
     <div

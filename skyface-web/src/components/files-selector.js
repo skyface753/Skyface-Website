@@ -1,5 +1,6 @@
 import React from "react";
 import apiService from "../services/api-service";
+import { MeetupLoader, SkyCloudLoader } from "./Loader";
 import ShowFilesComponent from "./show-files";
 
 export default function FilesSelector() {
@@ -37,7 +38,7 @@ export default function FilesSelector() {
             })
           )
         ) : (
-          <div className="loader" />
+          <SkyCloudLoader />
         )}
       </div>
     </div>

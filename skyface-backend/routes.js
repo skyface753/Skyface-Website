@@ -27,6 +27,9 @@ router.use(async (req, res, next) => {
   }
 });
 
+const ContactService = require("./services/contact_service.js");
+router.post("/contact", ContactService.sendForm);
+
 router.post("/blogs", BlogService.getAllBlogs);
 router.post("/blogs/last5", BlogService.getLast5Blogs);
 router.post("/blog-categories", BlogCategoryService.getBlogCategories);
@@ -37,6 +40,10 @@ router.post(
   BlogCategoryService.getSingleCategoryAndAllBlogs
 );
 router.post("/users/profile/:username", UserService.getUserProfile);
+router.post(
+  "/users/username/free/:username",
+  UserService.checkIfUsernameIsFree
+);
 
 router.post("/login/manuelly", UserService.loginManuelly);
 router.post("/register/manuelly", UserService.registerManuelly);
@@ -75,10 +82,7 @@ router.post("/blog-likes/unlike/:blogID", BlogLikesService.unlikeABlog);
 const CommentService = require("./services/comment_service.js");
 router.post("/comment/create/:blogID", CommentService.createComment);
 router.post("/users/username/change", UserService.changeUsername);
-router.post(
-  "/users/username/free/:username",
-  UserService.checkIfUsernameIsFree
-);
+
 router.post("/users/password/change", UserService.changePassword);
 
 //Authentication for ADMIN routes
@@ -113,7 +117,6 @@ router.use(async (req, res, next) => {
 });
 router.post("/blog/edit/:id", BlogService.updateBlog);
 router.post("/admin/blog/create", BlogService.createBlog);
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploaded-files/");
@@ -134,6 +137,11 @@ router.post("/admin/files", FileService.getAllFiles);
 router.post("/admin/files/:type", FileService.getAllFilesByType);
 router.post("/admin/blogs/delete/:blogId", BlogService.deleteBlog);
 router.post("/admin/category/create", BlogCategoryService.createBlogCategory);
+router.post("/admin/category/edit", BlogCategoryService.editBlogCategory);
+router.post(
+  "/admin/category/delete/:categoryId",
+  BlogCategoryService.deleteBlogCategory
+);
 router.post(
   "/admin/category/checkFreeUrl/:categoryUrl",
   BlogCategoryService.checkIfCategoryUrlIsFree
@@ -143,4 +151,21 @@ router.post(
   SeriesService.checkIfSeriesUrlIsFree
 );
 router.post("/admin/files/delete/:fileId", FileService.deleteFile);
+
+router.post("/admin/comments/pending", CommentService.getPendingComments);
+router.post(
+  "/admin/comments/approve/:commentID",
+  CommentService.approveComment
+);
+router.post("/admin/comments/delete/:commentID", CommentService.deleteComment);
+router.post(
+  "/admin/comments/all/approve",
+  CommentService.approveAllCommentsPending
+);
+router.post(
+  "/admin/comments/all/delete",
+  CommentService.deleteAllCommentsPending
+);
+router.post("/admin/series/create", SeriesService.createSeries);
+router.post("/admin/series/update", SeriesService.updateSeries);
 module.exports = router;

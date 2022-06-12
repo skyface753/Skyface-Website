@@ -30,8 +30,8 @@ function getChilds(currItemId, fullList) {
   if (returnList.length == 0) return null;
   return returnList;
 }
-
-function childsToHTML(childPrefix, currList, selectedValue) {
+var defaultMargin = 20;
+function childsToHTML(currMargin = defaultMargin, currList, selectedValue) {
   var returnHTML = [];
   if (currList == null) return returnHTML;
   for (var i = 0; i < currList.length; i++) {
@@ -42,13 +42,19 @@ function childsToHTML(childPrefix, currList, selectedValue) {
           name="category"
           value={currList[i]._id}
           checked={selectedValue === currList[i]._id}
+          onChange={() => {}}
+          style={{
+            marginLeft: currMargin + "px",
+          }}
           //   onChange={() => console.log("changed")}
         />
-        <label>
-          {childPrefix} {currList[i].name}
-        </label>
+        <label>{currList[i].name}</label>
 
-        {childsToHTML(childPrefix + " -", currList[i].children, selectedValue)}
+        {childsToHTML(
+          currMargin + defaultMargin,
+          currList[i].children,
+          selectedValue
+        )}
       </div>
     );
   }
@@ -76,9 +82,13 @@ const ShowCategoriesSelect = (props) => {
       }}
     >
       <fieldset onChange={props.onChange}>
-        <input type="radio" name="category" value="" checked={!selectedValue} onChange={() => {
-          props.onChange(null);
-        }} />
+        <input
+          type="radio"
+          name="category"
+          value=""
+          checked={!selectedValue}
+          onChange={() => {}}
+        />
         {(() => {
           return categories.map((category) => {
             // console.log(selectedValue + ":" + category._id);
@@ -89,6 +99,7 @@ const ShowCategoriesSelect = (props) => {
                   name="category"
                   value={category._id}
                   checked={selectedValue === category._id}
+                  onChange={() => {}}
                   //   onChange={() => props.onChange(category._id)}
                   //   onChange={() => setSelectedCategory(category._id)}
                 />
@@ -101,7 +112,11 @@ const ShowCategoriesSelect = (props) => {
                   if (category.children) {
                     return (
                       <div>
-                        {childsToHTML("-", category.children, selectedValue)}
+                        {childsToHTML(
+                          defaultMargin,
+                          category.children,
+                          selectedValue
+                        )}
                       </div>
                     );
                   }

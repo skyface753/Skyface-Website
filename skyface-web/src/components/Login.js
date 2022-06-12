@@ -4,7 +4,7 @@ import Styled from "styled-components";
 // import GithubIcon from "mdi-react/GithubIcon";
 import { AuthContext } from "../App";
 import apiService from "../services/api-service";
-
+import { MeetupLoader, SkyCloudLoader } from "./Loader";
 
 export default function Login() {
   const { state, dispatch } = useContext(AuthContext);
@@ -24,37 +24,37 @@ export default function Login() {
       setData({ ...data, isLoading: true });
 
       const requestData = {
-        code: newUrl[1]
+        code: newUrl[1],
       };
 
       console.log("Request data");
-        console.log(requestData);
-        apiService("login/github", {
-            "code": requestData.code,
-        }).then(response => {
-            console.log("Response data axios");
-            console.log(response);
-        });
+      console.log(requestData);
+      apiService("login/github", {
+        code: requestData.code,
+      }).then((response) => {
+        console.log("Response data axios");
+        console.log(response);
+      });
       // Use code parameter and other parameters to make POST request to proxy_server
-    //   fetch(proxy_url, {
-    //     method: "POST",
-    //     body: JSON.stringify(requestData)
-    //   })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log("Response data");
-    //         console.log(data);
-    //       dispatch({
-    //         type: "LOGIN",
-    //         payload: { user: data, isLoggedIn: true }
-    //       });
-    //     })
-    //     .catch(error => {
-    //       setData({
-    //         isLoading: false,
-    //         errorMessage: "Sorry! Login failed"
-    //       });
-    //     });
+      //   fetch(proxy_url, {
+      //     method: "POST",
+      //     body: JSON.stringify(requestData)
+      //   })
+      //     .then(response => response.json())
+      //     .then(data => {
+      //         console.log("Response data");
+      //         console.log(data);
+      //       dispatch({
+      //         type: "LOGIN",
+      //         payload: { user: data, isLoggedIn: true }
+      //       });
+      //     })
+      //     .catch(error => {
+      //       setData({
+      //         isLoading: false,
+      //         errorMessage: "Sorry! Login failed"
+      //       });
+      //     });
     }
   }, [state, dispatch, data]);
 
@@ -71,9 +71,7 @@ export default function Login() {
           <span>{data.errorMessage}</span>
           <div className="login-container">
             {data.isLoading ? (
-              <div className="loader-container">
-                <div className="loader"></div>
-              </div>
+              <SkyCloudLoader />
             ) : (
               <>
                 {

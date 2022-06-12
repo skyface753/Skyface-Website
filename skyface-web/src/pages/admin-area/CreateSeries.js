@@ -66,8 +66,9 @@ export default function CreateSeries() {
                 (response) => {
                   if (response.data.success) {
                     alert("Series created");
+                    window.location.href = "/admin";
                   } else {
-                    alert(response.data.error);
+                    alert(response.data.message);
                   }
                 }
               );

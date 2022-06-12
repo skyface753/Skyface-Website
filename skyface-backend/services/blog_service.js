@@ -29,10 +29,10 @@ let BlogService = {
     let blogContent = await blogContentModel
       .find({ for_blog: blog._id })
       .sort({ position: 1 });
-    let blogComments = await CommentModel.find({ for_blog: blog._id }).populate(
-      "by_user",
-      "username _id picture"
-    );
+    let blogComments = await CommentModel.find({
+      for_blog: blog._id,
+      approved: true,
+    }).populate("by_user", "username _id picture");
     // Blog Likes Count
     let blogLikesCount = await BlogLikesModel.countDocuments({
       for_blog: blog._id,
@@ -99,6 +99,16 @@ let BlogService = {
     blog.subtitle = newBlog.subtitle;
     blog.url = newBlog.url;
     blog.category = newBlog.category;
+    try {
+      if (newBlog.category == "") {
+        blog.category = null;
+      }
+      if (newBlog.category._id == "") {
+        blog.category = null;
+      }
+    } catch (e) {
+      console.log(e);
+    }
     console.log("Series");
     console.log(newBlog.series);
     try {

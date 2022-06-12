@@ -1,5 +1,6 @@
 import apiService from "../services/api-service";
 import React from "react";
+import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 
 function gotoSeries(url) {
   window.location.href = `/series/${url}`;
@@ -19,7 +20,7 @@ export default function SeriesPage() {
     });
   }, []);
 
-  if (!series) return <div className="loader" />;
+  if (!series) return <SkyCloudLoader />;
 
   return (
     <div>

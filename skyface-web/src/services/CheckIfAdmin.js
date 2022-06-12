@@ -5,8 +5,8 @@ export default function CheckIfAdmin() {
   const { state, dispatch } = useContext(AuthContext);
   const user = state.user;
   const isLoggedIn = state.isLoggedIn;
-  console.log("CheckIfAdmin: " + isLoggedIn);
-  console.log(user);
+  // console.log("CheckIfAdmin: " + isLoggedIn);
+  // console.log(user);
   if (isLoggedIn) {
     if (user.role === "admin") {
       return true;

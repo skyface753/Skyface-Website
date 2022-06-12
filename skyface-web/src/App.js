@@ -26,6 +26,9 @@ import CreateSeries from "./pages/admin-area/CreateSeries";
 import SearchPage from "./pages/SearchPage";
 import ContactForm from "./pages/Contact";
 import { initialState, reducer } from "./store/reducer";
+import Impressum from "./pages/impressum";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PendingComments from "./pages/admin-area/PendingComments";
 // import Login from "./components/Login";
 // import Home from "./components/Home";
 export const AuthContext = createContext();
@@ -46,6 +49,8 @@ function App() {
           <div className="main-div">
             <Routes>
               <Route path="/" exact element={<Home />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/home" element={<Home />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blogs/:blogUrl" element={<BlogPost />} />
@@ -78,6 +83,10 @@ function App() {
                 element={<CreateCategory />}
               />
               <Route path="/admin/create-series" element={<CreateSeries />} />
+              <Route
+                path="/admin/pending-comments"
+                element={<PendingComments />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

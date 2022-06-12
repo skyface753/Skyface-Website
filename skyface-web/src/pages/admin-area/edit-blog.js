@@ -9,11 +9,22 @@ import ShowFilesComponent from "../../components/show-files";
 import { BACKEND_FILES_URL } from "../../consts";
 import { AuthContext } from "../../App";
 import { SeriesSelect } from "../../components/SeriesSelect";
+import TextContent from "../../contentmodels/Text";
+import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
+
+function textClasses() {
+  var TextClass = new TextContent("Hallo", 0, "12345");
+  console.log(TextClass.getContent());
+  TextClass.setContent("Wie gehts?");
+  console.log(TextClass.getContent());
+}
+
 function handleCategoryChange(evt) {
   console.log(evt.target.value);
 }
 
 export default function EditBlogPost() {
+  textClasses();
   const { state, dispatch } = useContext(AuthContext);
   if (!state.isLoggedIn) {
     alert("You must be logged in to edit a blog post");
@@ -52,7 +63,7 @@ export default function EditBlogPost() {
     });
   }, []);
 
-  if (!posts) return <div className="loader" />;
+  if (!posts) return <SkyCloudLoader />;
 
   return (
     <div>
@@ -394,9 +405,12 @@ export default function EditBlogPost() {
           ) {
             if (
               posts["blog"].series_position == null ||
-              posts["blog"].series_position == ""
+              posts["blog"].series_position == "" ||
+              posts["blog"].series_position == 0
             ) {
-              alert("Please enter a series position");
+              alert("Please enter a series position > 0");
+              console.log("position: " + posts["blog"].series_position);
+              console.log(posts["blog"]);
               return;
             }
           }

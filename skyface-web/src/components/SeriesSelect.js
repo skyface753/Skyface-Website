@@ -1,5 +1,6 @@
 import React from "react";
 import apiService from "../services/api-service";
+import { MeetupLoader, SkyCloudLoader } from "./Loader";
 
 export const SeriesSelect = ({ selectedSeries, onChange }) => {
   const [series, setSeries] = React.useState(null);
@@ -11,7 +12,7 @@ export const SeriesSelect = ({ selectedSeries, onChange }) => {
     });
   }, []);
 
-  if (!series) return <div className="loader" />;
+  if (!series) return <SkyCloudLoader />;
 
   return (
     <div>

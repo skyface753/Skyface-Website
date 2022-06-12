@@ -1,6 +1,7 @@
 import React from "react";
 import SeriesBlogsComp from "./SeriesBlogsComp";
 import apiService from "../services/api-service";
+import { MeetupLoader, SkyCloudLoader } from "./Loader";
 
 const SidebarSeries = (seriesUrl) => {
   /*{
@@ -20,7 +21,7 @@ const SidebarSeries = (seriesUrl) => {
     });
   });
 
-  if (!series || !seriesBlogs) return <div className="loader" />;
+  if (!series || !seriesBlogs) return <SkyCloudLoader />;
 
   return (
     <div>
