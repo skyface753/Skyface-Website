@@ -135,6 +135,9 @@ let BlogService = {
     await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
     //Create new blog content
     for (let i = 0; i < newBlogContent.length; i++) {
+      if (newBlogContent[i].content == "") {
+        continue;
+      }
       let blogContent = new blogContentModel({
         content: newBlogContent[i].content,
         for_blog: blog._id,
@@ -182,6 +185,9 @@ let BlogService = {
 
     //Create new blog content
     for (let i = 0; i < newBlogContent.length; i++) {
+      if (newBlogContent[i].content == "") {
+        continue;
+      }
       let blogContent = new blogContentModel({
         content: newBlogContent[i].content,
         for_blog: blog._id,
