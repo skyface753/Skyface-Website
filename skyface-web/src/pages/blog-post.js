@@ -235,7 +235,8 @@ export default function BlogPost() {
       })()}
       <div className="title-container">
         <img
-          src={require("../img/blogs-title.png")}
+          // src={require("../img/blogs-title.png")}
+          src={BACKEND_FILES_URL + posts["blog"].blog_image}
           width="100%"
           alt="About-Title"
         />

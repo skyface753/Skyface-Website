@@ -158,6 +158,18 @@ export default function EditBlogPost() {
                 console.log(posts);
               }}
             />
+            <label htmlFor="blog-image">Image</label>
+            <input
+              type="text"
+              id="blog-image"
+              placeholder="Image"
+              value={post.blog_image}
+              onChange={(e) => {
+                post.blog_image = e.target.value;
+                setPost({ ...posts, blog: post });
+                console.log(posts);
+              }}
+            />
           </div>
         );
       })()}

@@ -16,6 +16,13 @@ export default function CreateBlog() {
 
   const [currentContentIndex, setCurrentContentIndex] = React.useState(0);
 
+  React.useEffect(() => {
+    apiService("admin/files").then((res) => {
+      setFiles(res.data.files);
+      setFilesLoaded(true);
+    });
+  });
+
   return (
     <div>
       <div id="file-selector-main" className="files-selector-overlay">
@@ -58,6 +65,7 @@ export default function CreateBlog() {
           )}
         </div>
       </div>
+
       <div className="title-container">
         <img
           src={require("../../img/blogs-title.png")}
@@ -105,6 +113,18 @@ export default function CreateBlog() {
               value={post.url}
               onChange={(e) => {
                 post.url = e.target.value;
+                setPost({ ...posts, blog: post });
+                console.log(posts);
+              }}
+            />
+            <label htmlFor="blog-image">Image</label>
+            <input
+              type="text"
+              id="blog-image"
+              placeholder="Image"
+              value={post.blog_image}
+              onChange={(e) => {
+                post.blog_image = e.target.value;
                 setPost({ ...posts, blog: post });
                 console.log(posts);
               }}
@@ -315,6 +335,14 @@ export default function CreateBlog() {
       <button
         className="save-blog-button"
         onClick={() => {
+          if (
+            posts["blog"].title == "" ||
+            posts["blog"].subline == "" ||
+            posts["blog"].blog_image == ""
+          ) {
+            alert("Please fill in all fields");
+            return;
+          }
           apiService("admin/blog/create", {
             blog: posts["blog"],
             blogContent: posts["blogContent"],

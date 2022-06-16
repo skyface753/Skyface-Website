@@ -35,8 +35,14 @@ let blogSchema = new Schema(
     },
     series_position: {
       type: Number,
-      required: function () { return this.series; }
-    }
+      required: function () {
+        return this.series;
+      },
+    },
+    blog_image: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
