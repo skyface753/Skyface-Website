@@ -29,6 +29,7 @@ import { initialState, reducer } from "./store/reducer";
 import Impressum from "./pages/impressum";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PendingComments from "./pages/admin-area/PendingComments";
+import ShowContacts from "./pages/admin-area/show-contacts";
 // import Login from "./components/Login";
 // import Home from "./components/Home";
 export const AuthContext = createContext();
@@ -87,6 +88,7 @@ function App() {
                 path="/admin/pending-comments"
                 element={<PendingComments />}
               />
+              <Route path="/admin/show-contacts" element={<ShowContacts />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

@@ -13,6 +13,8 @@ export default function AdminHome() {
       <a href="/admin/create-series">Create Series</a>
       <br />
       <a href="/admin/pending-comments">Pending Comments</a>
+      <br />
+      <a href="/admin/show-contacts">Show Contacts</a>
     </div>
   );
 }

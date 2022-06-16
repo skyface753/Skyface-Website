@@ -28,6 +28,15 @@ let ContactService = {
       contact: newContact,
     });
   },
+  checkIfAMessageIsUnread: async (req, res) => {
+    var openContacts = await ContactModel.find({});
+    var openContactsCount = openContacts.length;
+    res.json({
+      success: true,
+      openContacts: openContacts,
+      openContactsCount: openContactsCount,
+    });
+  },
 };
 
 module.exports = ContactService;

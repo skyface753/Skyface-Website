@@ -168,4 +168,5 @@ router.post(
 );
 router.post("/admin/series/create", SeriesService.createSeries);
 router.post("/admin/series/update", SeriesService.updateSeries);
+router.post("/admin/contact/show", ContactService.checkIfAMessageIsUnread);
 module.exports = router;
