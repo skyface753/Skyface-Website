@@ -246,9 +246,24 @@ const UserModel = require("./models/user_model.js");
 // });
 
 app.use("/uploaded-files", express.static(__dirname + "/uploaded-files"));
+
+// RSS
+const RssService = require("./services/rss_service.js");
+app.get("/rss", RssService.getRss);
+app.get("/rss.xml", RssService.getRss);
+
+// React Integration
+const path = __dirname + "/react_build/";
+app.use(express.static(path));
+
+app.get("*", function (req, res) {
+  res.sendFile(path + "index.html");
+});
+
 const { response } = require("express");
 const routes = require("./routes");
 app.use("/", routes);
+
 var http = require("http").Server(app);
 // Start the server
 http.listen(port, function () {

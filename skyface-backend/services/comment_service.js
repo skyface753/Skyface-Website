@@ -1,14 +1,17 @@
 const CommentModel = require("../models/comment_model");
 const UserModel = require("../models/user_model");
+const MailService = require("./mail_service");
 
 let CommentService = {
   createComment: async (req, res) => {
     var user = req.user;
+    var userFromDb = await UserModel.findById(user._id);
     let comment = new CommentModel({
       by_user: user._id,
       for_blog: req.params.blogID,
       comment_text: req.body.comment_text,
       reply_to: req.body.reply_to,
+      approved: userFromDb.role === "admin" ? true : false,
     });
     await comment.save();
     res.json({
@@ -16,6 +19,13 @@ let CommentService = {
       message: "Comment created",
       comment: comment,
     });
+    if (userFromDb.role !== "admin") {
+      await MailService.sendMail(
+        req,
+        "New comment",
+        `A new comment has been posted by ${userFromDb.username}`
+      );
+    }
   },
   getPendingComments: async (req, res) => {
     let comments = await getPendingComments();

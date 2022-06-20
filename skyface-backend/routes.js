@@ -9,10 +9,6 @@ const UserModel = require("./models/user_model.js");
 const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
 
-const RssService = require("./services/rss_service.js");
-router.get("/rss", RssService.getRss);
-router.get("/rss.xml", RssService.getRss);
-
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);

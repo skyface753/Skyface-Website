@@ -57,3 +57,6 @@ make build
 ## Backend
 
 `docker build -t skyface753/skyblog-backend ./skyface-backend`
+
+Neu 17. Juni
+cd skyface-web && npm run build && cd .. && mv skyface-web/build/\* skyface-backend/react_build

@@ -8,7 +8,7 @@ import Blogs from "./pages/blogs";
 import SignUp from "./pages/sign-up";
 import BlogPost from "./pages/blog-post";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { getCredentials } from "./credentials";
+import config from "./credentials";
 import EditBlogPost from "./pages/admin-area/edit-blog";
 import Categories from "./pages/categories";
 import SingleCategory from "./pages/single-category";
@@ -30,12 +30,16 @@ import Impressum from "./pages/impressum";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PendingComments from "./pages/admin-area/PendingComments";
 import ShowContacts from "./pages/admin-area/show-contacts";
+// import env from "react-dotenv";
+
 // import Login from "./components/Login";
 // import Home from "./components/Home";
 export const AuthContext = createContext();
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  // const clientId = env.GOOGLE_CLIENT_ID;
+  // console.log("clientId", clientId);
 
   return (
     <AuthContext.Provider
@@ -44,7 +48,7 @@ function App() {
         dispatch,
       }}
     >
-      <GoogleOAuthProvider clientId={getCredentials()}>
+      <GoogleOAuthProvider clientId={config.clientId}>
         <Router>
           <Navbar />
           <div className="main-div">
