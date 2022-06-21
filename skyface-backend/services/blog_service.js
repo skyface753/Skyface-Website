@@ -8,7 +8,7 @@ const BlogLikesModel = require("../models/blog_likes_model");
 let BlogService = {
   getAllBlogs: async (req, res) => {
     let blogs = await blogModel.find().sort({ createdAt: -1 });
-    console.log("Returned Blogs");
+    // console.log("Returned Blogs");
     res.json(blogs);
   },
   getSingleBlogByUrl: async (req, res) => {

@@ -8,20 +8,24 @@ const UserService = require("./services/user_service.js");
 const UserModel = require("./models/user_model.js");
 const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
+const SelfTrackerService = require("./services/self_tracker_service.js");
 
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
-  console.log("UserId: " + userId);
+  // console.log("UserId: " + userId);
   if (!userId) {
     next();
   } else {
-    console.log("UserId: " + userId);
+    // console.log("UserId: " + userId);
     var user = await UserModel.findById(userId);
     req.user = user;
     next();
   }
 });
+
+router.post("/api/self-tracker", SelfTrackerService.receiveSelfTrackerData);
+// (Get in Admin)
 
 const ContactService = require("./services/contact_service.js");
 router.post("/contact", ContactService.sendForm);
@@ -57,15 +61,15 @@ router.post("/search", SearchService.search);
 //Authentication for user routes
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
-  console.log("UserId: " + userId);
+  // console.log("UserId: " + userId);
   if (!userId) {
-    console.log("Unauthorized in Router");
+    // console.log("Unauthorized in Router");
     res.status(401).json({
       message: "Unauthorized",
     });
     return;
   }
-  console.log("Authorized in Router");
+  // console.log("Authorized in Router");
   var user = await UserModel.findById(userId);
   req.user = user;
   next();
@@ -84,15 +88,15 @@ router.post("/users/password/change", UserService.changePassword);
 //Authentication for ADMIN routes
 router.use(async (req, res, next) => {
   var userId = UserService.verifyTokenExport(req);
-  console.log("UserId: " + userId);
+  // console.log("UserId: " + userId);
   if (!userId) {
-    console.log("Unauthorized in Router");
+    // console.log("Unauthorized in Router");
     res.status(401).json({
       message: "Unauthorized",
     });
     return;
   }
-  console.log("Authorized in Router");
+  // console.log("Authorized in Router");
   var user = await UserModel.findById(userId);
   if (!user) {
     res.status(401).json({
@@ -101,14 +105,14 @@ router.use(async (req, res, next) => {
     return;
   }
   if (user.role !== "admin") {
-    console.log("Not an admin in Router");
+    // console.log("Not an admin in Router");
     res.status(401).json({
       message: "Not an admin",
     });
     return;
   }
   req.user = user;
-  console.log("Admin in Router");
+  // console.log("Admin in Router");
   next();
 });
 router.post("/blog/edit/:id", BlogService.updateBlog);
@@ -165,4 +169,5 @@ router.post(
 router.post("/admin/series/create", SeriesService.createSeries);
 router.post("/admin/series/update", SeriesService.updateSeries);
 router.post("/admin/contact/show", ContactService.checkIfAMessageIsUnread);
+router.post("/admin/self-tracker/get", SelfTrackerService.getSelfTrackerData);
 module.exports = router;

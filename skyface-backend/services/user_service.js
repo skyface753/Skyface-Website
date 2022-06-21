@@ -361,7 +361,7 @@ function verifyToken(req) {
     return false;
   }
   var userId = payload.user_id;
-  console.log("Token from request: " + token);
+  // console.log("Token from request: " + token);
   if (token) {
     return userId;
   } else {

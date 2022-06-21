@@ -15,6 +15,8 @@ export default function AdminHome() {
       <a href="/admin/pending-comments">Pending Comments</a>
       <br />
       <a href="/admin/show-contacts">Show Contacts</a>
+      <br />
+      <a href="/admin/show-selftracker">Show SelfTracker</a>
     </div>
   );
 }

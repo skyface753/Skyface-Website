@@ -1,5 +1,5 @@
 const ContactModel = require("../models/contact_model");
-
+const MailService = require("./mail_service");
 let ContactService = {
   sendForm: async (req, res) => {
     const name = req.body.name;
@@ -27,6 +27,11 @@ let ContactService = {
       message: "Message sent",
       contact: newContact,
     });
+    await MailService.sendMail(
+      req,
+      "New contact form",
+      `A new contact form has been submitted by ${name}`
+    );
   },
   checkIfAMessageIsUnread: async (req, res) => {
     var openContacts = await ContactModel.find({});

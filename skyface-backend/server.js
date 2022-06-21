@@ -253,12 +253,14 @@ app.get("/rss", RssService.getRss);
 app.get("/rss.xml", RssService.getRss);
 
 // React Integration
-const path = __dirname + "/react_build/";
-app.use(express.static(path));
+if (process.env.NODE_ENV !== "development") {
+  const path = __dirname + "/react_build/";
+  app.use(express.static(path));
 
-app.get("*", function (req, res) {
-  res.sendFile(path + "index.html");
-});
+  app.get("*", function (req, res) {
+    res.sendFile(path + "index.html");
+  });
+}
 
 const { response } = require("express");
 const routes = require("./routes");

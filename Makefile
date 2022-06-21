@@ -1,5 +1,7 @@
 PROJECT = "SkyBlog Webpage"
 
+build: build-react copy-react-build
+
 build-react: ;@echo "Building React..."
 	npm install -C skyface-web
 	npm run build -C skyface-web
@@ -7,6 +9,8 @@ build-react: ;@echo "Building React..."
 copy-react-build: ;@echo "Copying React build..."
 	rm -r skyface-backend/react_build/*
 	mv skyface-web/build/* skyface-backend/react_build
+
+
 
 
 

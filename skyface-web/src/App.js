@@ -30,6 +30,12 @@ import Impressum from "./pages/impressum";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import PendingComments from "./pages/admin-area/PendingComments";
 import ShowContacts from "./pages/admin-area/show-contacts";
+import DeckGl from "./pages/deckgl";
+import UseGaTracker from "./useGATracker";
+import { UseSelfTracker } from "./services/selfTracker";
+import ShowSelfTracker from "./pages/admin-area/show-selftracker";
+// import browserSignature from "browser-signature";
+
 // import env from "react-dotenv";
 
 // import Login from "./components/Login";
@@ -37,10 +43,11 @@ import ShowContacts from "./pages/admin-area/show-contacts";
 export const AuthContext = createContext();
 
 function App() {
+  // const signature = browserSignature();
+  // console.log("signature", signature);
   const [state, dispatch] = useReducer(reducer, initialState);
   // const clientId = env.GOOGLE_CLIENT_ID;
   // console.log("clientId", clientId);
-
   return (
     <AuthContext.Provider
       value={{
@@ -50,6 +57,8 @@ function App() {
     >
       <GoogleOAuthProvider clientId={config.clientId}>
         <Router>
+          <UseGaTracker />
+          <UseSelfTracker />
           <Navbar />
           <div className="main-div">
             <Routes>
@@ -93,9 +102,15 @@ function App() {
                 element={<PendingComments />}
               />
               <Route path="/admin/show-contacts" element={<ShowContacts />} />
+              <Route
+                path="/admin/show-selftracker"
+                element={<ShowSelfTracker />}
+              />
               <Route path="*" element={<NotFound />} />
+              <Route path="/deckgl" element={<DeckGl />} />
             </Routes>
           </div>
+          <Footer />
         </Router>
       </GoogleOAuthProvider>
     </AuthContext.Provider>
