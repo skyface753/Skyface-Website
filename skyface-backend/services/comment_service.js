@@ -23,7 +23,7 @@ let CommentService = {
       await MailService.sendMail(
         req,
         "New comment",
-        `A new comment has been posted by ${userFromDb.username}`
+        `A new comment has been posted by ${userFromDb.username}\n\n Text: ${comment.comment_text}`
       );
     }
   },

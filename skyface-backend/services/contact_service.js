@@ -30,7 +30,7 @@ let ContactService = {
     await MailService.sendMail(
       req,
       "New contact form",
-      `A new contact form has been submitted by ${name}`
+      `A new contact form has been submitted by ${name}\n\n Message: ${message}`
     );
   },
   checkIfAMessageIsUnread: async (req, res) => {

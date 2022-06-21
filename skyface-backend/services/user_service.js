@@ -263,7 +263,7 @@ let UserService = {
   },
   loginGoogle: async (req, res) => {
     const { token } = req.body;
-    console.log("Client id: " + process.env.GOOGLE_CLIENT_ID);
+    // console.log("Client id: " + process.env.GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -393,8 +393,8 @@ async function checkGitHubLogin(code) {
   if (!access_token) {
     return false;
   }
-  console.log("Access token:");
-  console.log(access_token);
+  // console.log("Access token:");
+  // console.log(access_token);
   var githubUser = await axios({
     method: "get",
     url: `https://api.github.com/user`,
@@ -403,7 +403,7 @@ async function checkGitHubLogin(code) {
     },
   })
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     })
     .catch((error) => {

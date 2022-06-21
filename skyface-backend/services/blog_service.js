@@ -40,7 +40,7 @@ let BlogService = {
     // Has User Liked Blog
     let hasUserLikedBlog = false;
     if (req.user) {
-      console.log("User is logged in");
+      // console.log("User is logged in");
       var liked = await BlogLikesModel.findOne({
         for_blog: blog._id,
         by_user: req.user._id,

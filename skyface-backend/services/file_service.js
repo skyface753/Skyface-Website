@@ -27,7 +27,7 @@ let FileService = {
     });
   },
   getAllFiles: async (req, res) => {
-    console.log("getAllFiles");
+    // console.log("getAllFiles");
     let files = await FileModel.find({});
     res.status(200).json({
       success: true,
@@ -67,9 +67,6 @@ let FileService = {
       message: "File deleted",
     });
   },
-
-
-
 };
 
 module.exports = FileService;
