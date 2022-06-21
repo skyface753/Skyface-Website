@@ -7,6 +7,7 @@ build-react: ;@echo "Building React..."
 	npm run build -C skyface-web
 
 copy-react-build: ;@echo "Copying React build..."
+	mkdir -p skyface-backend/react_build
 	rm -r skyface-backend/react_build/*
 	mv skyface-web/build/* skyface-backend/react_build
 
