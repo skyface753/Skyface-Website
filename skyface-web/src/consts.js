@@ -1,10 +1,5 @@
-// export const BACKENDURL = "http://localhost:5000/";
-// export const BACKEND_FILES_URL = "http://localhost:5000/uploaded-files/";
-// export const TITLEPREFIX = "SkyBlog - ";
-// export const RSSURL = "http://localhost:5000/rss";
-// const BACKENDHOST = "http://localhost:5000/";
 const BACKENDHOST = "http://localhost:5000/";
 export const BACKENDURL = BACKENDHOST;
 export const BACKEND_FILES_URL = BACKENDHOST + "uploaded-files/";
-export const TITLEPREFIX = "SkyBlog - ";
+export const TITLESUFFIX = " - SkyBlog";
 export const RSSURL = BACKENDHOST + "rss.xml";

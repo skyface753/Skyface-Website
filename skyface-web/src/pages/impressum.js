@@ -5,17 +5,17 @@ export default function Impressum() {
       <div class="blog-detail">
         <h2 id="angaben-gemass-5-tmg">Angaben gemäß § 5 TMG</h2>
         <p>
-          Name
+          Sebastian Joerz
           <br />
-          Strasse
+          Im Bangert 65
           <br />
-          PLZ ORT
+          64750 Lützelbach
         </p>
         <h2 id="kontakt">Kontakt</h2>
         <p>
-          Telefon:
+          Telefon: +49 (0)176-41312346
           <br />
-          E-Mail:
+          E-Mail: seppel8546@gmail.com
         </p>
       </div>
     </div>

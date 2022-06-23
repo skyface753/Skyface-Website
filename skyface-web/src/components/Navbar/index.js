@@ -76,20 +76,23 @@ export default function Navbar() {
               </li>
             ) : null
           ) : null}
-          <li>
-            <input
-              type="text"
-              placeholder="Search"
-              className="search-nav-input"
-              onKeyDown={(e) => {
-                // Enter key
-                if (e.key === "Enter") {
-                  window.location.href =
-                    "/search/?searchString=" + e.target.value;
-                }
-              }}
-            />
-          </li>
+          {!isNavExpanded ? (
+            <li>
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-nav-input"
+                onKeyDown={(e) => {
+                  // Enter key
+                  if (e.key === "Enter") {
+                    window.location.href =
+                      "/search/?searchString=" + e.target.value;
+                  }
+                }}
+              />
+            </li>
+          ) : null}
+
           {state.isLoggedIn ? (
             <li
               style={{
@@ -142,7 +145,7 @@ export default function Navbar() {
               </div>
             </li>
           ) : (
-            <div className="navbar-right">
+            <div className={isNavExpanded ? "navbar-space" : "navbar-right"}>
               <li>
                 <a href="/login">Login</a>
               </li>

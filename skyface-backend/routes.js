@@ -9,19 +9,11 @@ const UserModel = require("./models/user_model.js");
 const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
 const SelfTrackerService = require("./services/self_tracker_service.js");
+const Middleware = require("./middleware.js");
 
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
-  var userId = UserService.verifyTokenExport(req);
-  // console.log("UserId: " + userId);
-  if (!userId) {
-    next();
-  } else {
-    // console.log("UserId: " + userId);
-    var user = await UserModel.findById(userId);
-    req.user = user;
-    next();
-  }
+  await Middleware.getUserIfCookie(req, res, next);
 });
 
 router.post("/api/self-tracker", SelfTrackerService.receiveSelfTrackerData);
@@ -60,19 +52,7 @@ router.post("/search", SearchService.search);
 
 //Authentication for user routes
 router.use(async (req, res, next) => {
-  var userId = UserService.verifyTokenExport(req);
-  // console.log("UserId: " + userId);
-  if (!userId) {
-    // console.log("Unauthorized in Router");
-    res.status(401).json({
-      message: "Unauthorized",
-    });
-    return;
-  }
-  // console.log("Authorized in Router");
-  var user = await UserModel.findById(userId);
-  req.user = user;
-  next();
+  await Middleware.authUser(req, res, next);
 });
 
 const BlogLikesService = require("./services/blog_likes_service.js");
@@ -87,33 +67,7 @@ router.post("/users/password/change", UserService.changePassword);
 
 //Authentication for ADMIN routes
 router.use(async (req, res, next) => {
-  var userId = UserService.verifyTokenExport(req);
-  // console.log("UserId: " + userId);
-  if (!userId) {
-    // console.log("Unauthorized in Router");
-    res.status(401).json({
-      message: "Unauthorized",
-    });
-    return;
-  }
-  // console.log("Authorized in Router");
-  var user = await UserModel.findById(userId);
-  if (!user) {
-    res.status(401).json({
-      message: "Unauthorized",
-    });
-    return;
-  }
-  if (user.role !== "admin") {
-    // console.log("Not an admin in Router");
-    res.status(401).json({
-      message: "Not an admin",
-    });
-    return;
-  }
-  req.user = user;
-  // console.log("Admin in Router");
-  next();
+  await Middleware.authAdmin(req, res, next);
 });
 router.post("/blog/edit/:id", BlogService.updateBlog);
 router.post("/admin/blog/create", BlogService.createBlog);

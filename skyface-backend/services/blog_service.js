@@ -4,6 +4,7 @@ const blogCategoryModel = require("../models/blog_category_model.js");
 const UserService = require("../services/user_service.js");
 const CommentModel = require("../models/comment_model");
 const BlogLikesModel = require("../models/blog_likes_model");
+const BlogViewsModel = require("../models/blog_views_model");
 
 let BlogService = {
   getAllBlogs: async (req, res) => {
@@ -13,6 +14,7 @@ let BlogService = {
   },
   getSingleBlogByUrl: async (req, res) => {
     var blogUrl = req.params.url;
+
     // console.log(blogUrl);
     // console.log(req.body);
     let blog = await blogModel
@@ -21,6 +23,42 @@ let BlogService = {
       .populate("posted_by", "username _id")
       .populate("series", "name url");
     var seriesBlogs = null;
+    try {
+      const signature = req.body.signature;
+      if (signature) {
+        BlogViewsModel.create({
+          blogId: blog._id,
+          signature: signature,
+          userId: req.user ? req.user._id : null,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    // Group by Signature
+    const blogViewsCount = (
+      await BlogViewsModel.aggregate([
+        {
+          $unwind: "$signature",
+        },
+        {
+          $match: {
+            blogId: blog._id,
+            signature: { $ne: null },
+          },
+        },
+        {
+          $group: {
+            _id: "$signature",
+            count: { $sum: 1 },
+          },
+        },
+      ])
+    ).length;
+    const blogViewsCountGesamt = await BlogViewsModel.countDocuments({
+      blogId: blog._id,
+    });
+
     if (blog.series) {
       seriesBlogs = await blogModel.find({ series: blog.series }).sort({
         series_position: 1,
@@ -58,6 +96,8 @@ let BlogService = {
       seriesBlogs: seriesBlogs,
       blogLikesCount: blogLikesCount,
       hasUserLikedBlog: hasUserLikedBlog,
+      blogViewsCount: blogViewsCountGesamt,
+      blogViewsCountPerUser: blogViewsCount,
     });
   },
   getLast5Blogs: async (req, res) => {

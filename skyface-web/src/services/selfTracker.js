@@ -5,25 +5,38 @@ import apiService from "./api-service";
 import browserSignature from "browser-signature";
 import { AuthContext } from "../App";
 
+import CookieConsent, {
+  Cookies,
+  getCookieConsentValue,
+} from "react-cookie-consent";
+
+console.log();
+
 export const UseSelfTracker = () => {
   const { state, dispatch } = useContext(AuthContext);
   const location = useLocation();
   const signature = browserSignature();
+  const analyticEnabled = getCookieConsentValue();
   useEffect(() => {
-    apiService(
-      "api/self-tracker",
-      {
-        USER: state.user ? state.user._id : null,
-        TOKEN: config.SELF_TRACKING_TOKEN,
-        LOCATION: {
-          HOST: window.location.host,
-          PATH: location.pathname + location.search,
-          URL: window.location.href,
-        },
+    if (analyticEnabled === "true") {
+      console.log("analytic enabled");
+      apiService(
+        "api/self-tracker",
+        {
+          USER: state.user ? state.user._id : null,
+          TOKEN: config.SELF_TRACKING_TOKEN,
+          LOCATION: {
+            HOST: window.location.host,
+            PATH: location.pathname + location.search,
+            URL: window.location.href,
+          },
 
-        SIGNATURE: signature,
-      },
-      true
-    );
+          SIGNATURE: signature,
+        },
+        true
+      );
+    } else {
+      console.log("analytic disabled");
+    }
   }, [location]);
 };

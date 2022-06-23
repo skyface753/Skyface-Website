@@ -10,6 +10,33 @@ const jwtKey = "SkyTokSecretKey!fqiwhdhuwqhdf2uhf2zgu";
 const saltRounds = 11;
 const bycrypt = require("bcrypt");
 
+var failures = {};
+function onLoginFail(remoteIp) {
+  var f = (failures[remoteIp] = failures[remoteIp] || {
+    count: 0,
+    nextTry: new Date(),
+  });
+  ++f.count;
+  if (f.count % 3 == 0) {
+    f.nextTry.setTime(Date.now() + 1000 * 60 * 1); // 2 minutes
+    // f.nextTry.setTime(Date.now() + 1000 * f.count); // Wait another two seconds for every failed attempt
+  }
+}
+
+function onLoginSuccess(remoteIp) {
+  delete failures[remoteIp];
+}
+
+// Clean up people that have given up
+var MINS10 = 600000,
+  MINS30 = 3 * MINS10;
+setInterval(function () {
+  for (var ip in failures) {
+    if (Date.now() - failures[ip].nextTry > MINS10) {
+      delete failures[ip];
+    }
+  }
+}, MINS30);
 let UserService = {
   logout: (req, res) => {
     res.clearCookie("jwt");
@@ -143,11 +170,32 @@ let UserService = {
   loginManuelly: async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
+    if (!username || !password) {
+      res.json({
+        success: false,
+        message: "No Username or Password provided",
+      });
+      return;
+    }
+    const remoteIp = req.ip;
+    var f = failures[remoteIp];
+    if (f && Date.now() < f.nextTry) {
+      // Throttled. Can't try yet.
+      return res.json({
+        success: false,
+        message:
+          "Too many failed attempts. Try again in " +
+          Math.round((f.nextTry - Date.now()) / 1000 / 60) +
+          " minutes.",
+      });
+    }
+
     let user = await UserModel.findOne({
       username: username,
       provider: "Manuelly",
     });
     if (!user) {
+      onLoginFail(remoteIp);
       res.json({
         success: false,
         message: "User not found",
@@ -156,6 +204,7 @@ let UserService = {
     }
     let isPasswordCorrect = await bycrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
+      onLoginFail(remoteIp);
       res.json({
         success: false,
         message: "Password is incorrect",
@@ -171,6 +220,7 @@ let UserService = {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       sameSite: "Strict",
     });
+    onLoginSuccess(remoteIp);
     res.json({
       success: true,
       user: user,

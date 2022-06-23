@@ -60,7 +60,9 @@ make build
 
 Neu 22. Juni
 make
-docker-compose up -d
+docker-compose up -d --build
+OR
+make full
 
 Neu 17. Juni
 cd skyface-web && npm run build && cd .. && mv skyface-web/build/\* skyface-backend/react_build

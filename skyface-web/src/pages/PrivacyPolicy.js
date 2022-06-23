@@ -1,8 +1,14 @@
 export default function PrivacyPolicy() {
   return (
-    <div class="tab-content translations-content-item en visible" id="en">
+    <div
+      style={{
+        textAlign: "left",
+      }}
+      class="tab-content translations-content-item en visible"
+      id="en"
+    >
       <h1>Privacy Policy</h1>
-      <p>Last updated: June 11, 2022</p>
+      <p>Last updated: June 23, 2022</p>
       <p>
         This Privacy Policy describes Our policies and procedures on the
         collection, use and disclosure of Your information when You use the
@@ -30,7 +36,7 @@ export default function PrivacyPolicy() {
         <li>
           <p>
             <strong>Company</strong> (referred to as either "the Company", "We",
-            "Us" or "Our" in this Agreement) refers to TheBLog.
+            "Us" or "Our" in this Agreement) refers to SkyBlog.
           </p>
         </li>
         <li>
@@ -89,13 +95,13 @@ export default function PrivacyPolicy() {
         </li>
         <li>
           <p>
-            <strong>Website</strong> refers to TheBLog, accessible from{" "}
+            <strong>Website</strong> refers to SkyBlog, accessible from{" "}
             <a
-              href="http://localhost"
+              href="https://www.skyface.de"
               rel="external nofollow noopener"
               target="_blank"
             >
-              http://localhost
+              https://www.skyface.de
             </a>
           </p>
         </li>
@@ -153,9 +159,7 @@ export default function PrivacyPolicy() {
       </p>
       <ul>
         <li>Google</li>
-        <li>Facebook</li>
-        <li>Twitter</li>
-        <li>LinkedIn</li>
+        <li>GitHub</li>
       </ul>
       <p>
         If You decide to register through or otherwise grant us access to a
@@ -178,6 +182,7 @@ export default function PrivacyPolicy() {
         are beacons, tags, and scripts to collect and track information and to
         improve and analyze Our Service. The technologies We use may include:
       </p>
+
       <ul>
         <li>
           <strong>Cookies or Browser Cookies.</strong> A cookie is a small file
@@ -187,22 +192,7 @@ export default function PrivacyPolicy() {
           Service. Unless you have adjusted Your browser setting so that it will
           refuse Cookies, our Service may use Cookies.
         </li>
-        <li>
-          <strong>Flash Cookies.</strong> Certain features of our Service may
-          use local stored objects (or Flash Cookies) to collect and store
-          information about Your preferences or Your activity on our Service.
-          Flash Cookies are not managed by the same browser settings as those
-          used for Browser Cookies. For more information on how You can delete
-          Flash Cookies, please read "Where can I change the settings for
-          disabling, or deleting local shared objects?" available at{" "}
-          <a
-            href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_"
-            rel="external nofollow noopener"
-            target="_blank"
-          >
-            https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_
-          </a>
-        </li>
+
         <li>
           <strong>Web Beacons.</strong> Certain sections of our Service and our
           emails may contain small electronic files known as web beacons (also
@@ -276,6 +266,72 @@ export default function PrivacyPolicy() {
         For more information about the cookies we use and your choices regarding
         cookies, please visit our Cookies Policy or the Cookies section of our
         Privacy Policy.
+      </p>
+      <h2>Google Analytics</h2>
+
+      <p>
+        We use Google Analytics to track the usage of our Service. The data is
+        used to improve the service and to show advertisements.{" "}
+      </p>
+
+      <p>
+        Google Analytics will be provided by Google Ireland Limited (Gordon
+        House, Barrow Street, Dublin 4, Irland). Google is responsible for the
+        website usage data.
+        <a
+          href="https://support.google.com/analytics/answer/6004245?hl=de"
+          rel="external nofollow noopener"
+          target="_blank"
+        >
+          Privacy Policy of Google Analytics
+        </a>
+      </p>
+
+      <p>Following data is collected:</p>
+      <ul>
+        <li>Visited Sites</li>
+        <li>
+          Reachout of "Website-Targets" (e.g. contact requests and newsletter
+        </li>
+        <li>
+          Your behavior on the pages (e.g. duration, clicks, scroll behavior)
+        </li>
+        <li>Your approximate location (country and city)</li>
+
+        <li>
+          Your IP address (in an abbreviated form, so that no unique
+          identification is possible)
+        </li>
+        <li>
+          Technical information like browser, internet provider, device and
+          screen resolution
+        </li>
+        <li>
+          Source of your visit (i.e. through which website or through which
+        </li>
+        <li>No personal data is sent to Google Analytics.</li>
+      </ul>
+
+      <p>
+        Google Analytics saves Cookies in your browser for two years since your
+        last visit. This Cookies contain a random generated user-ID, which you
+        can recognize in future visits.
+      </p>
+      <p>
+        The data is stored in a form that is not possible to identify the user.
+        The data is aggregated and stored for the purpose of analysis.
+      </p>
+      <p>
+        If you do not want to allow Google Analytics to track your visit, you
+        can disable the tracking by installing the Google Analytics Opt-out
+        Browser Add-on.
+        <a
+          href="https://tools.google.com/dlpage/gaoptout"
+          rel="external nofollow noopener"
+          target="_blank"
+        >
+          Google Analytics Opt-out Browser Add-on
+        </a>
       </p>
       <h2>Use of Your Personal Data</h2>
       <p>The Company may use Personal Data for the following purposes:</p>
@@ -512,17 +568,17 @@ export default function PrivacyPolicy() {
       </p>
       <ul>
         <li>
-          <p>By email: ewjhbfj@myblog.de</p>
+          <p>By email: seppel8426@gmail.com</p>
         </li>
         <li>
           <p>
             By visiting this page on our website:{" "}
             <a
-              href="http://localhost/contact"
+              href="https://www.skyface.de/contact"
               rel="external nofollow noopener"
               target="_blank"
             >
-              http://localhost/contact
+              https://www.skyface.de/contact
             </a>
           </p>
         </li>

@@ -2,6 +2,8 @@ PROJECT = "SkyBlog Webpage"
 
 build: build-react copy-react-build
 
+full: build docker-start
+
 build-react: ;@echo "Building React..."
 	npm install -C skyface-web
 	npm run build -C skyface-web
@@ -11,7 +13,8 @@ copy-react-build: ;@echo "Copying React build..."
 	rm -r skyface-backend/react_build/*
 	mv skyface-web/build/* skyface-backend/react_build
 
-
+docker-start:
+	docker-compose up -d --build
 
 
 
@@ -32,11 +35,11 @@ copy-react-build: ;@echo "Copying React build..."
 # docker-restore: ;@echo "Restoring docker ${PROJECT}....."; \
 # 	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongorestore --archive' < latest.mongo
 
-# docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
-# 	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongodump --archive' > latest.mongo
+docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
+	docker-compose exec -T mongo sh -c 'mongodump --archive' > latest.mongo
 
-# move-backup: ;@echo "Moving backup to folder with date-name....."; \
-# 	mv latest.mongo mongo-backup/`date +%Y-%m-%d`.mongo
+move-backup: ;@echo "Moving backup to folder with date-name....."; \
+	mv latest.mongo mongo-backup/`date +%Y-%m-%d`.mongo
 
 # reactjs-build: ;@echo "Building reactjs ${PROJECT}....."; \
 # 	npm install -C skyface-web

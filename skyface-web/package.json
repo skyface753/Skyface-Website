@@ -1,7 +1,7 @@
 {
   "name": "skyface-web",
   "version": "0.1.0",
-  "homepage": "http://skyface.de:3000",
+  "homepage": "https://www.skyface.de",
   "private": true,
   "dependencies": {
     "@fingerprintjs/fingerprintjs-pro": "^3.6.3",
@@ -21,6 +21,7 @@
     "mdi-react": "^8.4.0",
     "react": "^18.1.0",
     "react-bootstrap": "^2.4.0",
+    "react-cookie-consent": "^7.5.0",
     "react-dnd": "^16.0.1",
     "react-dom": "^18.1.0",
     "react-dotenv": "^0.1.3",

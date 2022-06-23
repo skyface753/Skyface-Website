@@ -156,27 +156,33 @@ footer a{
   margin: 0 auto;
   margin-bottom: 5px;
   /* padding: 5%; */
+  /* background: rgba(0, 0, 0, 0.5); */
 }
 
 .title-container img {
   vertical-align: middle;
 }
 
-.title-container-text {
-  position: absolute;
-  /* Position the background text */
-  bottom: 0;
-  /* At the bottom. Use top:0 to append it to the top */
-  background: rgb(0, 0, 0);
-  /* Fallback color */
-  background: rgba(0, 0, 0, 0.5);
-  /* Black background with 0.5 opacity */
-  color: #f1f1f1;
-  /* Grey text */
-  width: 100%;
-  /* padding: 5%;  */
-  /* padding: 20px; Some padding */
+.title-container-text{
+  margin-top: 0;
+  
 }
+
+/* .title-container-text {
+  position: absolute;
+  /* Position the background text 
+  bottom: 0;
+  /* At the bottom. Use top:0 to append it to the top 
+  background: rgb(0, 0, 0);
+  /* Fallback color 
+  background: rgba(0, 0, 0, 0.5);
+  /* Black background with 0.5 opacity 
+  color: #f1f1f1;
+  /* Grey text 
+  width: 100%;
+  /* padding: 5%;  
+  /* padding: 20px; Some padding 
+} */
 
 /* .loader {
   border: 16px solid #f3f3f3;
@@ -315,7 +321,10 @@ footer a{
   height: 100%;
   /* border: 1px solid rgb(224, 224, 224); */
   padding: 5%;
+  padding-top: 2%!important;
   padding-bottom: 7rem;
+  
+
 }
 
 
@@ -345,7 +354,7 @@ footer a{
 .blog-meta {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   /* background-color: #f3f3f3; */
 }
 
@@ -419,6 +428,60 @@ footer a{
 .comment-div-header {
   display: flex;
   align-items: center;
+}
+.content-text{
+  font-family: "roboto","Helvetica Neue",Helvetica,Arial,sans-serif; /* make your choice */
+  font-size: 1rem;                                                  /* make your choice */ 
+  border: none;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-apperarance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none;
+  /* padding: 0px; */
+  resize: none;
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -ms-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  color: white;
+  /* border: none!important;
+    overflow: auto!important;
+    outline: none!important;
+    background: none!important;
+    color: white!important;
+
+    -webkit-box-shadow: none!important;
+    -moz-box-shadow: none!important;
+    box-shadow: none!important;
+
+    resize: none!important;
+    display: block;// */
+    margin-inline-start: 0px;
+    margin-inline-end: 0px; 
+    margin-block-start: 1em;
+    /* margin-block-end: 1em; */
+}
+.highlight{
+  background-color: yellow;
+  color: black;
+}
+.comment-answer-button{
+  border: none;
+  color: white;
+  background: none;
+  font-size: 1.2rem;
+}
+.comment-answer-button:hover{
+  cursor: pointer;
+  color: #f3f3f3;
+  background-color: #828282;
+  border-radius: 5px;
 }
 
 .comment-user-pic {
@@ -626,6 +689,9 @@ line-height: 1.5;
   padding: 20px 0 0;
   border-top: 4px dotted var(--border-top-color);
   list-style: none;
+}
+.image-container-image{
+  border: 1px solid #edf2f5;
 }
 .home-project-grid>li{
   padding: 20px;
@@ -979,4 +1045,15 @@ section>ol>li{
   grid-area: p-d;
   font-size: 1.125rem;
   text-align: end;
+}
+
+.blog-stats-container{
+  display:flex;
+  padding: 5px;
+  align-items: center;
+}
+
+.blog-stats-container>div{
+  margin-right: 5%;
+  margin-left: 1%;
 }

@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import apiService from "../services/api-service";
-import { BACKEND_FILES_URL, TITLEPREFIX } from "../consts";
+import { BACKEND_FILES_URL, TITLESUFFIX } from "../consts";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
 import { IsLikedButton, NeutralLikeButton } from "../img/like";
 import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import browserSignature from "browser-signature";
+import { ViewIcon } from "../img/view";
+import { UserSvg } from "../img/userSvg";
+
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -172,6 +176,110 @@ function commentsToHTML(
   return returnHTML;
 }
 
+function speakMessage(messages, PAUSE_MS = 500, utterance) {
+  try {
+    window.speechSynthesis.cancel();
+    let currentIndex = 0;
+    console.log(messages);
+    const speak = () => {
+      const msg = messages[currentIndex].content;
+      // const utterance = new SpeechSynthesisUtterance(msg);
+      utterance.text = msg;
+      utterance.onend = () => {
+        currentIndex += 1;
+        if (currentIndex < messages.length) {
+          setTimeout(speak, PAUSE_MS);
+        } else {
+          window.speechSynthesis.cancel();
+          removeOldMarker();
+        }
+      };
+      utterance.onerror = () => {
+        console.log("error");
+      };
+      utterance.onboundary = function (event) {
+        console.log("SpeechSynthesisUtterance.onboundary");
+        onboundaryHandler(event, messages[currentIndex]._id);
+      };
+      window.speechSynthesis.speak(utterance);
+    };
+    speak();
+  } catch (e) {
+    console.error(e);
+  }
+}
+var oldTextToSpeackID = null;
+var oldTextToSpeackHTML = null;
+function removeOldMarker() {
+  if (oldTextToSpeackID != null) {
+    var pTag = document.getElementById(oldTextToSpeackID);
+    pTag.innerHTML = oldTextToSpeackHTML;
+    oldTextToSpeackID = null;
+    oldTextToSpeackHTML = null;
+  }
+}
+
+function onboundaryHandler(event, contentID) {
+  removeOldMarker();
+  var pTag = document.getElementById(contentID);
+  var value = pTag.innerHTML;
+  var index = event.charIndex;
+  var word = getWordAt(value, index);
+  var anchorPosition = getWordStart(value, index);
+  var activePosition = anchorPosition + word.length;
+  console.log(word, anchorPosition, activePosition);
+
+  oldTextToSpeackID = contentID;
+  oldTextToSpeackHTML = pTag.innerHTML;
+  pTag.innerHTML =
+    value.substring(0, anchorPosition) +
+    "<span class='highlight' >" +
+    word +
+    "</span>" +
+    value.substring(activePosition);
+  pTag.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  // textarea.focus();
+
+  // if (textarea.setSelectionRange) {
+  //   textarea.setSelectionRange(anchorPosition, activePosition);
+  // } else {
+  //   var range = textarea.createTextRange();
+  //   range.collapse(true);
+  //   range.moveEnd("character", activePosition);
+  //   range.moveStart("character", anchorPosition);
+  //   range.select();
+  // }
+}
+// Get the word of a string given the string and index
+function getWordAt(str, pos) {
+  // Perform type conversions.
+  str = String(str);
+  pos = Number(pos) >>> 0;
+
+  // Search for the word's beginning and end.
+  var left = str.slice(0, pos + 1).search(/\S+$/),
+    right = str.slice(pos).search(/\s/);
+
+  // The last word in the string is a special case.
+  if (right < 0) {
+    return str.slice(left);
+  }
+
+  // Return the word, using the located bounds to extract it from the string.
+  return str.slice(left, right + pos);
+}
+
+// Get the position of the beginning of the word
+function getWordStart(str, pos) {
+  str = String(str);
+  pos = Number(pos) >>> 0;
+
+  // Search for the word's beginning
+  var start = str.slice(0, pos + 1).search(/\S+$/);
+  return start;
+}
+
 export default function BlogPost() {
   const { state, dispatch } = useContext(AuthContext);
   let { blogUrl } = useParams();
@@ -183,9 +291,25 @@ export default function BlogPost() {
   const [commentAnswer, setCommentAnswer] = React.useState(null);
   const [hasLiked, setHasLiked] = React.useState(false);
   const [blogLikesCount, setBlogLikesCount] = React.useState(0);
+  const [blogViewsCount, setBlogViewsCount] = React.useState(0);
+  const [blogViewsCountPerUser, setBlogViewsCountPerUser] = React.useState(0);
+  const [speakText, setSpeakText] = React.useState([]);
+
+  const signature = browserSignature();
+  const speekToText = new SpeechSynthesisUtterance();
+  // React.useEffect(() => {
+  //   console.log("Speeking");
+  //   window.speechSynthesis.speak(msg);
+  // }, [msg]);
+
+  speekToText.onerror = function (event) {
+    console.log("SpeechSynthesisUtterance.onerror");
+  };
 
   React.useEffect(() => {
-    apiService("blog/" + blogUrl, {}).then((response) => {
+    apiService("blog/" + blogUrl, {
+      signature,
+    }).then((response) => {
       var blogContent = response.data["blogContent"];
       console.log(response.data);
       blogContent.sort(function (a, b) {
@@ -195,6 +319,16 @@ export default function BlogPost() {
       setComments(commentsParentSort(response.data["blogComments"]));
       setHasLiked(response.data["hasUserLikedBlog"]);
       setBlogLikesCount(response.data["blogLikesCount"]);
+      setBlogViewsCount(response.data["blogViewsCount"]);
+      setBlogViewsCountPerUser(response.data["blogViewsCountPerUser"]);
+      // var contentText = "";
+      for (var i = 0; i < blogContent.length; i++) {
+        if (blogContent[i].type === "text") {
+          speakText.push(blogContent[i]);
+          // contentText += blogContent[i].content + "\n";
+        }
+      }
+      setSpeakText(speakText);
       if (response.data["series"]) {
         setSeries(response.data["series"]);
         setSeriesBlogs(response.data["seriesBlogs"]);
@@ -205,7 +339,7 @@ export default function BlogPost() {
 
   if (!posts) return <SkyCloudLoader />;
 
-  document.title = TITLEPREFIX + posts["blog"].title;
+  document.title = posts["blog"].title + " - " + TITLESUFFIX;
 
   console.log(commentsParentSort(posts["blogComments"]));
   return (
@@ -234,16 +368,24 @@ export default function BlogPost() {
         }
       })()}
       <div className="title-container">
+        <h1 className="title-container-text">{posts["blog"].title}</h1>
+        <h2
+          className="title-container-text"
+          style={{
+            marginBottom: "3%",
+          }}
+        >
+          {posts["blog"].subtitle}
+        </h2>
+      </div>
+      <div className="image-container">
         <img
+          className="image-container-image"
           // src={require("../img/blogs-title.png")}
           src={BACKEND_FILES_URL + posts["blog"].blog_image}
           width="100%"
           alt="About-Title"
         />
-        <div className="title-container-text">
-          <h1>{posts["blog"].title}</h1>
-          <h2>{posts["blog"].subtitle}</h2>
-        </div>
       </div>
 
       <div className="blog-meta">
@@ -273,6 +415,71 @@ export default function BlogPost() {
           {posts["blog"].updatedAt.substring(0, 10)}
         </p>
       </div>
+      <button
+        className="speak-button"
+        onClick={() => {
+          // speekToText.text = speakText;
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            return;
+          }
+          speakMessage(speakText, null, speekToText);
+          // speekToText.lang = "en-US";
+          // var voices = speechSynthesis.getVoices();
+          // speekToText.voice = voices[1];
+
+          // window.speechSynthesis.speak(speekToText);
+        }}
+      >
+        Speak
+        {/* <img
+          className="speak-button-icon"
+          src={require("../img/speak-icon.png")}
+          width="40px"
+          alt="Speak-Icon"
+        /> */}
+      </button>
+      <button
+        className="speak-button-pause"
+        onClick={() => {
+          window.speechSynthesis.pause();
+        }}
+      >
+        Pause
+      </button>
+      {(() => {
+        var voices = speechSynthesis.getVoices();
+
+        var voicesSelect = [];
+        for (var i = 0; i < voices.length; i++) {
+          voicesSelect.push(
+            <option key={i} value={voices[i].name}>
+              {voices[i].lang}
+              {" - "}
+              {voices[i].name}
+            </option>
+          );
+        }
+        if (voices.length < 1) {
+          return;
+        }
+        return (
+          <div className="speak-select-container">
+            <select
+              className="speak-select"
+              // defaultValue={voices[5].name}
+              onChange={(e) => {
+                speekToText.voice = speechSynthesis
+                  .getVoices()
+                  .find((voice) => voice.name === e.target.value);
+                speekToText.lang = speekToText.voice.lang;
+              }}
+            >
+              {voicesSelect}
+            </select>
+          </div>
+        );
+      })()}
 
       {/* Blog Posts */}
       {(() => {
@@ -282,7 +489,10 @@ export default function BlogPost() {
           if (content[i].type === "text") {
             contentDivs.push(
               <div key={content[i]._id} className="content-div">
-                <p>{content[i].content}</p>
+                {/* <textarea className="content-text" id={content[i]._id}>
+                  {content[i].content}
+                </textarea> */}
+                <p id={content[i]._id}>{content[i].content}</p>
               </div>
             );
           } else if (content[i].type == "code") {
@@ -349,53 +559,60 @@ export default function BlogPost() {
         }
       })()}
       <hr className="blog-divider"></hr>
-      {state.isLoggedIn ? (
-        hasLiked ? (
-          <button
-            className="unlike-button"
-            onClick={() =>
-              apiService("blog-likes/unlike/" + posts["blog"]._id, {}).then(
-                (response) => {
-                  if (response.data.success) {
-                    setHasLiked(false);
-                    setBlogLikesCount(blogLikesCount - 1);
+      <div className="blog-stats-container">
+        {state.isLoggedIn ? (
+          hasLiked ? (
+            <button
+              className="unlike-button"
+              onClick={() =>
+                apiService("blog-likes/unlike/" + posts["blog"]._id, {}).then(
+                  (response) => {
+                    if (response.data.success) {
+                      setHasLiked(false);
+                      setBlogLikesCount(blogLikesCount - 1);
+                    }
                   }
-                }
-              )
-            }
-          >
-            <IsLikedButton />
-          </button>
+                )
+              }
+            >
+              <IsLikedButton />
+            </button>
+          ) : (
+            <button
+              className="like-button"
+              onClick={() =>
+                apiService("blog-likes/like/" + posts["blog"]._id).then(
+                  (response) => {
+                    if (response.data.success) {
+                      setHasLiked(true);
+                      setBlogLikesCount(blogLikesCount + 1);
+                    }
+                  }
+                )
+              }
+            >
+              <NeutralLikeButton />
+            </button>
+          )
         ) : (
+          // Redirect to login page
           <button
             className="like-button"
             onClick={() =>
-              apiService("blog-likes/like/" + posts["blog"]._id).then(
-                (response) => {
-                  if (response.data.success) {
-                    setHasLiked(true);
-                    setBlogLikesCount(blogLikesCount + 1);
-                  }
-                }
-              )
+              (window.location.href =
+                "/login?redirect=" + window.location.pathname)
             }
           >
             <NeutralLikeButton />
           </button>
-        )
-      ) : (
-        // Redirect to login page
-        <button
-          className="like-button"
-          onClick={() =>
-            (window.location.href =
-              "/login?redirect=" + window.location.pathname)
-          }
-        >
-          <NeutralLikeButton />
-        </button>
-      )}
-      <p>{blogLikesCount} likes</p>
+        )}
+        <div>{blogLikesCount} </div>
+        <ViewIcon />
+        <div>{blogViewsCount}</div>
+        <UserSvg />
+        <div>{blogViewsCountPerUser}</div>
+      </div>
+
       <hr className="blog-divider"></hr>
       <div className="comments-container">
         <h3>Comments</h3>

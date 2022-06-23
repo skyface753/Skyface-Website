@@ -34,6 +34,9 @@ import DeckGl from "./pages/deckgl";
 import UseGaTracker from "./useGATracker";
 import { UseSelfTracker } from "./services/selfTracker";
 import ShowSelfTracker from "./pages/admin-area/show-selftracker";
+import CookieConsent from "react-cookie-consent";
+import TextToSpeechComponent from "./pages/speechToText";
+
 // import browserSignature from "browser-signature";
 
 // import env from "react-dotenv";
@@ -59,9 +62,26 @@ function App() {
         <Router>
           <UseGaTracker />
           <UseSelfTracker />
+          <CookieConsent
+            acceptOnScroll={false}
+            onDecline={() => {
+              console.log("Cookie declined");
+            }}
+            enableDeclineButton={true}
+            buttonText="I accept"
+          >
+            This website uses technical necessary cookies to ensure the login.
+            You can accept or decline the analytics cookies.
+            <a href="privacy-policy">Privacy Policy</a>
+          </CookieConsent>
+
           <Navbar />
           <div className="main-div">
             <Routes>
+              <Route
+                path="/text-to-speech"
+                element={<TextToSpeechComponent />}
+              />
               <Route path="/" exact element={<Home />} />
               <Route path="/impressum" element={<Impressum />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
