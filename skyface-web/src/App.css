@@ -690,9 +690,7 @@ line-height: 1.5;
   border-top: 4px dotted var(--border-top-color);
   list-style: none;
 }
-.image-container-image{
-  border: 1px solid #edf2f5;
-}
+
 .home-project-grid>li{
   padding: 20px;
   border: 1px solid #edf2f5;
