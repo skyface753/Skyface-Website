@@ -162,7 +162,7 @@ export default function EditBlogPost() {
             <input
               type="text"
               id="blog-image"
-              placeholder="Image"
+              placeholder="Image (optional)"
               value={post.blog_image}
               onChange={(e) => {
                 post.blog_image = e.target.value;
@@ -198,6 +198,7 @@ export default function EditBlogPost() {
                 <option value="image">Image</option>
                 <option value="subline">Subline</option>
                 <option value="link">Link</option>
+                <option value="download">Download</option>
               </select>
               <button
                 className="content-up-button"

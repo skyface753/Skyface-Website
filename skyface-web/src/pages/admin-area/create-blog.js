@@ -121,7 +121,7 @@ export default function CreateBlog() {
             <input
               type="text"
               id="blog-image"
-              placeholder="Image"
+              placeholder="Image (optional)"
               value={post.blog_image}
               onChange={(e) => {
                 post.blog_image = e.target.value;
@@ -157,6 +157,7 @@ export default function CreateBlog() {
                 <option value="image">Image</option>
                 <option value="subline">Subline</option>
                 <option value="link">Link</option>
+                <option value="download">Download</option>
               </select>
               <button
                 className="content-up-button"
@@ -335,11 +336,7 @@ export default function CreateBlog() {
       <button
         className="save-blog-button"
         onClick={() => {
-          if (
-            posts["blog"].title == "" ||
-            posts["blog"].subline == "" ||
-            posts["blog"].blog_image == ""
-          ) {
+          if (posts["blog"].title == "" || posts["blog"].subline == "") {
             alert("Please fill in all fields");
             return;
           }

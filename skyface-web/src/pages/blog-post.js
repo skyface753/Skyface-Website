@@ -297,6 +297,7 @@ export default function BlogPost() {
 
   const signature = browserSignature();
   const speekToText = new SpeechSynthesisUtterance();
+  speekToText.lang = "en-US";
   // React.useEffect(() => {
   //   console.log("Speeking");
   //   window.speechSynthesis.speak(msg);
@@ -378,15 +379,17 @@ export default function BlogPost() {
           {posts["blog"].subtitle}
         </h2>
       </div>
-      <div className="image-container">
-        <img
-          className="image-container-image"
-          // src={require("../img/blogs-title.png")}
-          src={BACKEND_FILES_URL + posts["blog"].blog_image}
-          width="100%"
-          alt="About-Title"
-        />
-      </div>
+      {posts["blog"].blog_image && (
+        <div className="image-container">
+          <img
+            className="image-container-image"
+            // src={require("../img/blogs-title.png")}
+            src={BACKEND_FILES_URL + posts["blog"].blog_image}
+            width="100%"
+            alt="About-Title"
+          />
+        </div>
+      )}
 
       <div className="blog-meta">
         {(() => {
@@ -415,72 +418,73 @@ export default function BlogPost() {
           {posts["blog"].updatedAt.substring(0, 10)}
         </p>
       </div>
-      <button
-        className="speak-button"
-        onClick={() => {
-          // speekToText.text = speakText;
-          if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-            return;
-          }
-          speakMessage(speakText, null, speekToText);
-          // speekToText.lang = "en-US";
-          // var voices = speechSynthesis.getVoices();
-          // speekToText.voice = voices[1];
+      <div className="blog-speak-container">
+        <button
+          className="speak-button"
+          onClick={() => {
+            // speekToText.text = speakText;
+            if (window.speechSynthesis.paused) {
+              window.speechSynthesis.resume();
+              return;
+            }
+            speakMessage(speakText, null, speekToText);
+            // speekToText.lang = "en-US";
+            // var voices = speechSynthesis.getVoices();
+            // speekToText.voice = voices[1];
 
-          // window.speechSynthesis.speak(speekToText);
-        }}
-      >
-        Speak
-        {/* <img
+            // window.speechSynthesis.speak(speekToText);
+          }}
+        >
+          Speak
+          {/* <img
           className="speak-button-icon"
           src={require("../img/speak-icon.png")}
           width="40px"
           alt="Speak-Icon"
         /> */}
-      </button>
-      <button
-        className="speak-button-pause"
-        onClick={() => {
-          window.speechSynthesis.pause();
-        }}
-      >
-        Pause
-      </button>
-      {(() => {
-        var voices = speechSynthesis.getVoices();
+        </button>
+        <button
+          className="speak-button-pause"
+          onClick={() => {
+            window.speechSynthesis.pause();
+          }}
+        >
+          Pause
+        </button>
+        {(() => {
+          var voices = speechSynthesis.getVoices();
 
-        var voicesSelect = [];
-        for (var i = 0; i < voices.length; i++) {
-          voicesSelect.push(
-            <option key={i} value={voices[i].name}>
-              {voices[i].lang}
-              {" - "}
-              {voices[i].name}
-            </option>
+          var voicesSelect = [];
+          for (var i = 0; i < voices.length; i++) {
+            voicesSelect.push(
+              <option key={i} value={voices[i].name}>
+                {voices[i].lang}
+                {" - "}
+                {voices[i].name}
+              </option>
+            );
+          }
+          if (voices.length < 1) {
+            return;
+          }
+          return (
+            <div className="speak-select-container">
+              <select
+                className="speak-select"
+                // defaultValue={voices[5].name}
+                onChange={(e) => {
+                  speekToText.voice = speechSynthesis
+                    .getVoices()
+                    .find((voice) => voice.name === e.target.value);
+                  speekToText.lang = speekToText.voice.lang;
+                }}
+              >
+                {voicesSelect}
+              </select>
+            </div>
           );
-        }
-        if (voices.length < 1) {
-          return;
-        }
-        return (
-          <div className="speak-select-container">
-            <select
-              className="speak-select"
-              // defaultValue={voices[5].name}
-              onChange={(e) => {
-                speekToText.voice = speechSynthesis
-                  .getVoices()
-                  .find((voice) => voice.name === e.target.value);
-                speekToText.lang = speekToText.voice.lang;
-              }}
-            >
-              {voicesSelect}
-            </select>
-          </div>
-        );
-      })()}
-
+        })()}
+      </div>
       {/* Blog Posts */}
       {(() => {
         const contentDivs = [];
@@ -538,6 +542,22 @@ export default function BlogPost() {
                 >
                   {content[i].content}
                 </a>
+              </div>
+            );
+          } else if (content[i].type == "download") {
+            contentDivs.push(
+              <div key={content[i]._id} className="content-download-div">
+                {content[i].content}
+                <form
+                  method="GET"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  action={BACKEND_FILES_URL + content[i].content}
+                >
+                  <button class="btn">
+                    <i class="fa fa-download"></i> Download
+                  </button>
+                </form>
               </div>
             );
           }

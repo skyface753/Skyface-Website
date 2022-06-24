@@ -41,7 +41,7 @@ let blogSchema = new Schema(
     },
     blog_image: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

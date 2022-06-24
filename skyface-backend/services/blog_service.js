@@ -139,7 +139,7 @@ let BlogService = {
     blog.subtitle = newBlog.subtitle;
     blog.url = newBlog.url;
     blog.category = newBlog.category;
-    blog.blog_image = newBlog.blog_image;
+    blog.blog_image = newBlog.blog_image || null;
     try {
       if (newBlog.category == "") {
         blog.category = null;
@@ -207,8 +207,7 @@ let BlogService = {
       !newBlog ||
       newBlog.length === 0 ||
       !newBlogContent ||
-      newBlogContent.length === 0 ||
-      !newBlog.blog_image
+      newBlogContent.length === 0
     ) {
       res.json({
         success: false,
@@ -222,7 +221,7 @@ let BlogService = {
       url: newBlog.url,
       category: newBlog.category._id == null ? null : newBlog.category._id,
       posted_by: user._id,
-      blog_image: newBlog.blog_image,
+      blog_image: newBlog.blog_image || null,
     });
     await blog.save();
 
