@@ -16,7 +16,7 @@ copy-react-build: ;@echo "Copying React build..."
 docker-start:
 	docker-compose up -d --build
 
-backup: docker-backup move-backup
+backup: move-backup docker-backup
 
 
 # start: install docker-start docker-restore

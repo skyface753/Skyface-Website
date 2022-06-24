@@ -241,7 +241,10 @@ export default function CreateBlog() {
                   }}
                 />
                 {(() => {
-                  if (content[i].type == "image") {
+                  if (
+                    content[i].type == "image" ||
+                    content[i].type == "download"
+                  ) {
                     return (
                       <div className="edit-blog-image-container">
                         <img
@@ -348,6 +351,8 @@ export default function CreateBlog() {
             if (response.data.success) {
               alert("Blog saved!");
               window.location.href = "/blogs/" + posts.blog.url;
+            } else {
+              alert(response.data.message);
             }
           });
         }}

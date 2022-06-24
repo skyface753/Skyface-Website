@@ -434,6 +434,8 @@ footer a{
 
 #file-selector-main {
   display: none;
+  overflow-y: auto;
+  background-color: black;
 }
 
 .edit-blog-image {

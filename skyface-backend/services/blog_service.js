@@ -134,6 +134,17 @@ let BlogService = {
       });
       return;
     }
+    let blogUrlAlreadyExists = await blogModel.findOne({
+      url: newBlog.url,
+      _id: { $ne: blogId },
+    });
+    if (blogUrlAlreadyExists) {
+      res.json({
+        success: false,
+        message: "Blog url already exists",
+      });
+      return;
+    }
     // Update Blog
     blog.title = newBlog.title;
     blog.subtitle = newBlog.subtitle;
@@ -212,6 +223,16 @@ let BlogService = {
       res.json({
         success: false,
         message: "No blog (or blog content) provided",
+      });
+      return;
+    }
+    let blogUrlAlreadyExists = await blogModel.findOne({
+      url: newBlog.url,
+    });
+    if (blogUrlAlreadyExists) {
+      res.json({
+        success: false,
+        message: "Blog url already exists",
       });
       return;
     }

@@ -282,7 +282,10 @@ export default function EditBlogPost() {
                   }}
                 />
                 {(() => {
-                  if (content[i].type == "image") {
+                  if (
+                    content[i].type == "image" ||
+                    content[i].type == "download"
+                  ) {
                     return (
                       <div className="edit-blog-image-container">
                         <img
@@ -436,6 +439,8 @@ export default function EditBlogPost() {
             if (response.data.success) {
               alert("Blog saved!\n" + response.data.message);
               window.location.href = "/blogs/" + posts.blog.url;
+            } else {
+              alert("Error: " + response.data.message);
             }
           });
         }}
