@@ -14,11 +14,7 @@ const SignUp = () => {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [error, setError] = React.useState("");
-  const setExampleData = () => {
-    setUsername("example");
-    setPassword("example");
-    setConfirmPassword("example");
-  };
+  
 
   return (
     <div
@@ -37,7 +33,6 @@ const SignUp = () => {
         <div>
           <h1>Sign Up</h1>
           <p>Please fill in this form to create an account.</p>
-          <button onClick={setExampleData}>Set Example Data</button>
           <hr />
 
           <label htmlFor="username">

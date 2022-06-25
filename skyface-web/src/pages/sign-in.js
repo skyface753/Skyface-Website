@@ -12,10 +12,7 @@ export default function SignIn() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const setExampleData = () => {
-    setUsername("example");
-    setPassword("example");
-  };
+  
 
   return (
     <div className="sign-in-container">
@@ -23,7 +20,6 @@ export default function SignIn() {
       <GitHubLoginButton />
       <div className="container">
         <h1>Sign In</h1>
-        <button onClick={setExampleData}>Set Example Data</button>
         <hr />
 
         <label htmlFor="username">

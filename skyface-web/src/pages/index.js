@@ -173,7 +173,7 @@ const Home = () => {
           , and{" "}
           <strong>
             <a
-              href="https://www.linkedin.com/in/sebastian-j%C3%B6rz-01a708232/"
+              href="https://de.linkedin.com/in/sebastian-j%C3%B6rz-01a708232/en?trk=people-guest_people_search-card"
               target="_blank"
               rel="noopener noreferrer"
             >
