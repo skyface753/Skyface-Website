@@ -129,7 +129,9 @@ const Home = () => {
       {/* <CloudLoader /> */}
       {/* <CloudsRainLoader /> */}
 
-      <h1 className="home-title">Hi, I'm Sebastian</h1>
+      <h1 className="home-title animate__animated animate__slideInUp">
+        Hi, I'm Sebastian
+      </h1>
       <p className="home-description">
         I'm a <strong>computer science student </strong>
         in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{" "}

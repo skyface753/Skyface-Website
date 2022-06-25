@@ -37,6 +37,8 @@ import ShowSelfTracker from "./pages/admin-area/show-selftracker";
 import CookieConsent from "react-cookie-consent";
 import TextToSpeechComponent from "./pages/speechToText";
 
+import "animate.css"; // https://animate.style/
+
 // import browserSignature from "browser-signature";
 
 // import env from "react-dotenv";
