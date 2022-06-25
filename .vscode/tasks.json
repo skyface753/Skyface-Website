@@ -5,7 +5,7 @@
 			"type": "npm",
 			"script": "install",
 			"path": "skyface-web",
-			"group": "clean",
+			"group": "none",
 			"problemMatcher": [],
 			"label": "npm: install - skyface-web",
 			"detail": "install dependencies from package",
@@ -17,7 +17,7 @@
 			"type": "npm",
 			"script": "install",
 			"path": "skyface-backend",
-			"group": "clean",
+			"group": "none",
 			"problemMatcher": [],
 			"label": "npm: install - skyface-backend",
 			"detail": "install dependencies from package",
@@ -29,13 +29,12 @@
 			"type": "npm",
 			"script": "install",
 			"path": "skyblog_react",
-			"group": "clean",
+			"group": "none",
 			"problemMatcher": [],
 			"label": "npm: install - skyblog_react",
 			"detail": "install dependencies from package",
 			"runOptions": {
 				"runOn": "folderOpen",
-				
 			},
 			"isBackground": true
 		},
