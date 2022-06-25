@@ -35,7 +35,7 @@ import UseGaTracker from "./useGATracker";
 import { UseSelfTracker } from "./services/selfTracker";
 import ShowSelfTracker from "./pages/admin-area/show-selftracker";
 import CookieConsent from "react-cookie-consent";
-import TextToSpeechComponent from "./pages/speechToText";
+import TextToSpeechComponent from "./pages/examples/speechToText";
 
 import "animate.css"; // https://animate.style/
 
@@ -81,7 +81,7 @@ function App() {
           <div className="main-div">
             <Routes>
               <Route
-                path="/text-to-speech"
+                path="/examples/TextToSpeech"
                 element={<TextToSpeechComponent />}
               />
               <Route path="/" exact element={<Home />} />

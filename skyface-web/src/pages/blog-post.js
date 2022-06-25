@@ -560,6 +560,20 @@ export default function BlogPost() {
                 </form>
               </div>
             );
+          } else if(content[i].type == "pureHTML"){
+            var pureHTML = content[i].content;
+            // var pureHTMLDiv = document.createElement("");
+            // pureHTMLDiv.innerHTML = pureHTML;
+            contentDivs.push(
+                  <div dangerouslySetInnerHTML={{__html: pureHTML}} key={content[i]._id} />
+                  
+                  
+            );
+            // contentDivs.push(
+            //   <div key={content[i]._id} className="content-pureHTML-div">
+            //     {content[i].content}
+            //   </div>
+            // );
           }
         }
         return contentDivs;

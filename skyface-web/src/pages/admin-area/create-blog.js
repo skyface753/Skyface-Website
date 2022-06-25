@@ -158,6 +158,7 @@ export default function CreateBlog() {
                 <option value="subline">Subline</option>
                 <option value="link">Link</option>
                 <option value="download">Download</option>
+                <option value="pureHTML">Pure HTML (dangerous)</option>
               </select>
               <button
                 className="content-up-button"

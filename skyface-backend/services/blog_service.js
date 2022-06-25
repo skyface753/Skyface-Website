@@ -183,21 +183,56 @@ let BlogService = {
 
     await blog.save();
 
-    //Delete old blog content
-    await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
-    //Create new blog content
-    for (let i = 0; i < newBlogContent.length; i++) {
-      if (newBlogContent[i].content == "") {
+
+    // Update Blog Content
+    for(let i = 0; i < newBlogContent.length; i++) {
+      if(newBlogContent[i].content == "") {
         continue;
       }
-      let blogContent = new blogContentModel({
-        content: newBlogContent[i].content,
-        for_blog: blog._id,
-        position: newBlogContent[i].position,
-        type: newBlogContent[i].type,
-      });
+      let blogContent = await blogContentModel.findById(newBlogContent[i]._id);
+      if(!blogContent) {
+        let createBlogContent = await blogContentModel.create({
+          for_blog: blog._id,
+          content: newBlogContent[i].content,
+          position: newBlogContent[i].position,
+          type: newBlogContent[i].type,
+        });
+        await createBlogContent.save();
+
+      }else {
+      blogContent.content = newBlogContent[i].content;
+      blogContent.position = newBlogContent[i].position;
+      blogContent.type = newBlogContent[i].type;
       await blogContent.save();
+      }
     }
+
+    // Delte Blog Content that is not in newBlogContent
+    let blogContentToDelete = await blogContentModel.find({
+      for_blog: blog._id,
+      _id: { $nin: newBlogContent.map((bc) => bc._id) },
+    });
+    for (let i = 0; i < blogContentToDelete.length; i++) {
+      await blogContentToDelete[i].remove();
+    }
+    
+
+
+    // //Delete old blog content
+    // await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
+    // //Create new blog content
+    // for (let i = 0; i < newBlogContent.length; i++) {
+    //   if (newBlogContent[i].content == "") {
+    //     continue;
+    //   }
+    //   let blogContent = new blogContentModel({
+    //     content: newBlogContent[i].content,
+    //     for_blog: blog._id,
+    //     position: newBlogContent[i].position,
+    //     type: newBlogContent[i].type,
+    //   });
+    //   await blogContent.save();
+    // }
     if (!newBlogContent || newBlogContent.length === 0) {
       res.json({
         success: true,

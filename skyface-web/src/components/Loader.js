@@ -78,19 +78,6 @@ export const SkyCloudLoader = () => {
           className="cloud-front"
         />
       </svg>
-      {/* <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="1.10612 5.97018 12.89 7.53"
-      >
-        <path
-          d="M 3 13 L 12 13 C 14 13 14 10 12 10 C 13 9 12 7 10 8 C 8 5 4 7 4 9 C 1 9 1 13 3 13"
-          className="cloud-back"
-        />
-        <path
-          d="M 3 13 L 12 13 C 14 13 14 10 12 10 C 13 9 12 7 10 8 C 8 5 4 7 4 9 C 1 9 1 13 3 13"
-          className="cloud-front"
-        />
-      </svg> */}
     </div>
   );
 };
