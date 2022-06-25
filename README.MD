@@ -40,6 +40,10 @@ React: `npm start`
 
 # RUN Prod
 
+Default User:
+- Username: admin
+- Password: admin
+
 In Progress
 
 # INFOS

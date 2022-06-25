@@ -74,7 +74,7 @@ let RssService = {
         //     link: "https://example.com/reggiemiller",
         //   },
         // ],
-        date: post.created_at,
+        date: post.createdAt,
         // image: post.image,
       });
     });

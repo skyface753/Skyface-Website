@@ -10,7 +10,6 @@ import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 import browserSignature from "browser-signature";
 import { ViewIcon } from "../img/view";
 import { UserSvg } from "../img/userSvg";
-
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -415,6 +414,12 @@ export default function BlogPost() {
           {" / "}
         </p>
         <p className="blog-meta-item">
+          {"Created "}
+          {posts["blog"].createdAt.substring(0, 10)}
+          {" / "}
+        </p>
+        <p className="blog-meta-item">
+          {"Updated "}
           {posts["blog"].updatedAt.substring(0, 10)}
         </p>
       </div>
@@ -566,7 +571,7 @@ export default function BlogPost() {
             // pureHTMLDiv.innerHTML = pureHTML;
             contentDivs.push(
                   <div dangerouslySetInnerHTML={{__html: pureHTML}} key={content[i]._id} />
-                  
+
                   
             );
             // contentDivs.push(

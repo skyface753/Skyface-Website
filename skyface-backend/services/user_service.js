@@ -37,6 +37,9 @@ setInterval(function () {
     }
   }
 }, MINS30);
+
+
+
 let UserService = {
   logout: (req, res) => {
     res.clearCookie("jwt");
@@ -359,6 +362,24 @@ let UserService = {
   signTokenExport: signToken,
   verifyTokenExport: verifyToken,
 };
+
+async function initDefaultAdmin(){
+  let user = await UserModel.findOne({
+    role: "admin",
+  });
+  if(!user){
+    let hashedPassword = await bycrypt.hash("admin", saltRounds);
+    user = new UserModel({
+      username: "admin",
+      password: hashedPassword,
+      provider: "Manuelly",
+      role: "admin",
+    });
+    user.save();
+  }
+}
+
+initDefaultAdmin();
 
 module.exports = UserService;
 
