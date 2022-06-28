@@ -2,6 +2,19 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			// Start the docker-compose-debug
+			"label": "docker-compose-debug",
+			"type": "shell",
+			"command": "docker-compose -f docker-compose-debug.yml up -d",
+			"group": "none",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
 			"type": "npm",
 			"script": "install",
 			"path": "skyface-web",
@@ -12,6 +25,9 @@
 			"runOptions": {
 				"runOn": "folderOpen"
 			},
+			"dependsOn": [
+				"docker-compose-debug"
+			],
 		},
 		{
 			"type": "npm",
@@ -23,7 +39,10 @@
 			"detail": "install dependencies from package",
 			"runOptions": {
 				"runOn": "folderOpen"
-			}
+			},
+			"dependsOn": [
+				"docker-compose-debug"
+			],
 		},
 		{
 			"type": "npm",
@@ -36,7 +55,72 @@
 			"runOptions": {
 				"runOn": "folderOpen",
 			},
-			"isBackground": true
+			"isBackground": true,
+			"dependsOn": [
+				"docker-compose-debug"
+			],
 		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "skyface-web",
+			"group": "none",
+			"problemMatcher": [],
+			"label": "npm: start - skyface-web",
+			"detail": "start the application",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"dependsOn": [
+				"npm: install - skyface-web"
+			],
+		},
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "skyface-backend",
+			"group": "none",
+			"problemMatcher": [],
+			"label": "npm: run dev - skyface-backend",
+			"detail": "start the application",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"dependsOn": [
+				"npm: install - skyface-backend"
+			],
+		},
+		// {
+		// 	"type": "shell",
+		// 	"label": "Start Skyface Backend",
+		// 	"command": "npm run dev",
+		// 	"group": "none",
+		// 	"options": {
+		// 		"cwd": "${cwd}/skyface-backend"
+		// 	},
+		// 	"problemMatcher": [],
+		// 	"runOptions": {
+		// 		"runOn": "folderOpen"
+		// 	},
+		// 	"dependsOn": [
+		// 		"npm: install - skyface-backend"
+		// 	]
+		// },
+		// {
+		// 	"type": "shell",
+		// 	"label": "Start Skyface Web",
+		// 	"command": "npm start",
+		// 	"group": "none",
+		// 	"options": {
+		// 		"cwd": "${cwd}/skyface-web"
+		// 	},
+		// 	"problemMatcher": [],
+		// 	"runOptions": {
+		// 		"runOn": "folderOpen"
+		// 	},
+		// 	"dependsOn": [
+		// 		"npm: install - skyface-web"
+		// 	]
+		// }
 	]
 }

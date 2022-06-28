@@ -10,6 +10,7 @@ services:
       - ./files:/usr/src/app/uploaded-files
     environment:
       - FRONTEND_URL=https://www.skyface.de
+    restart: always
   # backend:
   #   image: skyface753/skyblog-backend
   #   build:

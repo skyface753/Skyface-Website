@@ -17,6 +17,8 @@ export default function AdminHome() {
       <a href="/admin/show-contacts">Show Contacts</a>
       <br />
       <a href="/admin/show-selftracker">Show SelfTracker</a>
+      <br />
+      <a href="/admin/project/create">Create Project</a>
     </div>
   );
 }

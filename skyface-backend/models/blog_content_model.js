@@ -16,10 +16,37 @@ let blogContentSchema = new Schema(
       type: String,
       required: true,
     },
-    content: {
+    text: {
       type: String,
-      required: true,
     },
+    code: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
+    subline: {
+      type: String,
+    },
+    link: {
+      type: String,
+    } ,
+    link: {
+      type: String,
+    } ,
+    download: {
+      type: String,
+    } ,
+    pureHTML: {
+      type: String,
+    } ,
+    
+
+
+    // content: {
+    //   type: String,
+    //   required: true,
+    // },
   },
   {
     timestamps: true,

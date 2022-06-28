@@ -433,7 +433,7 @@ footer a{
 }
 
 #file-selector-main {
-  display: none;
+  /* display: none; */
   overflow-y: auto;
   background-color: black;
 }

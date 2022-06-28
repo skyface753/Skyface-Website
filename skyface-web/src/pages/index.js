@@ -8,80 +8,53 @@ import {
   MeetupLoader,
   SkyCloudLoader,
 } from "../components/Loader";
+import ProjectsPreview from "../components/ProjectsPreview";
 // import { Meetup as Loader } from "../components/Loader";
 
-var ProjectArticles = [
-  {
-    title: "SkyManager",
-    links: [
-      {
-        text: "backend",
-        href: "https://github.com/skyface753/SkyManager",
-      },
-      {
-        text: "frontend",
-        href: "https://github.com/skyface753/SkyManager-Frontend-Public",
-      },
-      {
-        text: "demo",
-        href: "https://demo.skymanager.net",
-      },
-    ],
-    text: "A Web, IOS and Android App for managing tickets, customers and documents build with Flutter and NodeJS",
-  },
-  {
-    title: "SkyTok",
-    links: [
-      {
-        text: "code",
-        href: "https://github.com/skyface753/SkyTok-Public",
-      },
-    ],
-    text: "A Replica of the TikTok App, build with Flutter and NodeJS",
-  },
-  {
-    title: "SkyBlog (this)",
-    links: [
-      {
-        text: "code",
-        href: "https://github.com/skyface753/Skyface-Website",
-      },
-      {
-        text: "web",
-        href: "https://www.skyface.de/",
-      },
-    ],
-    text: "My personal blog, build with React and NodeJS",
-  },
-];
-
-function createProjectsArticle(title, links, text) {
-  var articleLinks = [];
-
-  for (var i = 0; i < links.length; i++) {
-    var linkKey = "project-" + title + "-" + i;
-    articleLinks.push(
-      <li>
-        <a href={links[i].href} target="_blank" rel="noopener noreferrer">
-          {links[i].text}
-        </a>
-      </li>
-    );
-  }
-  var key = "project-" + title;
-  return (
-    <li key={key}>
-      <article className="home-project-article">
-        <Star />
-        <div>
-          <div className="home-project-article-title">{title}</div>
-          <ul className="home-project-article-links">{articleLinks}</ul>
-          <p className="home-project-article-text">{text}</p>
-        </div>
-      </article>
-    </li>
-  );
-}
+// var ProjectArticles = [
+//   {
+//     title: "SkyManager",
+//     links: [
+//       {
+//         text: "backend",
+//         href: "https://github.com/skyface753/SkyManager",
+//       },
+//       {
+//         text: "frontend",
+//         href: "https://github.com/skyface753/SkyManager-Frontend-Public",
+//       },
+//       {
+//         text: "demo",
+//         href: "https://demo.skymanager.net",
+//       },
+//     ],
+//     text: "A Web, IOS and Android App for managing tickets, customers and documents build with Flutter and NodeJS",
+//   },
+//   {
+//     title: "SkyTok",
+//     links: [
+//       {
+//         text: "code",
+//         href: "https://github.com/skyface753/SkyTok-Public",
+//       },
+//     ],
+//     text: "A Replica of the TikTok App, build with Flutter and NodeJS",
+//   },
+//   {
+//     title: "SkyBlog (this)",
+//     links: [
+//       {
+//         text: "code",
+//         href: "https://github.com/skyface753/Skyface-Website",
+//       },
+//       {
+//         text: "web",
+//         href: "https://www.skyface.de/",
+//       },
+//     ],
+//     text: "My personal blog, build with React and NodeJS",
+//   },
+// ];
 
 function createPostsArticle(title, url, datetime) {
   var url = "/blogs/" + url;
@@ -102,6 +75,7 @@ function createPostsArticle(title, url, datetime) {
 
 const Home = () => {
   const [latestPosts, setLatestPosts] = React.useState(null);
+  const [last3Projects, setLast4Projects] = React.useState(null);
 
   React.useEffect(() => {
     //Timeout 2 seconds to simulate loading
@@ -109,6 +83,11 @@ const Home = () => {
     apiService("blogs/last5").then((response) => {
       if (response.data.success) {
         setLatestPosts(response.data["blogs"]);
+      }
+    });
+    apiService("projects/last3").then((response) => {
+      if (response.data.success) {
+        setLast4Projects(response.data["projects"]);
       }
     });
     // }, 500);
@@ -210,26 +189,15 @@ const Home = () => {
         </a>
       </section>
       {/* Projects */}
-      <section className="hc">
-        <h2 className="d">Favorite Projects</h2>
-        <ol className="home-project-grid">
-          {ProjectArticles.map((article) => {
-            return createProjectsArticle(
-              article.title,
-              article.links,
-              article.text
-            );
-          })}
-        </ol>
-        <a href="/projects/" className="home-more-projects">
-          <span className="home-more-project-text">more side projects</span>{" "}
-          <Arrow />
-          {/* <svg aria-hidden="true" className="kc">
-            <use xlink:href="#arrow"></use>
-          </svg> */}
-        </a>
-      </section>
-      {/* </div> */}
+      {last3Projects ? (
+        <ProjectsPreview
+          UserIsAdmin={false}
+          projects={last3Projects}
+          showMoreLink={true}
+        />
+      ) : (
+        <SkyCloudLoader />
+      )}
     </div>
   );
 };

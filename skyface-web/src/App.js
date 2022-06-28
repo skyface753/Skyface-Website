@@ -36,8 +36,10 @@ import { UseSelfTracker } from "./services/selfTracker";
 import ShowSelfTracker from "./pages/admin-area/show-selftracker";
 import CookieConsent from "react-cookie-consent";
 import TextToSpeechComponent from "./pages/examples/speechToText";
-
+import Projects from "./pages/projects";
 import "animate.css"; // https://animate.style/
+import CreateProjectPage from "./pages/admin-area/create-project";
+import TextContentPageTEST from "./contentmodels/Content";
 
 // import browserSignature from "browser-signature";
 
@@ -85,6 +87,7 @@ function App() {
                 element={<TextToSpeechComponent />}
               />
               <Route path="/" exact element={<Home />} />
+              <Route path="/projects" element={<Projects />} />
               <Route path="/impressum" element={<Impressum />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/home" element={<Home />} />
@@ -128,8 +131,13 @@ function App() {
                 path="/admin/show-selftracker"
                 element={<ShowSelfTracker />}
               />
+              <Route
+                path="/admin/project/create"
+                element={<CreateProjectPage />}
+              />
               <Route path="*" element={<NotFound />} />
               <Route path="/deckgl" element={<DeckGl />} />
+              <Route path="/test" element={<TextContentPageTEST />} />
             </Routes>
           </div>
           <Footer />

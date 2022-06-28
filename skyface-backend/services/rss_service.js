@@ -38,7 +38,7 @@ let RssService = {
         position: 1,
       });
       for (let blogContent of blogContents) {
-        content += " " + blogContent.content;
+        content += " " + blogContent.text;
       }
       blogPost.content = content;
     }
@@ -82,9 +82,9 @@ let RssService = {
     feed.addCategory("Technologie");
 
     feed.addContributor({
-      name: "Johan Cruyff",
-      email: "johancruyff@example.com",
-      link: "https://example.com/johancruyff",
+      name: "Sebastian Joerz",
+      email: "sjoerz@skyface.de",
+      link: "https://skyface.de",
     });
     res.header("Content-Type", "text/xml").send(feed.rss2());
   },

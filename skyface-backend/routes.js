@@ -10,7 +10,7 @@ const SeriesService = require("./services/series_service.js");
 const SearchService = require("./services/search_service.js");
 const SelfTrackerService = require("./services/self_tracker_service.js");
 const Middleware = require("./middleware.js");
-
+const ProjectService = require("./services/project_service.js");
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
   await Middleware.getUserIfCookie(req, res, next);
@@ -18,7 +18,9 @@ router.use(async (req, res, next) => {
 
 router.post("/api/self-tracker", SelfTrackerService.receiveSelfTrackerData);
 // (Get in Admin)
-
+router.post("/projects", ProjectService.getProjects);
+router.post("/projects/last3", ProjectService.last3Projects);
+router.post("/projects/:projectID", ProjectService.getProjectByID);
 const ContactService = require("./services/contact_service.js");
 router.post("/contact", ContactService.sendForm);
 
@@ -123,5 +125,8 @@ router.post(
 router.post("/admin/series/create", SeriesService.createSeries);
 router.post("/admin/series/update", SeriesService.updateSeries);
 router.post("/admin/contact/show", ContactService.checkIfAMessageIsUnread);
+router.post("/admin/projects/create", ProjectService.createProject);
+router.post("/admin/projects/update/:projectID", ProjectService.updateProject);
+router.post("/admin/projects/delete/:projectID", ProjectService.deleteProject);
 router.post("/admin/self-tracker/get", SelfTrackerService.getSelfTrackerData);
 module.exports = router;

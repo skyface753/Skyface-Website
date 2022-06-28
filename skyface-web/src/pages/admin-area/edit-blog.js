@@ -9,22 +9,13 @@ import ShowFilesComponent from "../../components/show-files";
 import { BACKEND_FILES_URL } from "../../consts";
 import { AuthContext } from "../../App";
 import { SeriesSelect } from "../../components/SeriesSelect";
-import TextContent from "../../contentmodels/Text";
+// import TextContent from "../../contentmodels/Text";
 import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
+import { allTypes, Content, TextContent } from "../../contentmodels/Content";
 
-function textClasses() {
-  var TextClass = new TextContent("Hallo", 0, "12345");
-  console.log(TextClass.getContent());
-  TextClass.setContent("Wie gehts?");
-  console.log(TextClass.getContent());
-}
-
-function handleCategoryChange(evt) {
-  console.log(evt.target.value);
-}
 
 export default function EditBlogPost() {
-  textClasses();
+  // textClasses();
   const { state, dispatch } = useContext(AuthContext);
   if (!state.isLoggedIn) {
     alert("You must be logged in to edit a blog post");
@@ -47,6 +38,7 @@ export default function EditBlogPost() {
   let { blogUrl } = useParams();
   // console.log(id);
   const [posts, setPost] = React.useState(null);
+  const [blogContent, setBlogContent] = React.useState(null);
   const [files, setFiles] = React.useState(null);
   const [filesLoaded, setFilesLoaded] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState(null);
@@ -55,6 +47,10 @@ export default function EditBlogPost() {
   React.useEffect(() => {
     apiService("blog/" + blogUrl).then((response) => {
       setPost(response.data);
+      var tempContent = response.data["blogContent"].map((content) => {
+        return Content.fromJSON(content);
+      });
+      setBlogContent(tempContent);
       console.log(response.data);
     });
     apiService("admin/files").then((res) => {
@@ -67,7 +63,7 @@ export default function EditBlogPost() {
 
   return (
     <div>
-      <div id="file-selector-main" className="files-selector-overlay">
+      {/* <div id="file-selector-main" className="files-selector-overlay">
         <div className="files-selector-header">
           <h1>Select File</h1>
           <div
@@ -106,7 +102,7 @@ export default function EditBlogPost() {
             <div className="loader" />
           )}
         </div>
-      </div>
+      </div> */}
       <div className="title-container">
         <img
           src={require("../../img/blogs-title.png")}
@@ -173,8 +169,100 @@ export default function EditBlogPost() {
           </div>
         );
       })()}
+      {/* Blog Content */}
+      {blogContent && (
+      blogContent.map((content, index) => {
+        if (content != null) {
+          // if (content.type === "text") {
+          return(
+            <div key={"blub" + content._id}>
+              <select
+              defaultValue={content.type}
+              onChange={(e) => {
+                var copyableContentJSON = content.getCopyableContentJSON();
+                copyableContentJSON.type = e.target.value;
+                blogContent[index] = Content.fromJSON(copyableContentJSON);
+                setBlogContent([...blogContent]);
+              }}>
+                {allTypes.map((type) => {
+                  return (
+                    <option value={type.value} key={type.value}>
+                      {type.label}
+                    </option>
+                  );
+                }
+                )}
+              </select>
+              <button 
+                className="content-up-button"
+                onClick={() => {
+                  if(content.position > 0) {
+                    var tempContent = blogContent[index];
+                    blogContent[index] = blogContent[index - 1];
+                    blogContent[index - 1] = tempContent;
+                    setBlogContent([...blogContent]);
+                  }
+                }
+                }>
+                Up
+              </button>
+              <button
+                className="content-down-button"
+                onClick={() => {
+                  if(content.position < blogContent.length - 1) {
+                    var tempContent = blogContent[index];
+                    blogContent[index] = blogContent[index + 1];
+                    blogContent[index + 1] = tempContent;
+                    setBlogContent([...blogContent]);
+                  }
+                }
+                }>
+                Down
+              </button>
+              <button
+                className="content-delete-button"
+                onClick={() => {
+                  blogContent.splice(index, 1);
+                  setBlogContent([...blogContent]);
+                }
+                }>
+                Delete
+              </button>
+              {content.showEditor(blogContent, setBlogContent, index)}
+            </div>
+          );
+        }
+      }
+      )
+
+      )}
+      <button onClick={() => {
+        var newContent = new TextContent(
+          blogContent.length,
+          null,
+          "NEW" + blogContent.length,
+          "text",
+          null, 
+          null,
+          "New Text"
+        );
+        blogContent.push(newContent);
+        setBlogContent([...blogContent]);
+      }
+      }>
+        Add Content
+      </button>
+      <button onClick={() => {
+        // Save
+        var json = blogContent.map((content) => {
+          return content.getJSON();
+        })
+        console.log(json);
+      }}>
+        Save
+      </button>
       {/* Blog Posts */}
-      {(() => {
+      {/* {(() => {
         const contentDivs = [];
         var content = posts["blogContent"];
         for (let i = 0; i < content.length; i++) {
@@ -362,7 +450,7 @@ export default function EditBlogPost() {
         }}
       >
         Add Content
-      </button>
+      </button> */}
       <ShowCategoriesSelect
         selectedID={
           posts["blog"].category != null ? posts["blog"].category._id : null
@@ -434,7 +522,7 @@ export default function EditBlogPost() {
 
           apiService("blog/edit/" + posts.blog._id, {
             blog: posts["blog"],
-            blogContent: posts["blogContent"],
+            blogContent: blogContent,
           }).then((response) => {
             console.log(response);
             if (response.data.success) {

@@ -10,6 +10,7 @@ import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
 import browserSignature from "browser-signature";
 import { ViewIcon } from "../img/view";
 import { UserSvg } from "../img/userSvg";
+import { Content } from "../contentmodels/Content";
 // import SeriesBlogsComp from "../components/SeriesBlogsComp";
 // import SidebarSeries from "../components/SidebarSeries";
 
@@ -181,7 +182,7 @@ function speakMessage(messages, PAUSE_MS = 500, utterance) {
     let currentIndex = 0;
     console.log(messages);
     const speak = () => {
-      const msg = messages[currentIndex].content;
+      const msg = messages[currentIndex].text;
       // const utterance = new SpeechSynthesisUtterance(msg);
       utterance.text = msg;
       utterance.onend = () => {
@@ -284,6 +285,7 @@ export default function BlogPost() {
   let { blogUrl } = useParams();
   const location = useLocation();
   const [posts, setPost] = React.useState(null);
+  const [blogContent, setBlogContent] = React.useState(null);
   const [comments, setComments] = React.useState(null);
   const [series, setSeries] = React.useState(null);
   const [seriesBlogs, setSeriesBlogs] = React.useState(null);
@@ -310,21 +312,25 @@ export default function BlogPost() {
     apiService("blog/" + blogUrl, {
       signature,
     }).then((response) => {
-      var blogContent = response.data["blogContent"];
+      var blogContentTemp = response.data["blogContent"];
       console.log(response.data);
-      blogContent.sort(function (a, b) {
+      blogContentTemp.sort(function (a, b) {
         return a.position - b.position;
       });
       setPost(response.data);
+      var blogContentNew = blogContentTemp.map((content) => {
+        return Content.fromJSON(content);
+      })
+      setBlogContent(blogContentNew);
       setComments(commentsParentSort(response.data["blogComments"]));
       setHasLiked(response.data["hasUserLikedBlog"]);
       setBlogLikesCount(response.data["blogLikesCount"]);
       setBlogViewsCount(response.data["blogViewsCount"]);
       setBlogViewsCountPerUser(response.data["blogViewsCountPerUser"]);
       // var contentText = "";
-      for (var i = 0; i < blogContent.length; i++) {
-        if (blogContent[i].type === "text") {
-          speakText.push(blogContent[i]);
+      for (var i = 0; i < blogContentTemp.length; i++) {
+        if (blogContentTemp[i].type === "text") {
+          speakText.push(blogContentTemp[i]);
           // contentText += blogContent[i].content + "\n";
         }
       }
@@ -491,22 +497,26 @@ export default function BlogPost() {
         })()}
       </div>
       {/* Blog Posts */}
-      {(() => {
+      {blogContent != null && blogContent.length > 0 && (
+        blogContent.map((content) => {
+        if(content != null) {
+          return content.showContent();
+        }
+        })
+      )}
+        
+      {/* {(() => {
         const contentDivs = [];
         var content = posts["blogContent"];
         for (let i = 0; i < content.length; i++) {
           if (content[i].type === "text") {
             contentDivs.push(
               <div key={content[i]._id} className="content-div">
-                {/* <textarea className="content-text" id={content[i]._id}>
-                  {content[i].content}
-                </textarea> */}
                 <p id={content[i]._id}>{content[i].content}</p>
               </div>
             );
           } else if (content[i].type == "code") {
             contentDivs.push(
-              // <div key={content[i]._id} >
               <pre className="pre-code" key={content[i]._id}>
                 <code>{content[i].content}</code>
                 <button
@@ -516,7 +526,6 @@ export default function BlogPost() {
                   {copyButtonLabel}
                 </button>
               </pre>
-              // </div>
             );
             //TODO: CHANGE
           } else if (content[i].type == "image") {
@@ -565,14 +574,15 @@ export default function BlogPost() {
                 </form>
               </div>
             );
-          } else if(content[i].type == "pureHTML"){
+          } else if (content[i].type == "pureHTML") {
             var pureHTML = content[i].content;
             // var pureHTMLDiv = document.createElement("");
             // pureHTMLDiv.innerHTML = pureHTML;
             contentDivs.push(
-                  <div dangerouslySetInnerHTML={{__html: pureHTML}} key={content[i]._id} />
-
-                  
+              <div
+                dangerouslySetInnerHTML={{ __html: pureHTML }}
+                key={content[i]._id}
+              />
             );
             // contentDivs.push(
             //   <div key={content[i]._id} className="content-pureHTML-div">
@@ -582,7 +592,7 @@ export default function BlogPost() {
           }
         }
         return contentDivs;
-      })()}
+      })()} */}
       {(() => {
         if (series && seriesBlogs) {
           return (
@@ -650,6 +660,28 @@ export default function BlogPost() {
         <div>{blogViewsCount}</div>
         <UserSvg />
         <div>{blogViewsCountPerUser}</div>
+        {/* Share Button */}
+        {navigator.canShare && navigator.canShare({
+          url: window.location.href,
+          title: posts["blog"].title,
+        }) ? (
+        <button
+          className="share-button"
+          onClick={() => {
+            var data = {
+              url: window.location.href,
+              title: posts["blog"].title,
+            }
+            if(navigator.canShare && navigator.canShare(data)) {
+              navigator.share(data);
+            }
+          }}
+        >
+          Share
+        </button>
+        ) : (
+          null
+        )}
       </div>
 
       <hr className="blog-divider"></hr>

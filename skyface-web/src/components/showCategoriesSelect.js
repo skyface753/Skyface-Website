@@ -68,13 +68,15 @@ const ShowCategoriesSelect = (props) => {
   //   const [selectedCategory, setSelectedCategory] = React.useState(selectedValue);
 
   React.useEffect(() => {
+    console.log("Call api")
     apiService("blog-categories").then((response) => {
       setCategories(parentSort(response.data));
     });
-  }, []);
+  }, [selectedValue]);
 
   if (!categories) return <div className="loader" />;
-  console.log("Selected Value in ShowCategoriesSelect: " + selectedValue);
+  // console.log("Selected Value in ShowCategoriesSelect: " + selectedValue);
+  
   return (
     <div
       style={{

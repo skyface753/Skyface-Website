@@ -1,4 +1,5 @@
 import React from "react";
+import { allTypes, Content, TextContent } from "../../contentmodels/Content";
 import NewBlogBlank from "./new-blog.json";
 import TextareaAutosize from "react-textarea-autosize";
 import { BACKEND_FILES_URL } from "../../consts";
@@ -8,11 +9,39 @@ import axios from "axios";
 import apiService from "../../services/api-service";
 import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
 const baseURL = "http://localhost:5000/admin/blog/";
+
+const initContent =[ {
+  _id: "1",
+      text: "New Blog Text",
+      for_blog: null,
+      position: 0,
+      type: "text",
+      createdAt: null,
+      updatedAt: null,
+}
+];
+
+var content = initContent.map((item) => {
+  return Content.fromJSON(item);
+});
 export default function CreateBlog() {
   const [posts, setPost] = React.useState(NewBlogBlank);
   const [files, setFiles] = React.useState(null);
   const [filesLoaded, setFilesLoaded] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState(null);
+
+
+  const [blogContent, setBlogContent] = React.useState(content);
+
+    // {
+    //   _id: "1",
+    //   text: "New Blog Text",
+    //   for_blog: null,
+    //   position: 0,
+    //   type: "text",
+    //   createdAt: null,
+    //   updatedAt: null,
+    // }));
 
   const [currentContentIndex, setCurrentContentIndex] = React.useState(0);
 
@@ -25,7 +54,7 @@ export default function CreateBlog() {
 
   return (
     <div>
-      <div id="file-selector-main" className="files-selector-overlay">
+      {/* <div id="file-selector-main" className="files-selector-overlay">
         <div className="files-selector-header">
           <h1>Select File</h1>
           <div
@@ -64,7 +93,7 @@ export default function CreateBlog() {
             <SkyCloudLoader />
           )}
         </div>
-      </div>
+      </div> */}
 
       <div className="title-container">
         <img
@@ -132,8 +161,107 @@ export default function CreateBlog() {
           </div>
         );
       })()}
-      {/* Blog Posts */}
-      {(() => {
+      {/* Blog Content */}
+      {blogContent && (
+      blogContent.map((content, index) => {
+        if (content != null) {
+          // if (content.type === "text") {
+          return(
+            <div key={"blub" + content._id}>
+              <select
+              defaultValue={content.type}
+              onChange={(e) => {
+                var copyableContentJSON = content.getCopyableContentJSON();
+                copyableContentJSON.type = e.target.value;
+                blogContent[index] = Content.fromJSON(copyableContentJSON);
+                setBlogContent([...blogContent]);
+              }}>
+                {allTypes.map((type) => {
+                  return (
+                    <option value={type.value} key={type.value}>
+                      {type.label}
+                    </option>
+                  );
+                }
+                )}
+              </select>
+              <button 
+                className="content-up-button"
+                onClick={() => {
+                  if(content.position > 0) {
+                    var tempContent = blogContent[index];
+                    blogContent[index] = blogContent[index - 1];
+                    blogContent[index - 1] = tempContent;
+                    setBlogContent([...blogContent]);
+                  }
+                }
+                }>
+                Up
+              </button>
+              <button
+                className="content-down-button"
+                onClick={() => {
+                  if(content.position < blogContent.length - 1) {
+                    var tempContent = blogContent[index];
+                    blogContent[index] = blogContent[index + 1];
+                    blogContent[index + 1] = tempContent;
+                    setBlogContent([...blogContent]);
+                  }
+                }
+                }>
+                Down
+              </button>
+              <button
+                className="content-delete-button"
+                onClick={() => {
+                  blogContent.splice(index, 1);
+                  setBlogContent([...blogContent]);
+                }
+                }>
+                Delete
+              </button>
+              {content.showEditor(blogContent, setBlogContent, index)}
+            </div>
+          );
+        }
+      }
+      )
+
+      )}
+      <button onClick={() => {
+        var newContent = new TextContent(
+          blogContent.length,
+          null,
+          "NEW" + blogContent.length,
+          "text",
+          null, 
+          null,
+          "New Text"
+        );
+        blogContent.push(newContent);
+        setBlogContent([...blogContent]);
+      }
+      }>
+        Add Content
+      </button>
+      <button onClick={() => {
+        // Save
+        var json = blogContent.map((content) => {
+          return content.getJSON();
+        })
+        console.log(json);
+      }}>
+        Save
+      </button>
+      
+
+
+
+
+
+
+
+      {/* {(() => {
         const contentDivs = [];
         var content = posts["blogContent"];
         for (let i = 0; i < content.length; i++) {
@@ -274,37 +402,6 @@ export default function CreateBlog() {
               </div>
             </div>
           );
-          // if (content[i].type === "text") {
-          // 	contentDivs.push(
-          // 		<div key={content[i]._id} className='content-div'>
-          // 		<p>{content[i].content}</p>
-          // 		</div>
-          // 	);
-          // }
-          // else if(content[i].type == "code"){
-
-          // 	contentDivs.push(
-          // 		// <div key={content[i]._id} >
-          // 			<pre key={content[i]._id} className="pre-code">
-          // 				<code>{content[i].content}</code>
-          // 				<button className="copy-code-button" onClick={() => copyCode(content[i].content)}>{copyButtonLabel}</button>
-          // 			</pre>
-          // 		// </div>
-          // 	);
-          // 	//TODO: CHANGE
-          // }else if(content[i].type == "image"){
-          // 	contentDivs.push(
-          // 		<div key={content[i]._id} >
-          // 			<img src={content[i].content} alt="image" />
-          // 		</div>
-          // 	);
-          // }else if(content[i].type == "subline"){
-          // 	contentDivs.push(
-          // 		// <div key={content[i]._id} >
-          // 			<h3 key={content[i]._id} className='sublines'>{content[i].content}</h3>
-          // 		// </div>
-          // 	);
-          // }
         }
         return contentDivs;
       })()}
@@ -321,7 +418,7 @@ export default function CreateBlog() {
         }}
       >
         Add Content
-      </button>
+      </button> */}
       <ShowCategoriesSelect
         selectedID={
           posts["blog"].category != null ? posts["blog"].category._id : null
@@ -346,7 +443,7 @@ export default function CreateBlog() {
           }
           apiService("admin/blog/create", {
             blog: posts["blog"],
-            blogContent: posts["blogContent"],
+            blogContent: blogContent,
           }).then((response) => {
             console.log(response);
             if (response.data.success) {

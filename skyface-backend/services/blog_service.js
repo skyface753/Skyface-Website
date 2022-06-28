@@ -5,6 +5,7 @@ const UserService = require("../services/user_service.js");
 const CommentModel = require("../models/comment_model");
 const BlogLikesModel = require("../models/blog_likes_model");
 const BlogViewsModel = require("../models/blog_views_model");
+const DeletedBlogSchema = require("../models/deleted_blog_model");
 
 let BlogService = {
   getAllBlogs: async (req, res) => {
@@ -122,7 +123,7 @@ let BlogService = {
     if (!newBlog || newBlog.length === 0) {
       res.json({
         success: false,
-        message: "No blog (or blog content) provided",
+        message: "No blog provided",
       });
       return;
     }
@@ -183,56 +184,53 @@ let BlogService = {
 
     await blog.save();
 
-
-    // Update Blog Content
-    for(let i = 0; i < newBlogContent.length; i++) {
-      if(newBlogContent[i].content == "") {
-        continue;
-      }
-      let blogContent = await blogContentModel.findById(newBlogContent[i]._id);
-      if(!blogContent) {
-        let createBlogContent = await blogContentModel.create({
-          for_blog: blog._id,
-          content: newBlogContent[i].content,
-          position: newBlogContent[i].position,
-          type: newBlogContent[i].type,
-        });
-        await createBlogContent.save();
-
-      }else {
-      blogContent.content = newBlogContent[i].content;
-      blogContent.position = newBlogContent[i].position;
-      blogContent.type = newBlogContent[i].type;
-      await blogContent.save();
-      }
-    }
-
-    // Delte Blog Content that is not in newBlogContent
+    // Get Blog Content that is not in newBlogContent
     let blogContentToDelete = await blogContentModel.find({
       for_blog: blog._id,
-      _id: { $nin: newBlogContent.map((bc) => bc._id) },
+      _id: { $nin: newBlogContent.map((bc) => {
+        if(bc.createdAt) {
+          return bc._id;
+        }
+      // } bc._id) },
+      })
+      }
     });
+
     for (let i = 0; i < blogContentToDelete.length; i++) {
       await blogContentToDelete[i].remove();
     }
+
+
+    // Update Blog Content
+    for(let i = 0; i < newBlogContent.length; i++) {
+      if(newBlogContent[i]._id && newBlogContent[i].createdAt) {
+        let blogContent = await blogContentModel.findById(newBlogContent[i]._id);
+        if(blogContent) {
+          await blogContentModel.findByIdAndUpdate(newBlogContent[i]._id, newBlogContent[i]);
+          continue;
+        }else{
+          newBlogContent[i].for_blog = blog._id;
+          newBlogContent[i].createdAt = null;
+          newBlogContent[i].updatedAt = null;
+          newBlogContent[i]._id = null;
+          await blogContentModel.create(newBlogContent[i]);
+          
+        }
+    }else{
+      newBlogContent[i].for_blog = blog._id;
+      newBlogContent[i].createdAt = null;
+      newBlogContent[i].updatedAt = null;
+      newBlogContent[i]._id = null;
+      await blogContentModel.create(newBlogContent[i]);
+    }
+  }
+
+    
+   
     
 
 
-    // //Delete old blog content
-    // await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
-    // //Create new blog content
-    // for (let i = 0; i < newBlogContent.length; i++) {
-    //   if (newBlogContent[i].content == "") {
-    //     continue;
-    //   }
-    //   let blogContent = new blogContentModel({
-    //     content: newBlogContent[i].content,
-    //     for_blog: blog._id,
-    //     position: newBlogContent[i].position,
-    //     type: newBlogContent[i].type,
-    //   });
-    //   await blogContent.save();
-    // }
+
     if (!newBlogContent || newBlogContent.length === 0) {
       res.json({
         success: true,
@@ -283,16 +281,23 @@ let BlogService = {
 
     //Create new blog content
     for (let i = 0; i < newBlogContent.length; i++) {
-      if (newBlogContent[i].content == "") {
-        continue;
-      }
-      let blogContent = new blogContentModel({
-        content: newBlogContent[i].content,
-        for_blog: blog._id,
-        position: newBlogContent[i].position,
-        type: newBlogContent[i].type,
-      });
+      // if (newBlogContent[i].content == "") {
+      //   continue;
+      // }
+      newBlogContent[i].for_blog = blog._id;
+      newBlogContent[i]._id = null;
+      newBlogContent[i].createdAt = null;
+      newBlogContent[i].updatedAt = null;
+      let blogContent = new blogContentModel(newBlogContent[i]);
+      // if(blogCo)
       await blogContent.save();
+      // let blogContent = new blogContentModel({
+      //   content: newBlogContent[i].content,
+      //   for_blog: blog._id,
+      //   position: newBlogContent[i].position,
+      //   type: newBlogContent[i].type,
+      // });
+      // await blogContent.save();
     }
     res.send({
       success: true,
@@ -314,6 +319,24 @@ let BlogService = {
       });
       return;
     }
+    await DeletedBlogSchema.create({
+      blog_id: blog._id,
+      title: blog.title, 
+      subtitle: blog.subtitle,
+      url: blog.url,
+      category: blog.category,
+      blog_image: blog.blog_image,
+      posted_by: blog.posted_by,
+      createdAt: blog.createdAt,
+      updatedAt: blog.updatedAt,
+      deleted_by: req.user._id,
+      deleted_at: new Date(),
+      contents: await blogContentModel.find({
+        for_blog: blog._id,
+      }),
+    });
+
+
     await blog.remove();
     await blogContentModel.deleteMany({ for_blog: blog._id }).exec();
     res.json({
@@ -322,93 +345,127 @@ let BlogService = {
     });
   },
 };
+// if(process.argv)
+if(process.argv[2] == "updatedb") {
+  console.error("Updating database... please make sure you have an backup of your database");
+  console.error("Starting in 5 seconds...");
+  setTimeout(async () => {
+
+  updateBlogContentv2();
+  console.error("Done");
+  }, 5000);
+
+}
+async function updateBlogContentv2(){
+  let blogContents = await blogContentModel.find({});
+  for(let i = 0; i < blogContents.length; i++){
+    // Check if blogContent.content attribute exists
+    var currContent = await blogContentModel.findById(blogContents[i]._id);
+    if(!currContent.content){
+      continue;
+    }else{
+      // var content = blogContent.content;
+      console.log("Update");
+      var type = blogContents[i].type;
+      await blogContentModel.findByIdAndUpdate(blogContents[i]._id, {
+        $rename: {
+          "content": type
+        }
+      });
+
+
+    }
+
+
+  }
+}
 
 module.exports = BlogService;
 // createDummyBlog();
 
 const UserModel = require("../models/user_model.js");
 
-async function createDummyBlog() {
-  setTimeout(async () => {
-    // Create User Skyface
-    let userSkyface = new UserModel({
-      username: "Skyface",
-      email: "sjoerz@skyface.de",
-      password: "123456",
-      role: "admin",
-    });
-    await userSkyface.save();
+// async function createDummyBlog() {
+//   setTimeout(async () => {
+//     // Create User Skyface
+//     let userSkyface = new UserModel({
+//       username: "Skyface",
+//       email: "sjoerz@skyface.de",
+//       password: "123456",
+//       role: "admin",
+//     });
+//     await userSkyface.save();
 
-    for (let i = 0; i < 10; i++) {
-      let title = "Title " + i;
-      let subtitle = "Subtitle " + i;
-      let content = [];
-      for (let j = 0; j < 10; j++) {
-        var words = [
-          "The sky",
-          "above",
-          "the port",
-          "was",
-          "the color of television",
-          "tuned",
-          "to",
-          "a dead channel",
-          ".",
-          "All",
-          "this happened",
-          "more or less",
-          ".",
-          "I",
-          "had",
-          "the story",
-          "bit by bit",
-          "from various people",
-          "and",
-          "as generally",
-          "happens",
-          "in such cases",
-          "each time",
-          "it",
-          "was",
-          "a different story",
-          ".",
-          "It",
-          "was",
-          "a pleasure",
-          "to",
-          "burn",
-        ];
-        var text = [];
-        var x = 100;
-        while (--x) text.push(words[Math.floor(Math.random() * words.length)]);
-        let contentItem = {
-          content: "Content " + j + ": " + text.join(" "),
-          position: j,
-        };
-        content.push(contentItem);
-      }
-      let posted_by = userSkyface._id;
-      let categories = [];
-      let url = "url-test-" + i;
-      let blog = new blogModel({
-        title: title,
-        subtitle: subtitle,
-        posted_by: posted_by,
-        categories: categories,
-        url: url,
-      });
-      await blog.save();
+//     for (let i = 0; i < 10; i++) {
+//       let title = "Title " + i;
+//       let subtitle = "Subtitle " + i;
+//       let content = [];
+//       for (let j = 0; j < 10; j++) {
+//         var words = [
+//           "The sky",
+//           "above",
+//           "the port",
+//           "was",
+//           "the color of television",
+//           "tuned",
+//           "to",
+//           "a dead channel",
+//           ".",
+//           "All",
+//           "this happened",
+//           "more or less",
+//           ".",
+//           "I",
+//           "had",
+//           "the story",
+//           "bit by bit",
+//           "from various people",
+//           "and",
+//           "as generally",
+//           "happens",
+//           "in such cases",
+//           "each time",
+//           "it",
+//           "was",
+//           "a different story",
+//           ".",
+//           "It",
+//           "was",
+//           "a pleasure",
+//           "to",
+//           "burn",
+//         ];
+//         var text = [];
+//         var x = 100;
+//         while (--x) text.push(words[Math.floor(Math.random() * words.length)]);
+//         let contentItem = {
+//           content: "Content " + j + ": " + text.join(" "),
+//           position: j,
+//         };
+//         content.push(contentItem);
+//       }
+//       let posted_by = userSkyface._id;
+//       let categories = [];
+//       let url = "url-test-" + i;
+//       let blog = new blogModel({
+//         title: title,
+//         subtitle: subtitle,
+//         posted_by: posted_by,
+//         categories: categories,
+//         url: url,
+//       });
+//       await blog.save();
 
-      for (let i = 0; i < content.length; i++) {
-        let blogContent = new blogContentModel({
-          content: content[i].content,
-          for_blog: blog._id,
-          position: content[i].position,
-          type: "text",
-        });
-        await blogContent.save();
-      }
-    }
-    console.log("Blogs created");
-  }, 1000);
-}
+//       for (let i = 0; i < content.length; i++) {
+//         let blogContent = new blogContentModel({
+//           content: content[i].content,
+//           for_blog: blog._id,
+//           position: content[i].position,
+//           type: "text",
+//         });
+//         await blogContent.save();
+//       }
+//     }
+//     console.log("Blogs created");
+//   }, 1000);
+// }
