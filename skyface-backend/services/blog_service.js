@@ -346,39 +346,50 @@ let BlogService = {
   },
 };
 // if(process.argv)
-if(process.argv[2] == "updatedb") {
-  console.error("Updating database... please make sure you have an backup of your database");
-  console.error("Starting in 5 seconds...");
-  setTimeout(async () => {
+// if(process.argv[2] == "updatedb") {
+//   // console.error("Updating database... please make sure you have an backup of your database");
+//   // console.error("Starting in 5 seconds...");
+//   // setTimeout(async () => {
 
-  updateBlogContentv2();
-  console.error("Done");
-  }, 5000);
+//   updateBlogContentv2();
+//   // console.error("Done");
+//   // }, 5000);
 
-}
-async function updateBlogContentv2(){
-  let blogContents = await blogContentModel.find({});
-  for(let i = 0; i < blogContents.length; i++){
-    // Check if blogContent.content attribute exists
-    var currContent = await blogContentModel.findById(blogContents[i]._id);
-    if(!currContent.content){
-      continue;
-    }else{
-      // var content = blogContent.content;
-      console.log("Update");
-      var type = blogContents[i].type;
-      await blogContentModel.findByIdAndUpdate(blogContents[i]._id, {
-        $rename: {
-          "content": type
-        }
-      });
+// }
+// async function updateBlogContentv2(){
+//   let allBlogContents = await blogContentModel.find({});
+//   // allBlogContents.forEach(element => {
+//   //   console.log(element[0]["content"]);
+//   // });
+//   for(let i = 0; i < allBlogContents.length; i++) {
+//     let blogContent = allBlogContents[i];
+//     console.log(blogContent)
+//     console.log("Content: " + blogContent.content);
+//   }
+//   // let blogContents = await blogContentModel.find({}).exec();
+//   // console.log("blogContents", blogContents);
+//   // for(let i = 0; i < blogContents.length; i++){
+//   //   let blogContent = blogContents[i];
+//   //   console.log("blogContent", blogContent.content);
+//   //   // if(!blogContents[i].content){
+//   //   //   console.log("blogContent", blogContents[i]["content"]);
+//   //   //   continue;
+//   //   // }else{
+//   //   //   // var content = blogContent.content;
+//   //   //   console.log("Update");
+//   //   //   var type = blogContents[i].type;
+//   //   //   await blogContentModel.findByIdAndUpdate(blogContents[i]._id, {
+//   //   //     $rename: {
+//   //   //       "content": type
+//   //   //     }
+//   //   //   });
 
 
-    }
+//   //   // }
 
 
-  }
-}
+//   // }
+// }
 
 module.exports = BlogService;
 // createDummyBlog();

@@ -40,13 +40,6 @@ let blogContentSchema = new Schema(
     pureHTML: {
       type: String,
     } ,
-    
-
-
-    // content: {
-    //   type: String,
-    //   required: true,
-    // },
   },
   {
     timestamps: true,
