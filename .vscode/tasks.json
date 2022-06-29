@@ -68,9 +68,9 @@
 			"problemMatcher": [],
 			"label": "npm: start - skyface-web",
 			"detail": "start the application",
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
+			// "runOptions": {
+			// 	"runOn": "folderOpen"
+			// },
 			"dependsOn": [
 				"npm: install - skyface-web"
 			],
@@ -83,9 +83,9 @@
 			"problemMatcher": [],
 			"label": "npm: run dev - skyface-backend",
 			"detail": "start the application",
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
+			// "runOptions": {
+			// 	"runOn": ""
+			// },
 			"dependsOn": [
 				"npm: install - skyface-backend"
 			],

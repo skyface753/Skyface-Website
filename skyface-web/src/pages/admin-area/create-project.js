@@ -37,38 +37,8 @@ export default function CreateProjectPage({ existingProjectID }) {
   return (
     <div>
       <h1>Create Project</h1>
-      <form
-        id="create-project-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          // Check if project is valid and send to server
-          if (project.title && project.text) {
-            console.log("Project is valid");
-          } else {
-            alert("Project is not valid");
-            return;
-          }
-          var linksAreValid = true;
-          for (var i = 0; i < project.links.length; i++) {
-            if (!project.links[i].text || !project.links[i].href) {
-              linksAreValid = false;
-            }
-          }
-          if (linksAreValid) {
-            console.log("Links are valid");
-            apiService("admin/projects/create", project).then((res) => {
-              if (res.data.success) {
-                alert("Project created successfully");
-                window.location.href = "/projects/";
-              } else {
-                console.log(res.data.message);
-              }
-            });
-          } else {
-            alert("Links are not valid");
-          }
-        }}
-      >
+      
+     
         <label>Title</label>
         <input
           type="text"
@@ -138,8 +108,38 @@ export default function CreateProjectPage({ existingProjectID }) {
             setProject({ ...project, text: e.target.value });
           }}
         />
-        <button type="submit">Submit</button>
-      </form>
+        <button type="submit"
+        onClick={() => {
+              // Check if project is valid and send to server
+              if (project.title && project.text) {
+                console.log("Project is valid");
+              } else {
+                alert("Project is not valid");
+                return;
+              }
+              var linksAreValid = true;
+              for (var i = 0; i < project.links.length; i++) {
+                if (!project.links[i].text || !project.links[i].href) {
+                  linksAreValid = false;
+                }
+              }
+              if (linksAreValid) {
+                console.log("Links are valid");
+                apiService("admin/projects/create", project).then((res) => {
+                  if (res.data.success) {
+                    alert("Project created successfully");
+                    window.location.href = "/projects/";
+                  } else {
+                    console.log(res.data.message);
+                  }
+                });
+              } else {
+                alert("Links are not valid");
+              }
+            }
+        }
+        >Submit</button>
+      
     </div>
   );
 }

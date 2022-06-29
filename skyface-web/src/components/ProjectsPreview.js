@@ -1,5 +1,7 @@
 import Arrow from "../img/arrow";
 import Star from "../img/star";
+import CheckIfAdmin from "../services/CheckIfAdmin";
+
 export default function ProjectsPreview({
   projects,
   UserIsAdmin = false,
@@ -49,6 +51,29 @@ function createProjectsArticle(title, links, text) {
           <div className="home-project-article-title">{title}</div>
           <ul className="home-project-article-links">{articleLinks}</ul>
           <p className="home-project-article-text">{text}</p>
+          {
+            CheckIfAdmin() && (
+             <div>
+              <button 
+                className="home-project-article-edit"
+                onClick={() => {
+                  console.log("edit");
+                }}
+              >
+                edit
+              </button>
+              <button
+                className="home-project-article-delete"
+                onClick={() => {
+                  console.log("delete");
+                }}
+              >
+                delete
+              </button>
+            </div>
+            )
+
+          }
         </div>
       </article>
     </li>
