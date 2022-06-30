@@ -38,7 +38,7 @@ import CookieConsent from "react-cookie-consent";
 import TextToSpeechComponent from "./pages/examples/speechToText";
 import Projects from "./pages/projects";
 import "animate.css"; // https://animate.style/
-import CreateProjectPage from "./pages/admin-area/create-project";
+import ProjectAdminPage from "./pages/admin-area/project-admin";
 import TextContentPageTEST from "./contentmodels/Content";
 
 // import browserSignature from "browser-signature";
@@ -133,7 +133,11 @@ function App() {
               />
               <Route
                 path="/admin/project/create"
-                element={<CreateProjectPage />}
+                element={<ProjectAdminPage />}
+              />
+              <Route 
+                path="/admin/project/edit/:projectID"
+                element={<ProjectAdminPage />}
               />
               <Route path="*" element={<NotFound />} />
               <Route path="/deckgl" element={<DeckGl />} />

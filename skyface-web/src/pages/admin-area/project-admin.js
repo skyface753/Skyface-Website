@@ -7,7 +7,7 @@
 import React, { useState } from "react";
 import { SkyCloudLoader } from "../../components/Loader";
 import apiService from "../../services/api-service";
-
+import { useParams } from "react-router-dom";
 var emptyProject = {
   title: "",
   links: [
@@ -19,8 +19,10 @@ var emptyProject = {
   text: "",
 };
 
-export default function CreateProjectPage({ existingProjectID }) {
+export default function ProjectAdminPage({  }) {
   const [project, setProject] = useState(emptyProject);
+  const existingProjectID = useParams().projectID;
+ 
 
   React.useEffect(() => {
     if (existingProjectID) {
@@ -36,7 +38,11 @@ export default function CreateProjectPage({ existingProjectID }) {
 
   return (
     <div>
-      <h1>Create Project</h1>
+      {existingProjectID ? (
+        <h1>Edit project</h1>
+        ) : (
+        <h1>Create a new project</h1>
+      )}
       
      
         <label>Title</label>
@@ -125,6 +131,16 @@ export default function CreateProjectPage({ existingProjectID }) {
               }
               if (linksAreValid) {
                 console.log("Links are valid");
+                if(existingProjectID) {
+                  apiService("admin/projects/update/" + existingProjectID, project).then((res) => {
+                    if (res.data.success) {
+                      alert("Project updated");
+                      window.location.href = "/projects";
+                    }else{
+                      alert(res.data.message);
+                    }
+                  });
+                }else{
                 apiService("admin/projects/create", project).then((res) => {
                   if (res.data.success) {
                     alert("Project created successfully");
@@ -133,6 +149,7 @@ export default function CreateProjectPage({ existingProjectID }) {
                     console.log(res.data.message);
                   }
                 });
+                }
               } else {
                 alert("Links are not valid");
               }

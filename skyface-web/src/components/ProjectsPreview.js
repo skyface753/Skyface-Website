@@ -1,5 +1,6 @@
 import Arrow from "../img/arrow";
 import Star from "../img/star";
+import apiService from "../services/api-service";
 import CheckIfAdmin from "../services/CheckIfAdmin";
 
 export default function ProjectsPreview({
@@ -15,7 +16,8 @@ export default function ProjectsPreview({
           return createProjectsArticle(
             article.title,
             article.links,
-            article.text
+            article.text,
+            article._id
           );
         })}
       </ol>
@@ -29,7 +31,7 @@ export default function ProjectsPreview({
   );
 }
 
-function createProjectsArticle(title, links, text) {
+function createProjectsArticle(title, links, text, id) {
   var articleLinks = [];
 
   for (var i = 0; i < links.length; i++) {
@@ -54,21 +56,29 @@ function createProjectsArticle(title, links, text) {
           {
             CheckIfAdmin() && (
              <div>
-              <button 
-                className="home-project-article-edit"
-                onClick={() => {
-                  console.log("edit");
-                }}
-              >
-                edit
-              </button>
+              <a href={"/admin/project/edit/" + id} className="home-project-article-edit">
+                <span className="home-project-article-edit-text">edit</span>
+                {/* <Star /> */}
+              </a>
+              
               <button
                 className="home-project-article-delete"
                 onClick={() => {
-                  console.log("delete");
-                }}
+                  
+                  if(window.confirm("Are you sure you want to delete this project?")){
+                    apiService("admin/projects/delete/" + id).then((res) => {
+                      if (res.data.success) {
+                        alert("Project deleted");
+                        window.location.href = "/projects";
+                      } else {
+                        alert("Project not deleted\n" + res.data.message);
+                      }
+                    });
+                  }
+                }
+              }
               >
-                delete
+                Delete
               </button>
             </div>
             )
