@@ -47,7 +47,7 @@
 		{
 			"type": "npm",
 			"script": "install",
-			"path": "skyblog_react",
+			"path": "skyface_react_native",
 			"group": "none",
 			"problemMatcher": [],
 			"label": "npm: install - skyblog_react",

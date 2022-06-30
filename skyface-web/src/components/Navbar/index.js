@@ -1,13 +1,4 @@
 import React, { useContext } from "react";
-import {
-  Nav,
-  NavLink,
-  Bars,
-  NavMenu,
-  NavBtn,
-  NavBtnLink,
-} from "./NavbarElements";
-import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout } from "@react-oauth/google";
 import "../../styles/navbar.css";
 import { useState } from "react";
@@ -73,7 +64,7 @@ export default function Navbar() {
             <a href="/contact">Contact</a>
           </li>
           {state.isLoggedIn ? (
-            state.user.role == "admin" ? (
+            state.user.role === "admin" ? (
               <li>
                 <a href="/admin">Admin</a>
               </li>
@@ -108,13 +99,13 @@ export default function Navbar() {
                     <img
                       className="profile-pic"
                       src={state.user.picture}
-                      alt="User Picture"
+                      alt="User"
                     />
                   ) : (
                     <img
                       className="profile-pic"
                       src={require("../../img/default-profile-pic.png")}
-                      alt="User Picture"
+                      alt="User"
                     />
                   )}
                 </div>
@@ -130,7 +121,7 @@ export default function Navbar() {
                       apiService("logout").then((res) => {
                         if (res.data.success) {
                           console.log("Logged out");
-                          if (state.user.provider == "Google") {
+                          if (state.user.provider === "Google") {
                             googleLogout();
                           }
                           dispatch({
@@ -160,66 +151,5 @@ export default function Navbar() {
         </ul>
       </div>
     </nav>
-    // <>
-    //   <Nav
-    //   >
-    //     <Bars />
-    //     <NavMenu>
-    //       <NavLink to="/">Home</NavLink>
-
-    //       <NavLink to="/about">About</NavLink>
-    //       <NavLink to="/blogs">Blogs</NavLink>
-    //       <NavLink to="/categories">Categories</NavLink>
-    //       <NavLink to="/series">Series</NavLink>
-    //       {loggedInUser != null ? (
-    //         loggedInUser.role == "admin" ? (
-    //           <NavLink to="/admin">Admin</NavLink>
-    //         ) : null
-    //       ) : null}
-    //     </NavMenu>
-    //     {loggedInUser ? (
-    //       <div className="loggedInUserMenu">
-    //         <div className="loggedInUserMenu-Button">
-    //           {loggedInUser.picture ? (
-    //             <img
-    //               className="profile-pic"
-    //               src={loggedInUser.picture}
-    //               alt="User Picture"
-    //             />
-    //           ) : (
-    //             <img
-    //               className="profile-pic"
-    //               src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-    //               alt="User Picture"
-    //             />
-    //           )}
-    //         </div>
-    //         <div className="loggedInUser-dropdown-content">
-    //           {/* <a href={"/users" + loggedInUser.user.username}>{loggedInUser.user.name}</a> */}
-    //           <a href={"/users/" + loggedInUser.username}>Profile</a>
-    //           {/* Logout */}
-    //           <a
-    //             href="/"
-    //             onClick={() => {
-    //               if (loggedInUser.provider == "google") {
-    //                 googleLogout();
-    //               }
-    //               reactLocalStorage.setObject("loggedInUser", null);
-    //               reactLocalStorage.set("jwt", null);
-    //               window.location.reload();
-    //             }}
-    //           >
-    //             Logout
-    //           </a>
-    //         </div>
-    //       </div>
-    //     ) : (
-    //       <NavMenu>
-    //         <NavBtnLink to="/sign-in">Sign In</NavBtnLink>
-    //         <NavBtnLink to="/sign-up">Sign Up</NavBtnLink>
-    //       </NavMenu>
-    //     )}
-    //   </Nav>
-    // </>
   );
 }

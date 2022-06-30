@@ -3,61 +3,13 @@ import Star from "../img/star";
 import Arrow from "../img/arrow";
 import apiService from "../services/api-service";
 import {
-  CloudLoader,
-  CloudsRainLoader,
-  MeetupLoader,
   SkyCloudLoader,
 } from "../components/Loader";
 import ProjectsPreview from "../components/ProjectsPreview";
-// import { Meetup as Loader } from "../components/Loader";
 
-// var ProjectArticles = [
-//   {
-//     title: "SkyManager",
-//     links: [
-//       {
-//         text: "backend",
-//         href: "https://github.com/skyface753/SkyManager",
-//       },
-//       {
-//         text: "frontend",
-//         href: "https://github.com/skyface753/SkyManager-Frontend-Public",
-//       },
-//       {
-//         text: "demo",
-//         href: "https://demo.skymanager.net",
-//       },
-//     ],
-//     text: "A Web, IOS and Android App for managing tickets, customers and documents build with Flutter and NodeJS",
-//   },
-//   {
-//     title: "SkyTok",
-//     links: [
-//       {
-//         text: "code",
-//         href: "https://github.com/skyface753/SkyTok-Public",
-//       },
-//     ],
-//     text: "A Replica of the TikTok App, build with Flutter and NodeJS",
-//   },
-//   {
-//     title: "SkyBlog (this)",
-//     links: [
-//       {
-//         text: "code",
-//         href: "https://github.com/skyface753/Skyface-Website",
-//       },
-//       {
-//         text: "web",
-//         href: "https://www.skyface.de/",
-//       },
-//     ],
-//     text: "My personal blog, build with React and NodeJS",
-//   },
-// ];
 
 function createPostsArticle(title, url, datetime) {
-  var url = "/blogs/" + url;
+  url = "/blogs/" + url;
   return (
     <li key={url}>
       <article className="home-latest-posts-article">

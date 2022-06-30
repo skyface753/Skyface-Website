@@ -19,6 +19,7 @@ export default function ShowContacts() {
 
   return (
     <div className="container">
+      <h1>{contactsCount} </h1>
       <table
         className="table table-striped"
         style={{ border: "1px solid #ccc", width: "100%" }}

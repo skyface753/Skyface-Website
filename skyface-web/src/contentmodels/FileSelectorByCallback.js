@@ -76,17 +76,6 @@ export default function FileSelectorByCallback({ onSelectCB, onCloseCB }) {
                   </div>
                 </div>
               );
-              // return ShowFilesComponent(file, () => {
-              //   console.log("CurrentContentIndex: " + currentContentIndex);
-              //   posts["blogContent"][currentContentIndex].content =
-              //     file.generated_name;
-              //   setPost(posts);
-              //   console.log(posts);
-              //   setSelectedFile(file);
-              //   var fileSelector =
-              //     document.getElementById("file-selector-main");
-              //   fileSelector.style.display = "none";
-              // });
             }))
           )
         ) : (

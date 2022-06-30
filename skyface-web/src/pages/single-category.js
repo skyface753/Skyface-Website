@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import apiService from "../services/api-service";
 import BlogPreviewOL from "../components/blog-preview";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 import CheckIfAdmin from "../services/CheckIfAdmin";
 import ShowCategoriesSelect from "../components/showCategoriesSelect";
 
@@ -22,7 +22,7 @@ export default function SingleCategory() {
       setEditCategory(response.data["category"]);
       setPosts(response.data["blogs"]);
     });
-  }, []);
+  }, [categoryUrl]);
 
   if (!category) return <SkyCloudLoader />;
 

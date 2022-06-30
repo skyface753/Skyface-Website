@@ -1,6 +1,6 @@
 import React from "react";
 import apiService from "../services/api-service";
-import { MeetupLoader, SkyCloudLoader } from "./Loader";
+import { SkyCloudLoader } from "./Loader";
 import ShowFilesComponent from "./show-files";
 
 export default function FilesSelector() {

@@ -17,11 +17,6 @@ export default function FileUpload() {
         window.location.reload();
       }
     });
-    // const response = await fetch("http://localhost:5000/image-upload", {
-    //   method: "POST",
-    //   body: formData,
-    // });
-    // if (response) setStatus(response.statusText);
   };
 
   const handleFileChange = (e) => {

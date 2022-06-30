@@ -15,12 +15,7 @@ export default function PendingComments() {
 
   if (!pendingComments) return <SkyCloudLoader />;
   console.log(pendingComments);
-  /* comment.by_user.username
-  comment.by_user.picture
-  comment.for_blog.title
-  comment.comment_text
-  comment.reply_to
-  */
+ 
   return (
     <div>
       <button

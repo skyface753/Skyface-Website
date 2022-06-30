@@ -1,11 +1,9 @@
 import React from "react";
 import apiService from "../services/api-service";
 import { useParams } from "react-router-dom";
-import BlogPreview from "../components/blog-preview";
 import SeriesBlogsComp from "../components/SeriesBlogsComp";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 import CheckIfAdmin from "../services/CheckIfAdmin";
-import { useDrag } from "react-dnd";
 
 export default function SingleSeries() {
   var { seriesUrl } = useParams();
@@ -92,74 +90,10 @@ export default function SingleSeries() {
         editMode ? (
           <div>HI</div>
         ) : (
-          // (() => {
-          //   var blogs = [];
-          //   for (var i = 0; i < seriesBlogs.length; i++) {
-          //     blogs.push(
-          //       <div key={seriesBlogs[i]._id}>
-          //         {/* Position UP */}
-          //         <button
-          //           onClick={() => {
-          //             console.log("up");
-          //             console.log("I", i);
-
-          //             if (i > 0) {
-          //               var newSeriesBlogs = seriesBlogs;
-          //               var temp = newSeriesBlogs[i];
-          //               newSeriesBlogs[i] = newSeriesBlogs[i - 1];
-          //               newSeriesBlogs[i - 1] = temp;
-          //               setSeriesBlogs(newSeriesBlogs);
-          //             }
-          //           }}
-          //         >
-          //           Up
-          //         </button>
-          //         {/* Position DOWN */}
-          //         <button
-          //           onClick={() => {
-          //             if (i < seriesBlogs.length - 1) {
-          //               var newSeriesBlogs = seriesBlogs;
-          //               var temp = newSeriesBlogs[i];
-          //               newSeriesBlogs[i] = newSeriesBlogs[i + 1];
-          //               newSeriesBlogs[i + 1] = temp;
-          //               setSeriesBlogs(newSeriesBlogs);
-          //             }
-          //           }}
-          //         >
-          //           Down
-          //         </button>
-          //         <div> {seriesBlogs[i].title} </div>
-          //         <div> {seriesBlogs[i].description} </div>
-          //       </div>
-          //     );
-          //   }
-          //   return blogs;
-          // })()
-          // seriesBlogs.map((blog) => {
-          //   return(
-          //     <div key={blog.id}>
-          //       {/* Position UP */}
-          //       <button onClick={() => {
-
-          //   return <div key={blog.id}> {blog.title} </div>;
-          // })
+       
           SeriesBlogsComp(seriesBlogs, series.url)
         )
 
-        // {/* <ul className="series-bar">
-        //   {seriesBlogs.length > 0 ? (
-        //     seriesBlogs.map((seriesBlog) => {
-        //       console.log(seriesBlog["blog"]);
-        //       return (
-        //         <li key={seriesBlog["blog"]._id}>
-        //           {BlogPreview(seriesBlog["blog"], false, "20px", series.url)}
-        //         </li>
-        //       );
-        //     })
-        //   ) : (
-        //     <div>No Blogs found</div>
-        //   )}
-        // </ul> */}
       }
     </div>
   );

@@ -2,7 +2,7 @@ import React from "react";
 import apiService from "../../services/api-service";
 import { BACKEND_FILES_URL } from "../../consts";
 import ShowFilesComponent from "../../components/show-files";
-import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
+import { SkyCloudLoader } from "../../components/Loader";
 
 export default function ShowFiles() {
   const [files, setFiles] = React.useState(null);

@@ -61,24 +61,12 @@ export default function SearchPage() {
         <h2 className="search-titles">Users</h2>
         {usersSearchResults.map((user) => {
           return <UserPreview user={user} />;
-          // return (
-          //   <div key={user._id}>
-          //     <h3>{user.username}</h3>
-          //   </div>
-          // );
         })}
-        {/* <h2>Blogs</h2> */}
-        {/* <BlogPreviewOL blogList={blogsSearchResults} /> */}
         <section className="search-blogs">
           <h2 className="search-blogs-title">Blogs</h2>
           <ol className="search-blogs-elemets">
             {blogsSearchResults.map((blog) => {
               return BlogPreviewLI(blog, false, "0px");
-              // return (
-              //     <div key={blog._id}>
-              //         <h3>{blog.title}</h3>
-              //     </div>
-              // );
             })}
           </ol>
         </section>
@@ -94,10 +82,6 @@ export default function SearchPage() {
                   <li>{category.name}</li>
                 </a>
               );
-              //   <div key={category._id}>
-              //     <h3>{category.name}</h3>
-              //   </div>
-              // );
             })}
           </ol>
         </section>
@@ -109,9 +93,6 @@ export default function SearchPage() {
                 <a key={series._id} href={`/series/${series.url}`}>
                   <li>{series.name}</li>
                 </a>
-                // <div key={series._id}>
-                //   <h3>{series.name}</h3>
-                // </div>
               );
             })}
           </ol>

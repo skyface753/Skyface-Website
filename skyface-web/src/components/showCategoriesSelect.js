@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import apiService from "../services/api-service";
 
 function parentSort(fullList) {
@@ -93,7 +92,6 @@ const ShowCategoriesSelect = (props) => {
         />
         {(() => {
           return categories.map((category) => {
-            // console.log(selectedValue + ":" + category._id);
             return (
               <div key={category._id}>
                 <input
@@ -102,14 +100,10 @@ const ShowCategoriesSelect = (props) => {
                   value={category._id}
                   checked={selectedValue === category._id}
                   onChange={() => {}}
-                  //   onChange={() => props.onChange(category._id)}
-                  //   onChange={() => setSelectedCategory(category._id)}
                 />
                 <label>{category.name}</label>
 
-                {/* <p className="category-item">
-                  {category.name} - {category.description}
-                </p> */}
+                
                 {(() => {
                   if (category.children) {
                     return (

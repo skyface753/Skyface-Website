@@ -6,23 +6,14 @@ import ReactTextareaAutosize from "react-textarea-autosize";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../App";
 import { IsLikedButton, NeutralLikeButton } from "../img/like";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 import browserSignature from "browser-signature";
 import { ViewIcon } from "../img/view";
 import { UserSvg } from "../img/userSvg";
 import { Content } from "../contentmodels/Content";
-// import SeriesBlogsComp from "../components/SeriesBlogsComp";
-// import SidebarSeries from "../components/SidebarSeries";
-
-const copyButtonLabel = "Copy Code";
-
-function copyCode(code) {
-  navigator.clipboard.writeText(code);
-}
 
 function gotoBlockFromSeries(seriesBlogUrl) {
   window.location.href = seriesBlogUrl;
-  // window.location.href = seriesBlogUrl;
 }
 
 function focusCommentTextBox() {
@@ -239,17 +230,7 @@ function onboundaryHandler(event, contentID) {
     value.substring(activePosition);
   pTag.scrollIntoView({ behavior: "smooth", block: "center" });
 
-  // textarea.focus();
-
-  // if (textarea.setSelectionRange) {
-  //   textarea.setSelectionRange(anchorPosition, activePosition);
-  // } else {
-  //   var range = textarea.createTextRange();
-  //   range.collapse(true);
-  //   range.moveEnd("character", activePosition);
-  //   range.moveStart("character", anchorPosition);
-  //   range.select();
-  // }
+ 
 }
 // Get the word of a string given the string and index
 function getWordAt(str, pos) {
@@ -439,20 +420,10 @@ export default function BlogPost() {
               return;
             }
             speakMessage(speakText, null, speekToText);
-            // speekToText.lang = "en-US";
-            // var voices = speechSynthesis.getVoices();
-            // speekToText.voice = voices[1];
-
-            // window.speechSynthesis.speak(speekToText);
           }}
         >
           Speak
-          {/* <img
-          className="speak-button-icon"
-          src={require("../img/speak-icon.png")}
-          width="40px"
-          alt="Speak-Icon"
-        /> */}
+          
         </button>
         <button
           className="speak-button-pause"
@@ -505,94 +476,7 @@ export default function BlogPost() {
         })
       )}
         
-      {/* {(() => {
-        const contentDivs = [];
-        var content = posts["blogContent"];
-        for (let i = 0; i < content.length; i++) {
-          if (content[i].type === "text") {
-            contentDivs.push(
-              <div key={content[i]._id} className="content-div">
-                <p id={content[i]._id}>{content[i].content}</p>
-              </div>
-            );
-          } else if (content[i].type == "code") {
-            contentDivs.push(
-              <pre className="pre-code" key={content[i]._id}>
-                <code>{content[i].content}</code>
-                <button
-                  className="copy-code-button"
-                  onClick={() => copyCode(content[i].content)}
-                >
-                  {copyButtonLabel}
-                </button>
-              </pre>
-            );
-            //TODO: CHANGE
-          } else if (content[i].type == "image") {
-            contentDivs.push(
-              <div key={content[i]._id}>
-                <img
-                  src={BACKEND_FILES_URL + content[i].content}
-                  alt="blog-image"
-                  className="blog-image"
-                />
-              </div>
-            );
-          } else if (content[i].type == "subline") {
-            contentDivs.push(
-              // <div key={content[i]._id} >
-              <h3 key={content[i]._id} className="sublines">
-                {content[i].content}
-              </h3>
-              // </div>
-            );
-          } else if (content[i].type == "link") {
-            contentDivs.push(
-              <div key={content[i]._id} className="content-link-div">
-                <a
-                  href={content[i].content}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {content[i].content}
-                </a>
-              </div>
-            );
-          } else if (content[i].type == "download") {
-            contentDivs.push(
-              <div key={content[i]._id} className="content-download-div">
-                {content[i].content}
-                <form
-                  method="GET"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  action={BACKEND_FILES_URL + content[i].content}
-                >
-                  <button class="btn">
-                    <i class="fa fa-download"></i> Download
-                  </button>
-                </form>
-              </div>
-            );
-          } else if (content[i].type == "pureHTML") {
-            var pureHTML = content[i].content;
-            // var pureHTMLDiv = document.createElement("");
-            // pureHTMLDiv.innerHTML = pureHTML;
-            contentDivs.push(
-              <div
-                dangerouslySetInnerHTML={{ __html: pureHTML }}
-                key={content[i]._id}
-              />
-            );
-            // contentDivs.push(
-            //   <div key={content[i]._id} className="content-pureHTML-div">
-            //     {content[i].content}
-            //   </div>
-            // );
-          }
-        }
-        return contentDivs;
-      })()} */}
+     
       {(() => {
         if (series && seriesBlogs) {
           return (

@@ -1,10 +1,6 @@
 import Star from "../img/star";
-import StarsCollection from "../img/stars-collection";
 import apiService from "../services/api-service";
 
-// function gotoBlock(url) {
-//   window.location.href = `/blogs/${url}`;
-// }
 
 function deleteBlog(blogTitle, blogId) {
   //Confirm delete
@@ -26,12 +22,6 @@ export default function BlogPreviewOL({
   UserIsAdmin = false,
   marginLeft = 0,
 }) {
-  // var blogsList = props["blogList"];
-  // var UserIsAdmin = props["UserIsAdmin"] || false;
-  // var marginLeft = props["marginLeft"] || "0px";
-  // console.log("BlogPreviewOL");
-  // console.log(props);
-  // console.log(blogsList);
   return (
     <section className="blogs-section">
       <ol className="blogs-list">

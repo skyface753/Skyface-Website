@@ -1,12 +1,9 @@
 import React from "react";
 import SeriesBlogsComp from "./SeriesBlogsComp";
 import apiService from "../services/api-service";
-import { MeetupLoader, SkyCloudLoader } from "./Loader";
+import { SkyCloudLoader } from "./Loader";
 
 const SidebarSeries = (seriesUrl) => {
-  /*{
-    "seriesUrl": "rn-app-getting-started"
-}*/
   seriesUrl = seriesUrl.seriesUrl;
   const [series, setSeries] = React.useState(null);
   const [seriesBlogs, setSeriesBlogs] = React.useState(null);

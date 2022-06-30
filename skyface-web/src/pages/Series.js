@@ -1,6 +1,6 @@
 import apiService from "../services/api-service";
 import React from "react";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 
 function gotoSeries(url) {
   window.location.href = `/series/${url}`;

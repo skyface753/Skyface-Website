@@ -13,36 +13,7 @@ export default function ShowSelfTracker() {
     });
   }, []);
   console.log(selfTrackerByPath);
-  /*[[
-    {
-        "_id": "/login",
-        "count": 4
-    },
-    {
-        "_id": "/blogs",
-        "count": 8
-    },
-    {
-        "_id": "/Categories",
-        "count": 2
-    },
-    {
-        "_id": "/",
-        "count": 13
-    },
-    {
-        "_id": "/admin",
-        "count": 2
-    },
-    {
-        "_id": "/admin/show-selftracker",
-        "count": 4
-    },
-    {
-        "_id": "/api/self-tracker",
-        "count": 2
-    }
-]*/
+
   return (
     <div>
       <h1>ShowSelfTracker</h1>

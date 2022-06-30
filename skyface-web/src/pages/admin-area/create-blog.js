@@ -1,14 +1,8 @@
 import React from "react";
 import { allTypes, Content, TextContent } from "../../contentmodels/Content";
 import NewBlogBlank from "./new-blog.json";
-import TextareaAutosize from "react-textarea-autosize";
-import { BACKEND_FILES_URL } from "../../consts";
-import ShowFilesComponent from "../../components/show-files";
 import ShowCategoriesSelect from "../../components/showCategoriesSelect";
-import axios from "axios";
 import apiService from "../../services/api-service";
-import { MeetupLoader, SkyCloudLoader } from "../../components/Loader";
-const baseURL = "http://localhost:5000/admin/blog/";
 
 const initContent =[ {
   _id: "1",
@@ -26,75 +20,20 @@ var content = initContent.map((item) => {
 });
 export default function CreateBlog() {
   const [posts, setPost] = React.useState(NewBlogBlank);
-  const [files, setFiles] = React.useState(null);
-  const [filesLoaded, setFilesLoaded] = React.useState(false);
-  const [selectedFile, setSelectedFile] = React.useState(null);
-
+  
 
   const [blogContent, setBlogContent] = React.useState(content);
 
-    // {
-    //   _id: "1",
-    //   text: "New Blog Text",
-    //   for_blog: null,
-    //   position: 0,
-    //   type: "text",
-    //   createdAt: null,
-    //   updatedAt: null,
-    // }));
-
-  const [currentContentIndex, setCurrentContentIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    apiService("admin/files").then((res) => {
-      setFiles(res.data.files);
-      setFilesLoaded(true);
-    });
-  });
+  // React.useEffect(() => {
+  //   apiService("admin/files").then((res) => {
+  //     setFiles(res.data.files);
+  //     setFilesLoaded(true);
+  //   });
+  // });
 
   return (
     <div>
-      {/* <div id="file-selector-main" className="files-selector-overlay">
-        <div className="files-selector-header">
-          <h1>Select File</h1>
-          <div
-            className="files-selector-close-button"
-            onClick={() => {
-              var fileSelector = document.getElementById("file-selector-main");
-              fileSelector.style.display = "none";
-            }}
-          >
-            Close
-            <i className="fas fa-times"></i>
-          </div>
-        </div>
-        <div className="files-selector-body">
-          {filesLoaded ? (
-            files.length === 0 ? (
-              (console.log("No files uploaded yet"),
-              (<p>No files uploaded yet</p>))
-            ) : (
-              (console.log("files: " + files),
-              files.map((file) => {
-                return ShowFilesComponent(file, () => {
-                  console.log("CurrentContentIndex: " + currentContentIndex);
-                  posts["blogContent"][currentContentIndex].content =
-                    file.generated_name;
-                  setPost(posts);
-                  console.log(posts);
-                  setSelectedFile(file);
-                  var fileSelector =
-                    document.getElementById("file-selector-main");
-                  fileSelector.style.display = "none";
-                });
-              }))
-            )
-          ) : (
-            <SkyCloudLoader />
-          )}
-        </div>
-      </div> */}
-
+     
       <div className="title-container">
         <img
           src={require("../../img/blogs-title.png")}
@@ -261,165 +200,8 @@ export default function CreateBlog() {
 
 
 
-      {/* {(() => {
-        const contentDivs = [];
-        var content = posts["blogContent"];
-        for (let i = 0; i < content.length; i++) {
-          contentDivs.push(
-            <div key={content[i]._id} className="content-div">
-              <select
-                className="content-type-selector"
-                defaultValue={content[i].type}
-                onChange={(e) => {
-                  content[i].type = e.target.value;
-                  setPost({ ...posts, blogContent: content });
-                  console.log(posts);
-                  // if (e.target.value == "image") {
-                  //   // currentContentIndex = i;
-
-                  // }
-                }}
-              >
-                <option value="text">Text</option>
-                <option value="code">Code</option>
-                <option value="image">Image</option>
-                <option value="subline">Subline</option>
-                <option value="link">Link</option>
-                <option value="download">Download</option>
-                <option value="pureHTML">Pure HTML (dangerous)</option>
-              </select>
-              <button
-                className="content-up-button"
-                onClick={() => {
-                  if (i > 0) {
-                    var temp = content[i];
-                    content[i] = content[i - 1];
-                    content[i - 1] = temp;
-                    content[i].position = i;
-                    content[i - 1].position = i - 1;
-                    setPost({ ...posts, blogContent: content });
-                    console.log(posts);
-                  }
-                }}
-              >
-                {" "}
-                ↑{" "}
-              </button>
-              <button
-                className="content-down-button"
-                onClick={() => {
-                  if (i < content.length - 1) {
-                    var temp = content[i];
-                    content[i] = content[i + 1];
-                    content[i + 1] = temp;
-                    content[i].position = i;
-                    content[i + 1].position = i + 1;
-                    setPost({ ...posts, blogContent: content });
-                    console.log(posts);
-                  }
-                }}
-              >
-                {" "}
-                ↓{" "}
-              </button>
-              <button
-                className="content-delete-button"
-                onClick={() => {
-                  // Confirm Delete
-                  var confirmDelete = window.confirm(
-                    "Are you sure you want to delete this content?"
-                  );
-                  if (confirmDelete) {
-                    content.splice(i, 1);
-                    setPost({ ...posts, blogContent: content });
-                    console.log(posts);
-                  }
-                }}
-              >
-                {" "}
-                X{" "}
-              </button>
-              <div className="content-div-content">
-                <TextareaAutosize
-                  value={content[i].content}
-                  className="content-textarea"
-                  onChange={(e) => {
-                    content[i].content = e.target.value;
-                    setPost({ ...posts, blogContent: content });
-                    console.log(posts);
-                  }}
-                  onKeyDown={(e) => {
-                    let caret = e.target.selectionStart;
-
-                    if (e.key === "Tab") {
-                      e.preventDefault();
-
-                      let newText =
-                        e.target.value.substring(0, caret) +
-                        " ".repeat(4) +
-                        e.target.value.substring(caret);
-                      e.target.value = newText;
-                      content[i].content = newText;
-                      setPost({ ...posts, blogContent: content });
-                      // Go to position after the tab
-                      e.target.selectionStart = e.target.selectionEnd =
-                        caret + 4;
-
-                      // setText({value: newText, caret: caret, target: e.target});
-                    }
-                  }}
-                />
-                {(() => {
-                  if (
-                    content[i].type == "image" ||
-                    content[i].type == "download"
-                  ) {
-                    return (
-                      <div className="edit-blog-image-container">
-                        <img
-                          src={BACKEND_FILES_URL + content[i].content}
-                          alt="Blog-Image"
-                          className="edit-blog-image"
-                        />
-                        <button
-                          onClick={() => {
-                            setCurrentContentIndex(i);
-                            console.log(
-                              "currentContentIndex onchange: " +
-                                currentContentIndex
-                            );
-                            var fileSelector =
-                              document.getElementById("file-selector-main");
-                            fileSelector.style.display = "block";
-                          }}
-                        >
-                          Select
-                        </button>
-                      </div>
-                    );
-                  }
-                })()}
-              </div>
-            </div>
-          );
-        }
-        return contentDivs;
-      })()}
-      <button
-        className="add-content-button"
-        onClick={() => {
-          var content = posts["blogContent"];
-          content.push({
-            type: "text",
-            content: "",
-            position: content.length,
-          });
-          setPost({ ...posts, blogContent: content });
-        }}
-      >
-        Add Content
-      </button> */}
-      <ShowCategoriesSelect
+     
+           <ShowCategoriesSelect
         selectedID={
           posts["blog"].category != null ? posts["blog"].category._id : null
         }

@@ -1,7 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useContext } from "react";
 import { AuthContext } from "../App";
-import { BACKENDURL } from "../consts";
 import apiService from "../services/api-service";
 
 export default function GoogleLoginButton() {
@@ -22,10 +21,6 @@ export default function GoogleLoginButton() {
             });
           }
         });
-
-        // const data = await res.json();
-        // console.log(data);
-        // reactLocalStorage.set("jwt", data.token);
         window.location.href = "/";
       }}
       onError={() => {

@@ -8,9 +8,7 @@ import GitHubLoginButton from "../components/GitHubLoginButton";
 const SignUp = () => {
   const { state, dispatch } = useContext(AuthContext);
   var lastPage = document.referrer;
-  // console.log("Last Page:" + document.referrer)
   const [username, setUsername] = React.useState("");
-  // const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -18,12 +16,6 @@ const SignUp = () => {
 
   return (
     <div
-    // style={{
-    // 	display: 'flex',
-    // 	justifyContent: 'Right',
-    // 	alignItems: 'Right',
-    // 	height: '100vh'
-    // }}
     >
       <h1>Sign Up</h1>
 
@@ -60,18 +52,7 @@ const SignUp = () => {
             }}
           />
 
-          {/* <label htmlFor="email">
-          <b>Email</b>
-        </label>
-        <input
-          type="text"
-          placeholder="Enter Email"
-          name="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        /> */}
-
+       
           <label htmlFor="password">
             <b>Password</b>
           </label>

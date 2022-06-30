@@ -1,8 +1,6 @@
 import React from "react";
 import apiService from "../services/api-service";
-import axios from "axios";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
-import Star from "../img/star";
+import { SkyCloudLoader } from "../components/Loader";
 
 function parentSort(fullList) {
   var sortedList = [];

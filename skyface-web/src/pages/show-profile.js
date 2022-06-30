@@ -3,13 +3,12 @@ import apiService from "../services/api-service";
 import { useParams } from "react-router-dom";
 import BlogPreviewOL from "../components/blog-preview";
 import { AuthContext } from "../App";
-import { MeetupLoader, SkyCloudLoader } from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 
 async function checkUsernameFree(username) {
   return await apiService("users/username/free/" + username).then((res) => {
     return res.data.free;
   });
-  // return isFreeData;
 }
 
 export default function ShowProfile() {
@@ -34,7 +33,7 @@ export default function ShowProfile() {
         setError("User not found");
       }
     });
-  }, []);
+  }, [username]);
   if (error) {
     return <h1>{error}</h1>;
   }
@@ -49,7 +48,7 @@ export default function ShowProfile() {
             alt="user-profile-pic"
             className="user-profile-pic"
           />
-          {state.isLoggedIn && state.user._id == user._id ? (
+          {state.isLoggedIn && state.user._id === user._id ? (
             <div>
               <label htmlFor="usernameEdit" className="username-edit">
                 <b>Username</b>
@@ -77,11 +76,11 @@ export default function ShowProfile() {
                   }
                 }}
               />
-              {usernameChangeError && username != user.username ? (
+              {usernameChangeError && username !== user.username ? (
                 <p>{usernameChangeError}</p>
               ) : null}
 
-              {username != user.username ? (
+              {username !== user.username ? (
                 <button
                   onClick={() => {
                     // Check if min 3 chars
@@ -112,8 +111,8 @@ export default function ShowProfile() {
           ) : (
             <h1>{user.username}</h1>
           )}
-          {state.isLoggedIn && state.user._id == user._id ? (
-            state.user.provider == "Manuelly" ? (
+          {state.isLoggedIn && state.user._id === user._id ? (
+            state.user.provider === "Manuelly" ? (
               <div>
                 <h4>Change Password</h4>
                 <label htmlFor="oldPassword">
@@ -157,7 +156,7 @@ export default function ShowProfile() {
                 />
                 <button
                   onClick={() => {
-                    if (newPassword == newPassword2) {
+                    if (newPassword === newPassword2) {
                       apiService("users/password/change", {
                         oldPassword: oldPassword,
                         newPassword: newPassword,
@@ -179,8 +178,7 @@ export default function ShowProfile() {
             ) : null
           ) : null}
           <p>{user.email}</p>
-          {/* <hr className="blog-divider"></hr> */}
-        </div>
+                  </div>
       ) : (
         <div>Loading...</div>
       )}
@@ -189,13 +187,6 @@ export default function ShowProfile() {
         UserIsAdmin={false}
         marginLeft="0px"
       />
-      {/* {(() => {
-        const blogsDiv = [];
-        for (var i = 0; i < userBlogs.length; i++) {
-          blogsDiv.push(BlogPreview(userBlogs[i]));
-        }
-        return blogsDiv;
-      })()} */}
     </div>
   );
 }
