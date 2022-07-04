@@ -1,3 +1,4 @@
+import { Content } from "../content_models/Content.js";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -20,7 +21,12 @@ export default function SingleBlog({ route, navigation }) {
   useEffect(() => {
     apiService("blog/" + blogFromBlogs.url).then((response) => {
       setBlog(response.data["blog"]);
-      setBlogContent(response.data["blogContent"]);
+      var tempContent = response.data["blogContent"];
+      var fhefheu = tempContent.map((content) => {
+        return Content.fromJSON(content);
+      });
+      setBlogContent(fhefheu);
+      console.log(fhefheu);
     });
   }, []);
 
@@ -37,7 +43,16 @@ export default function SingleBlog({ route, navigation }) {
         <Text style={styles.title}>{blog.title}</Text>
         <Text style={styles.subtitle}>{blog.subtitle}</Text>
         <View style={styles.separator} />
-        {(() => {
+        {blogContent.map((content) => {
+          if (
+            content.type === "text" ||
+            content.type === "code" ||
+            content.type === "image"
+          ) {
+            return content.showContent();
+          }
+        })}
+        {/* {(() => {
           const blogDivs = [];
           console.log(blogContent);
           if (blogContent.length == 0) {
@@ -87,7 +102,7 @@ export default function SingleBlog({ route, navigation }) {
             }
           }
           return blogDivs;
-        })()}
+        })()} */}
       </View>
     </ScrollView>
   );
@@ -105,13 +120,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color: "white",
+    // color: "white",
     fontWeight: "bold",
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 15,
-    color: "white",
+    // color: "white",
     // fontWeight: "bold",
     marginBottom: 12,
   },
@@ -121,13 +136,13 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: "#2e78b7",
+    // color: "#2e78b7",
   },
   blogContentView: {
     marginBottom: 10,
     width: "100%",
-    backgroundColor: "black",
-    color: "white",
+    // backgroundColor: "black",
+    // color: "white",
     // padding: 10,
     alignContent: "flex-start",
   },

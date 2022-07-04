@@ -33,8 +33,8 @@ backup: move-backup docker-backup
 # docker-start: ;@echo "Starting docker ${PROJECT}....."; \
 # 	docker-compose -f docker-compose-debug.yml up -d
 
-# docker-restore: ;@echo "Restoring docker ${PROJECT}....."; \
-# 	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongorestore --archive' < latest.mongo
+restore: ;@echo "Restoring docker ${PROJECT}....."; \
+	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongorestore --archive' < latest.mongo
 
 docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
 	docker-compose exec -T mongo sh -c 'mongodump --archive' > latest.mongo

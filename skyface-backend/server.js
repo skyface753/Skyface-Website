@@ -9,6 +9,7 @@ csrf = require("csurf");
 var app = express();
 //CORS
 // app.use(cors());
+
 app.use(
   cors({
     origin: [
@@ -22,6 +23,7 @@ app.use(
     credentials: true,
   })
 );
+
 // set up rate limiter: maximum of five requests per minute
 var RateLimit = require("express-rate-limit");
 var limiter = RateLimit({

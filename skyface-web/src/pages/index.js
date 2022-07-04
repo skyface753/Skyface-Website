@@ -2,11 +2,9 @@ import React from "react";
 import Star from "../img/star";
 import Arrow from "../img/arrow";
 import apiService from "../services/api-service";
-import {
-  SkyCloudLoader,
-} from "../components/Loader";
+import { SkyCloudLoader } from "../components/Loader";
 import ProjectsPreview from "../components/ProjectsPreview";
-
+import BlogPreviewOL from "../components/blog-preview";
 
 function createPostsArticle(title, url, datetime) {
   url = "/blogs/" + url;
@@ -117,7 +115,12 @@ const Home = () => {
       {/* Latest Blogs */}
       <section className="home-latest-posts">
         <h2 className="home-latest-posts-title">Latest Blog Posts</h2>
-        <ol className="home-latest-posts-elemets">
+        {latestPosts ? (
+          <BlogPreviewOL blogList={latestPosts} UserIsAdmin={false} />
+        ) : (
+          <SkyCloudLoader />
+        )}
+        {/* <ol className="home-latest-posts-elemets">
           {latestPosts ? (
             latestPosts.map((post) => {
               return createPostsArticle(
@@ -128,13 +131,13 @@ const Home = () => {
             })
           ) : (
             <SkyCloudLoader />
-          )}
-          {/* {createPostsArticle(
+          )} */}
+        {/* {createPostsArticle(
             "SkyBlog - A Blog for Myself",
             "url-test-12",
             "2022-06-04"
           )} */}
-        </ol>
+        {/* </ol> */}
         <a href="/blogs/" className="home-latest-posts-more">
           <span className="home-latest-posts-text">more blog posts</span>{" "}
           <Arrow />
