@@ -17,7 +17,6 @@ export default function SingleCategory() {
 
   React.useEffect(() => {
     apiService("blog-categories/" + categoryUrl, {}).then((response) => {
-      console.log(response.data);
       setCategory(response.data["category"]);
       setEditCategory(response.data["category"]);
       setPosts(response.data["blogs"]);
@@ -59,7 +58,6 @@ export default function SingleCategory() {
             <ShowCategoriesSelect
               selectedID={editCategory.parent_category}
               onChange={(e) => {
-                console.log("Selected ID: " + e.target.value);
                 if (e.target.value === editCategory._id) {
                   alert("You cannot set a category as its own parent");
                   return;

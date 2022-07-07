@@ -10,9 +10,9 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Sentry disabled", window.location.hostname);
+  //console.log("Sentry disabled", window.location.hostname);
 } else {
-  console.log("Sentry enabled", window.location.hostname);
+  //console.log("Sentry enabled", window.location.hostname);
   Sentry.init({
     dsn: "https://9cf13258b73a4a04a44122c0210fd9f0@o1115470.ingest.sentry.io/6533798",
     integrations: [new BrowserTracing()],

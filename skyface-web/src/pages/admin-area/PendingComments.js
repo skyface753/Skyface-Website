@@ -14,8 +14,8 @@ export default function PendingComments() {
   }, []);
 
   if (!pendingComments) return <SkyCloudLoader />;
-  console.log(pendingComments);
- 
+  //console.log(pendingComments);
+
   return (
     <div>
       <button
@@ -96,7 +96,7 @@ const PendingCommentItem = ({ comment, setPendingComments }) => {
         <button
           className="pending-comment-approve"
           onClick={() => {
-            console.log(comment);
+            //console.log(comment);
             apiService("admin/comments/approve/" + comment._id).then(
               (response) => {
                 if (response.data.success) {

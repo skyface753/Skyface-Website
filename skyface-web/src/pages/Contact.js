@@ -18,10 +18,6 @@ const ContactForm = () => {
   const onSubmit = async (data) => {
     const { name, email, subject, message } = data;
 
-    console.log("Name: ", name);
-    console.log("Email: ", email);
-    console.log("Subject: ", subject);
-    console.log("Message: ", message);
     apiService("contact", {
       name,
       email,

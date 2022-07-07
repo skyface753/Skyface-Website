@@ -3,7 +3,7 @@ import "../styles/users-preview.css";
 export const UserPreview = ({ user }) => {
   var username = user.username;
   var picture = user.picture;
-  console.log(user);
+  //console.log(user);
   return (
     <a href={`/users/${user.username}`} className="user-preview">
       <img

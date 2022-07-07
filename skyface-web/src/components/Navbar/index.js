@@ -10,8 +10,8 @@ export default function Navbar() {
   const { state, dispatch } = useContext(AuthContext);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  console.log("State");
-  console.log(state);
+  //console.log("State");
+  //console.log(state);
   return (
     <nav className="navigation">
       <a href="/" className="brand-name">
@@ -120,7 +120,7 @@ export default function Navbar() {
                     onClick={() => {
                       apiService("logout").then((res) => {
                         if (res.data.success) {
-                          console.log("Logged out");
+                          //console.log("Logged out");
                           if (state.user.provider === "Google") {
                             googleLogout();
                           }

@@ -1,5 +1,5 @@
 import { BACKEND_FILES_URL } from "../consts";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FileSelectorByCallback from "./FileSelectorByCallback";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -31,7 +31,7 @@ export const allTypes = [
   {
     label: "Pure HTML (dangerous)",
     value: "pureHTML",
-  }
+  },
 ];
 
 export class Content {
@@ -59,26 +59,24 @@ export class Content {
   static fromJSON(json) {
     switch (json.type) {
       case "text":
-        return  TextContent.fromJSON(json);
+        return TextContent.fromJSON(json);
       case "code":
-        return  CodeContent.fromJSON(json);
+        return CodeContent.fromJSON(json);
       case "image":
-        return  ImageContent.fromJSON(json);
+        return ImageContent.fromJSON(json);
       case "subline":
-        return  SublineContent.fromJSON(json);
+        return SublineContent.fromJSON(json);
       case "link":
-        return  LinkContent.fromJSON(json);
+        return LinkContent.fromJSON(json);
       case "download":
-        return  DownloadContent.fromJSON(json);
+        return DownloadContent.fromJSON(json);
       case "pureHTML":
-        return  pureHTMLContent.fromJSON(json);
+        return pureHTMLContent.fromJSON(json);
       default:
         console.error("Unknown content type: " + json.type);
         throw new TypeError("Unknown content type");
     }
   }
-
-
 
   showEditor() {
     throw new TypeError("Abstract method");
@@ -109,7 +107,7 @@ export class TextContent extends Content {
           value={this.text}
           onChange={(e) => {
             this.text = e.target.value;
-            console.log("Index: ", index);
+            //console.log("Index: ", index);
             contents[index] = this;
             setContents([...contents]);
           }}
@@ -177,7 +175,7 @@ class CodeContent extends Content {
     return (
       <div key={this._id} className="content-code-edit">
         <TextareaAutosize
-          style={{"width": "100%"}}
+          style={{ width: "100%" }}
           id={this._id}
           value={this.code}
           wrap="off"
@@ -190,30 +188,28 @@ class CodeContent extends Content {
           onKeyDown={(e) => {
             let caret = e.target.selectionStart;
 
-                    if (e.key === "Tab") {
-                      e.preventDefault();
+            if (e.key === "Tab") {
+              e.preventDefault();
 
-                      let newText =
-                        e.target.value.substring(0, caret) +
-                        " ".repeat(4) +
-                        e.target.value.substring(caret);
-                      e.target.value = newText;
-                      this.code = newText;
+              let newText =
+                e.target.value.substring(0, caret) +
+                " ".repeat(4) +
+                e.target.value.substring(caret);
+              e.target.value = newText;
+              this.code = newText;
 
-                        contents[index] = this;
+              contents[index] = this;
 
-                      setContents([...contents]);
-                      
-                      // setPost({ ...posts, blogContent: content });
-                      // Go to position after the tab
-                      e.target.selectionStart = e.target.selectionEnd =
-                        caret + 4;
+              setContents([...contents]);
 
-                      // setText({value: newText, caret: caret, target: e.target});
-                    }
-                  }
-                }
-              />
+              // setPost({ ...posts, blogContent: content });
+              // Go to position after the tab
+              e.target.selectionStart = e.target.selectionEnd = caret + 4;
+
+              // setText({value: newText, caret: caret, target: e.target});
+            }
+          }}
+        />
         {/* <textarea
           id={this._id}
           value={this.code}
@@ -240,7 +236,7 @@ class CodeContent extends Content {
   }
 
   static fromJSON(json) {
-    console.log(json);
+    //console.log(json);
     return new CodeContent(
       json.position,
       json.for_blog,
@@ -332,7 +328,6 @@ class ImageContent extends Content {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       image: this.image,
-
     };
   }
 
@@ -359,7 +354,6 @@ class ImageContent extends Content {
       copyContent: this.image,
     };
   }
-
 }
 
 class LinkContent extends Content {
@@ -404,7 +398,6 @@ class LinkContent extends Content {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       link: this.link,
-
     };
   }
 
@@ -458,8 +451,8 @@ class DownloadContent extends Content {
   }
 
   showEditor(contents, setContents, index) {
-    if(this.editMode) {
-      return(
+    if (this.editMode) {
+      return (
         <FileSelectorByCallback
           onCloseCB={() => {
             this.editMode = false;
@@ -472,19 +465,22 @@ class DownloadContent extends Content {
             setContents([...contents]);
           }}
         />
-      )}
+      );
+    }
     return (
       <div key={this._id} className="content-download-edit">
-<button className="btn">
-            <i className="fa fa-download"></i> {this.download}
-          </button>
+        <button className="btn">
+          <i className="fa fa-download"></i> {this.download}
+        </button>
         <button
           className="select-download-button"
           onClick={() => {
             this.editMode = true;
             setContents([...contents]);
-          }
-          }>Select File</button>
+          }}
+        >
+          Select File
+        </button>
       </div>
     );
   }
@@ -522,7 +518,6 @@ class DownloadContent extends Content {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       copyContent: this.download,
-
     };
   }
 }
@@ -567,7 +562,6 @@ class SublineContent extends Content {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       subline: this.subline,
-
     };
   }
 
@@ -614,7 +608,6 @@ class pureHTMLContent extends Content {
         <textarea
           id={this._id}
           value={this.pureHTML}
-          
           onChange={(e) => {
             this.pureHTML = e.target.value;
             contents[index] = this;
@@ -671,9 +664,7 @@ export default function TextContentPageTEST() {
   const [contents, setContents] = useState(contentsTemp);
   checkAndCorrectPosition(contents);
 
-
-
-  console.log(contents);
+  //console.log(contents);
 
   return (
     <div>
@@ -689,49 +680,49 @@ export default function TextContentPageTEST() {
       {contents.map((content, index) => {
         if (content != null) {
           // if (content.type === "text") {
-          return(
+          return (
             <div key={"blub" + content._id}>
               <select
-              defaultValue={content.type}
-              onChange={(e) => {
-                var copyableContentJSON = content.getCopyableContentJSON();
-                copyableContentJSON.type = e.target.value;
-                contents[index] = Content.fromJSON(copyableContentJSON);
-                setContents([...contents]);
-              }}>
+                defaultValue={content.type}
+                onChange={(e) => {
+                  var copyableContentJSON = content.getCopyableContentJSON();
+                  copyableContentJSON.type = e.target.value;
+                  contents[index] = Content.fromJSON(copyableContentJSON);
+                  setContents([...contents]);
+                }}
+              >
                 {allTypes.map((type) => {
                   return (
                     <option value={type.value} key={type.value}>
                       {type.label}
                     </option>
                   );
-                }
-                )}
+                })}
               </select>
-              <button 
+              <button
                 className="content-up-button"
                 onClick={() => {
-                  if(content.position > 0) {
+                  if (content.position > 0) {
                     var tempContent = contents[index];
                     contents[index] = contents[index - 1];
                     contents[index - 1] = tempContent;
                     setContents([...contents]);
                   }
-                }
-                }>
+                }}
+              >
                 Up
               </button>
               <button
                 className="content-down-button"
                 onClick={() => {
-                  if(content.position < contents.length - 1) {
+                  if (content.position < contents.length - 1) {
                     var tempContent = contents[index];
                     contents[index] = contents[index + 1];
                     contents[index + 1] = tempContent;
                     setContents([...contents]);
                   }
-                }
-                }>
+                }}
+              >
                 Down
               </button>
               <button
@@ -739,43 +730,43 @@ export default function TextContentPageTEST() {
                 onClick={() => {
                   contents.splice(index, 1);
                   setContents([...contents]);
-                }
-                }>
+                }}
+              >
                 Delete
               </button>
               {content.showEditor(contents, setContents, index)}
             </div>
           );
         }
-      }
-      )}
-      <button onClick={() => {
-        var newContent = new TextContent(
-          contents.length,
-          null,
-          "NEW" + contents.length,
-          "text",
-          null, 
-          null,
-          "New Text"
-        );
-        contents.push(newContent);
-        setContents([...contents]);
-      }
-      }>
+      })}
+      <button
+        onClick={() => {
+          var newContent = new TextContent(
+            contents.length,
+            null,
+            "NEW" + contents.length,
+            "text",
+            null,
+            null,
+            "New Text"
+          );
+          contents.push(newContent);
+          setContents([...contents]);
+        }}
+      >
         Add Content
       </button>
-      <button onClick={() => {
-        // Save
-        var json = contents.map((content) => {
-          return content.getJSON();
-        })
-        console.log(json);
-      }}>
+      <button
+        onClick={() => {
+          // Save
+          var json = contents.map((content) => {
+            return content.getJSON();
+          });
+          //console.log(json);
+        }}
+      >
         Save
       </button>
-
-
 
       <style jsx="true">{`
         .divider {
@@ -798,8 +789,6 @@ export default function TextContentPageTEST() {
 function copyCode(code) {
   navigator.clipboard.writeText(code);
 }
-
-
 
 const contentsFromApi = [
   {
@@ -883,4 +872,3 @@ const contentsFromApi = [
     __v: 0,
   },
 ];
-

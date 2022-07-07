@@ -9,8 +9,9 @@ export default async function apiService(path, data, noError) {
     .catch((error) => {
       if (noError) {
       } else {
-        console.log(error);
-        // alert(error);
+        if (window.location.href.includes("localhost")) {
+          console.error(error);
+        }
       }
     });
 }

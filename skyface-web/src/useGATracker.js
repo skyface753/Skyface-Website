@@ -8,15 +8,15 @@ const UseGaTracker = () => {
   const [initialized, setInitialized] = useState(false);
   const analyticEnabled = getCookieConsentValue();
   useEffect(() => {
-    if (analyticEnabled === "true") {
-      console.log("analytic enabled");
+    if (analyticEnabled !== "false") {
+      //console.log("analytic enabled");
       if (!window.location.href.includes("localhost")) {
         ReactGA.initialize(config.GATrackingID);
       }
-      // console.log("location", location);
+      // //console.log("location", location);
       setInitialized(true);
     } else {
-      console.log("analytic disabled");
+      //console.log("analytic disabled");
     }
   }, []);
 

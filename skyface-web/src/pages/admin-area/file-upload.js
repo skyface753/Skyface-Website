@@ -9,7 +9,7 @@ export default function FileUpload() {
     let formData = new FormData();
     formData.append("file", image.data);
     apiService("admin/upload", formData).then((res) => {
-      console.log("res: ", res);
+      //console.log("res: ", res);
       setStatus(res.data.message);
       if (res.data.success) {
         alert("File uploaded successfully");
@@ -30,7 +30,9 @@ export default function FileUpload() {
   return (
     <div className="App">
       <h1>Upload to server</h1>
-      {image.preview && <img src={image.preview} width="100" height="100" />}
+      {image.preview && (
+        <img src={image.preview} alt="preview" width="100" height="100" />
+      )}
       <hr></hr>
       <form onSubmit={handleSubmit}>
         <input type="file" name="file" onChange={handleFileChange}></input>

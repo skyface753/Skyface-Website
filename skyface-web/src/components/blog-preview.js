@@ -1,13 +1,12 @@
 import Star from "../img/star";
 import apiService from "../services/api-service";
 
-
 function deleteBlog(blogTitle, blogId) {
   //Confirm delete
   if (
     window.confirm("Are you sure you want to delete ''" + blogTitle + "''?")
   ) {
-    console.log("Delete Blog " + blogTitle + " with id " + blogId);
+    //console.log("Delete Blog " + blogTitle + " with id " + blogId);
     apiService("admin/blogs/delete/" + blogId).then((response) => {
       if (response.data.success) {
         alert("Blog deleted successfully");
@@ -34,7 +33,7 @@ export default function BlogPreviewOL({
 }
 
 export function BlogPreviewLI(currBlogPost, UserIsAdmin, marginLeft = 0) {
-  // console.log(currBlogPost);
+  // //console.log(currBlogPost);
   try {
     var datetime = currBlogPost.createdAt.substring(0, 10);
   } catch (e) {

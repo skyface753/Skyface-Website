@@ -27,15 +27,14 @@ export default function Login() {
         code: newUrl[1],
       };
 
-      console.log("Request data");
-      console.log(requestData);
+      //console.log("Request data");
+      //console.log(requestData);
       apiService("login/github", {
         code: requestData.code,
       }).then((response) => {
-        console.log("Response data axios");
-        console.log(response);
+        //console.log("Response data axios");
+        //console.log(response);
       });
-    
     }
   }, [state, dispatch, data]);
 

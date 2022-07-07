@@ -1,14 +1,11 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import config from "../credentials";
 import apiService from "./api-service";
 import browserSignature from "browser-signature";
 import { AuthContext } from "../App";
 
-import CookieConsent, {
-  Cookies,
-  getCookieConsentValue,
-} from "react-cookie-consent";
+import { getCookieConsentValue } from "react-cookie-consent";
 
 console.log();
 
@@ -18,7 +15,7 @@ export const UseSelfTracker = () => {
   const signature = browserSignature();
   const analyticEnabled = getCookieConsentValue();
   useEffect(() => {
-    if (analyticEnabled === "true") {
+    if (analyticEnabled !== "false") {
       console.log("analytic enabled");
       apiService(
         "api/self-tracker",

@@ -8,23 +8,23 @@ export default function GoogleLoginButton() {
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
-        console.log(credentialResponse);
+        //console.log(credentialResponse);
         const res = await apiService("login/google", {
-          token: credentialResponse.credential
+          token: credentialResponse.credential,
         }).then((res) => {
-          console.log(res);
+          //console.log(res);
           if (res.data.success) {
             const { user } = res.data;
             dispatch({
               type: "LOGIN",
-              payload: { user, isLoggedIn: true }
+              payload: { user, isLoggedIn: true },
             });
           }
         });
         window.location.href = "/";
       }}
       onError={() => {
-        console.log("Login Failed");
+        //console.log("Login Failed");
       }}
     />
   );

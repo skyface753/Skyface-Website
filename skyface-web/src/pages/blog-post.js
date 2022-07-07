@@ -98,7 +98,6 @@ function getCommentAnswerButton(commentID, by_username, setCommentAnswer) {
     <button
       className="comment-answer-button"
       onClick={() => {
-        console.log("setCommentAnswer", commentID);
         setCommentAnswer(commentID);
         focusCommentTextBox();
       }}
@@ -171,7 +170,6 @@ function speakMessage(messages, PAUSE_MS = 500, utterance) {
   try {
     window.speechSynthesis.cancel();
     let currentIndex = 0;
-    console.log(messages);
     const speak = () => {
       const msg = messages[currentIndex].text;
       // const utterance = new SpeechSynthesisUtterance(msg);
@@ -185,11 +183,8 @@ function speakMessage(messages, PAUSE_MS = 500, utterance) {
           removeOldMarker();
         }
       };
-      utterance.onerror = () => {
-        console.log("error");
-      };
+      utterance.onerror = () => {};
       utterance.onboundary = function (event) {
-        console.log("SpeechSynthesisUtterance.onboundary");
         onboundaryHandler(event, messages[currentIndex]._id);
       };
       window.speechSynthesis.speak(utterance);
@@ -218,7 +213,6 @@ function onboundaryHandler(event, contentID) {
   var word = getWordAt(value, index);
   var anchorPosition = getWordStart(value, index);
   var activePosition = anchorPosition + word.length;
-  console.log(word, anchorPosition, activePosition);
 
   oldTextToSpeackID = contentID;
   oldTextToSpeackHTML = pTag.innerHTML;
@@ -229,8 +223,6 @@ function onboundaryHandler(event, contentID) {
     "</span>" +
     value.substring(activePosition);
   pTag.scrollIntoView({ behavior: "smooth", block: "center" });
-
- 
 }
 // Get the word of a string given the string and index
 function getWordAt(str, pos) {
@@ -280,28 +272,20 @@ export default function BlogPost() {
   const signature = browserSignature();
   const speekToText = new SpeechSynthesisUtterance();
   speekToText.lang = "en-US";
-  // React.useEffect(() => {
-  //   console.log("Speeking");
-  //   window.speechSynthesis.speak(msg);
-  // }, [msg]);
-
-  speekToText.onerror = function (event) {
-    console.log("SpeechSynthesisUtterance.onerror");
-  };
+  speekToText.onerror = function (event) {};
 
   React.useEffect(() => {
     apiService("blog/" + blogUrl, {
       signature,
     }).then((response) => {
       var blogContentTemp = response.data["blogContent"];
-      console.log(response.data);
       blogContentTemp.sort(function (a, b) {
         return a.position - b.position;
       });
       setPost(response.data);
       var blogContentNew = blogContentTemp.map((content) => {
         return Content.fromJSON(content);
-      })
+      });
       setBlogContent(blogContentNew);
       setComments(commentsParentSort(response.data["blogComments"]));
       setHasLiked(response.data["hasUserLikedBlog"]);
@@ -328,7 +312,6 @@ export default function BlogPost() {
 
   document.title = posts["blog"].title + " - " + TITLESUFFIX;
 
-  console.log(commentsParentSort(posts["blogComments"]));
   return (
     <div>
       {(() => {
@@ -423,7 +406,6 @@ export default function BlogPost() {
           }}
         >
           Speak
-          
         </button>
         <button
           className="speak-button-pause"
@@ -468,15 +450,14 @@ export default function BlogPost() {
         })()}
       </div>
       {/* Blog Posts */}
-      {blogContent != null && blogContent.length > 0 && (
+      {blogContent != null &&
+        blogContent.length > 0 &&
         blogContent.map((content) => {
-        if(content != null) {
-          return content.showContent();
-        }
-        })
-      )}
-        
-     
+          if (content != null) {
+            return content.showContent();
+          }
+        })}
+
       {(() => {
         if (series && seriesBlogs) {
           return (
@@ -545,27 +526,26 @@ export default function BlogPost() {
         <UserSvg />
         <div>{blogViewsCountPerUser}</div>
         {/* Share Button */}
-        {navigator.canShare && navigator.canShare({
+        {navigator.canShare &&
+        navigator.canShare({
           url: window.location.href,
           title: posts["blog"].title,
         }) ? (
-        <button
-          className="share-button"
-          onClick={() => {
-            var data = {
-              url: window.location.href,
-              title: posts["blog"].title,
-            }
-            if(navigator.canShare && navigator.canShare(data)) {
-              navigator.share(data);
-            }
-          }}
-        >
-          Share
-        </button>
-        ) : (
-          null
-        )}
+          <button
+            className="share-button"
+            onClick={() => {
+              var data = {
+                url: window.location.href,
+                title: posts["blog"].title,
+              };
+              if (navigator.canShare && navigator.canShare(data)) {
+                navigator.share(data);
+              }
+            }}
+          >
+            Share
+          </button>
+        ) : null}
       </div>
 
       <hr className="blog-divider"></hr>

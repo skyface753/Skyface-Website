@@ -16,7 +16,6 @@ export default function SingleSeries() {
 
   React.useEffect(() => {
     apiService("series/" + seriesUrl).then((response) => {
-      console.log(response.data);
       setSeries(response.data["series"]);
       setSeriesBlogs(response.data["seriesBlogs"]);
       setEditSeries(response.data["series"]);
@@ -86,15 +85,7 @@ export default function SingleSeries() {
           {editMode ? "Cancle" : "Edit"}
         </button>
       )}
-      {
-        editMode ? (
-          <div>HI</div>
-        ) : (
-       
-          SeriesBlogsComp(seriesBlogs, series.url)
-        )
-
-      }
+      {editMode ? <div>HI</div> : SeriesBlogsComp(seriesBlogs, series.url)}
     </div>
   );
 }

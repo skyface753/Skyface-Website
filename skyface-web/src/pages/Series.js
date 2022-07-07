@@ -14,7 +14,6 @@ export default function SeriesPage() {
       if (response.data.success) {
         setSeries(response.data.series);
       } else {
-        console.log(response.data);
         alert(response.data);
       }
     });

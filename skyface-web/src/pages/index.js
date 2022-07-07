@@ -6,23 +6,6 @@ import { SkyCloudLoader } from "../components/Loader";
 import ProjectsPreview from "../components/ProjectsPreview";
 import BlogPreviewOL from "../components/blog-preview";
 
-function createPostsArticle(title, url, datetime) {
-  url = "/blogs/" + url;
-  return (
-    <li key={url}>
-      <article className="home-latest-posts-article">
-        <Star />{" "}
-        <div className="home-latest-posts-article-title">
-          <a href={url}>{title}</a>
-        </div>
-        <time className="home-latest-posts-time" dateTime={datetime}>
-          {datetime}
-        </time>
-      </article>
-    </li>
-  );
-}
-
 const Home = () => {
   const [latestPosts, setLatestPosts] = React.useState(null);
   const [last3Projects, setLast4Projects] = React.useState(null);
@@ -42,7 +25,6 @@ const Home = () => {
     });
     // }, 500);
   }, []);
-  console.log(latestPosts);
 
   document.title = "SkyBlog - Home";
   return (

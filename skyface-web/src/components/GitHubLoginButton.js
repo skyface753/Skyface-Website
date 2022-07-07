@@ -24,16 +24,16 @@ export default function GitHubLoginButton() {
         code: newUrl[1],
       };
 
-      console.log("Request data");
-      console.log(requestData);
+      //console.log("Request data");
+      //console.log(requestData);
       apiService("login/github", {
         code: requestData.code,
       }).then((response) => {
-        console.log("Response data axios");
-        console.log(response);
+        //console.log("Response data axios");
+        //console.log(response);
         if (response.data.success) {
-          console.log("Login success");
-          console.log(response.data.user);
+          //console.log("Login success");
+          //console.log(response.data.user);
           const { user } = response.data;
           dispatch({
             type: "LOGIN",
@@ -51,8 +51,6 @@ export default function GitHubLoginButton() {
   return (
     <div className="github-login-container">
       <>
-        
-
         <a
           className="github-login-link"
           href={`https://github.com/login/oauth/authorize?scope=user&client_id=${config.REACT_APP_CLIENT_ID}&redirect_uri=${config.REACT_APP_REDIRECT_URI}`}

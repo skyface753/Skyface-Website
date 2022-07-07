@@ -51,10 +51,10 @@ export const AuthContext = createContext();
 
 function App() {
   // const signature = browserSignature();
-  // console.log("signature", signature);
+  // //console.log("signature", signature);
   const [state, dispatch] = useReducer(reducer, initialState);
   // const clientId = env.GOOGLE_CLIENT_ID;
-  // console.log("clientId", clientId);
+  // //console.log("clientId", clientId);
   return (
     <AuthContext.Provider
       value={{
@@ -69,7 +69,8 @@ function App() {
           <CookieConsent
             acceptOnScroll={false}
             onDecline={() => {
-              console.log("Cookie declined");
+              //console.log("Cookie declined");
+              window.location.reload();
             }}
             enableDeclineButton={true}
             buttonText="I accept"
@@ -135,7 +136,7 @@ function App() {
                 path="/admin/project/create"
                 element={<ProjectAdminPage />}
               />
-              <Route 
+              <Route
                 path="/admin/project/edit/:projectID"
                 element={<ProjectAdminPage />}
               />

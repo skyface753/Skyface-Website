@@ -95,7 +95,6 @@ const Categories = () => {
   }, []);
 
   if (!categories) return <SkyCloudLoader />;
-  console.log(categories);
   return (
     <div
       style={{

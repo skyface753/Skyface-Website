@@ -4,15 +4,16 @@ import NewBlogBlank from "./new-blog.json";
 import ShowCategoriesSelect from "../../components/showCategoriesSelect";
 import apiService from "../../services/api-service";
 
-const initContent =[ {
-  _id: "1",
-      text: "New Blog Text",
-      for_blog: null,
-      position: 0,
-      type: "text",
-      createdAt: null,
-      updatedAt: null,
-}
+const initContent = [
+  {
+    _id: "1",
+    text: "New Blog Text",
+    for_blog: null,
+    position: 0,
+    type: "text",
+    createdAt: null,
+    updatedAt: null,
+  },
 ];
 
 var content = initContent.map((item) => {
@@ -20,7 +21,6 @@ var content = initContent.map((item) => {
 });
 export default function CreateBlog() {
   const [posts, setPost] = React.useState(NewBlogBlank);
-  
 
   const [blogContent, setBlogContent] = React.useState(content);
 
@@ -33,7 +33,6 @@ export default function CreateBlog() {
 
   return (
     <div>
-     
       <div className="title-container">
         <img
           src={require("../../img/blogs-title.png")}
@@ -58,7 +57,7 @@ export default function CreateBlog() {
               onChange={(e) => {
                 post.title = e.target.value;
                 setPost({ ...posts, blog: post });
-                console.log(posts);
+                //console.log(posts);
               }}
             />
             <label htmlFor="blog-subtitle">Subtitle</label>
@@ -70,7 +69,6 @@ export default function CreateBlog() {
               onChange={(e) => {
                 post.subtitle = e.target.value;
                 setPost({ ...posts, blog: post });
-                console.log(posts);
               }}
             />
             <label htmlFor="blog-url">URL</label>
@@ -82,7 +80,7 @@ export default function CreateBlog() {
               onChange={(e) => {
                 post.url = e.target.value;
                 setPost({ ...posts, blog: post });
-                console.log(posts);
+                //console.log(posts);
               }}
             />
             <label htmlFor="blog-image">Image</label>
@@ -94,125 +92,117 @@ export default function CreateBlog() {
               onChange={(e) => {
                 post.blog_image = e.target.value;
                 setPost({ ...posts, blog: post });
-                console.log(posts);
+                //console.log(posts);
               }}
             />
           </div>
         );
       })()}
       {/* Blog Content */}
-      {blogContent && (
-      blogContent.map((content, index) => {
-        if (content != null) {
-          // if (content.type === "text") {
-          return(
-            <div key={"blub" + content._id}>
-              <select
-              defaultValue={content.type}
-              onChange={(e) => {
-                var copyableContentJSON = content.getCopyableContentJSON();
-                copyableContentJSON.type = e.target.value;
-                blogContent[index] = Content.fromJSON(copyableContentJSON);
-                setBlogContent([...blogContent]);
-              }}>
-                {allTypes.map((type) => {
-                  return (
-                    <option value={type.value} key={type.value}>
-                      {type.label}
-                    </option>
-                  );
-                }
-                )}
-              </select>
-              <button 
-                className="content-up-button"
-                onClick={() => {
-                  if(content.position > 0) {
-                    var tempContent = blogContent[index];
-                    blogContent[index] = blogContent[index - 1];
-                    blogContent[index - 1] = tempContent;
+      {blogContent &&
+        blogContent.map((content, index) => {
+          if (content != null) {
+            // if (content.type === "text") {
+            return (
+              <div key={"blub" + content._id}>
+                <select
+                  defaultValue={content.type}
+                  onChange={(e) => {
+                    var copyableContentJSON = content.getCopyableContentJSON();
+                    copyableContentJSON.type = e.target.value;
+                    blogContent[index] = Content.fromJSON(copyableContentJSON);
                     setBlogContent([...blogContent]);
-                  }
-                }
-                }>
-                Up
-              </button>
-              <button
-                className="content-down-button"
-                onClick={() => {
-                  if(content.position < blogContent.length - 1) {
-                    var tempContent = blogContent[index];
-                    blogContent[index] = blogContent[index + 1];
-                    blogContent[index + 1] = tempContent;
+                  }}
+                >
+                  {allTypes.map((type) => {
+                    return (
+                      <option value={type.value} key={type.value}>
+                        {type.label}
+                      </option>
+                    );
+                  })}
+                </select>
+                <button
+                  className="content-up-button"
+                  onClick={() => {
+                    if (content.position > 0) {
+                      var tempContent = blogContent[index];
+                      blogContent[index] = blogContent[index - 1];
+                      blogContent[index - 1] = tempContent;
+                      setBlogContent([...blogContent]);
+                    }
+                  }}
+                >
+                  Up
+                </button>
+                <button
+                  className="content-down-button"
+                  onClick={() => {
+                    if (content.position < blogContent.length - 1) {
+                      var tempContent = blogContent[index];
+                      blogContent[index] = blogContent[index + 1];
+                      blogContent[index + 1] = tempContent;
+                      setBlogContent([...blogContent]);
+                    }
+                  }}
+                >
+                  Down
+                </button>
+                <button
+                  className="content-delete-button"
+                  onClick={() => {
+                    blogContent.splice(index, 1);
                     setBlogContent([...blogContent]);
-                  }
-                }
-                }>
-                Down
-              </button>
-              <button
-                className="content-delete-button"
-                onClick={() => {
-                  blogContent.splice(index, 1);
-                  setBlogContent([...blogContent]);
-                }
-                }>
-                Delete
-              </button>
-              {content.showEditor(blogContent, setBlogContent, index)}
-            </div>
+                  }}
+                >
+                  Delete
+                </button>
+                {content.showEditor(blogContent, setBlogContent, index)}
+              </div>
+            );
+          }
+        })}
+      <button
+        onClick={() => {
+          var newContent = new TextContent(
+            blogContent.length,
+            null,
+            "NEW" + blogContent.length,
+            "text",
+            null,
+            null,
+            "New Text"
           );
-        }
-      }
-      )
-
-      )}
-      <button onClick={() => {
-        var newContent = new TextContent(
-          blogContent.length,
-          null,
-          "NEW" + blogContent.length,
-          "text",
-          null, 
-          null,
-          "New Text"
-        );
-        blogContent.push(newContent);
-        setBlogContent([...blogContent]);
-      }
-      }>
+          blogContent.push(newContent);
+          setBlogContent([...blogContent]);
+        }}
+      >
         Add Content
       </button>
-      <button onClick={() => {
-        // Save
-        var json = blogContent.map((content) => {
-          return content.getJSON();
-        })
-        console.log(json);
-      }}>
+      <button
+        onClick={() => {
+          // Save
+          var json = blogContent.map((content) => {
+            return content.getJSON();
+          });
+          //console.log(json);
+        }}
+      >
         Save
       </button>
-      
 
-
-
-
-
-
-
-     
-           <ShowCategoriesSelect
+      <ShowCategoriesSelect
         selectedID={
           posts["blog"].category != null ? posts["blog"].category._id : null
         }
         onChange={(e) => {
-          console.log("New Selected: " + e.target.value);
-          console.log("OLD");
-          console.log(posts);
+          //console.log("New Selected: " + e.target.value);
+          //console.log("OLD");
+          //console.log(posts);
           posts["blog"].category = { _id: e.target.value };
           setPost({ ...posts, blog: posts["blog"] });
-          console.log("NEW");
-          console.log(posts);
+          //console.log("NEW");
+          //console.log(posts);
           // setPost({ ...posts, category: e.target.value });
         }}
       />
@@ -227,7 +217,7 @@ export default function CreateBlog() {
             blog: posts["blog"],
             blogContent: blogContent,
           }).then((response) => {
-            console.log(response);
+            //console.log(response);
             if (response.data.success) {
               alert("Blog saved!");
               window.location.href = "/blogs/" + posts.blog.url;

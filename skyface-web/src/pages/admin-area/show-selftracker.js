@@ -12,7 +12,7 @@ export default function ShowSelfTracker() {
       setSelfTrackerByPath(res.data.selfTrackerByPath);
     });
   }, []);
-  console.log(selfTrackerByPath);
+  //console.log(selfTrackerByPath);
 
   return (
     <div>

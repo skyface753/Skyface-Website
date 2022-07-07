@@ -10,9 +10,9 @@ const SidebarSeries = (seriesUrl) => {
 
   React.useEffect(() => {
     apiService("series/" + seriesUrl).then((response) => {
-      console.log("response.data for seriesUrl");
-      console.log(seriesUrl);
-      console.log(response.data);
+      //console.log("response.data for seriesUrl");
+      //console.log(seriesUrl);
+      //console.log(response.data);
       setSeries(response.data["series"]);
       setSeriesBlogs(response.data["seriesBlogs"]);
     });

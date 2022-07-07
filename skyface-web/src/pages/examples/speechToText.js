@@ -49,7 +49,7 @@ export default function TextToSpeechComponent() {
 
   speekToText.onboundary = onboundaryHandler;
   speekToText.onerror = function (e) {
-    console.log("error", e);
+    //console.log("error", e);
   };
   //   speekToText.onend = function (e) {
   //     document.getElementById("text").innerText = text;

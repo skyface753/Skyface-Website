@@ -25,7 +25,6 @@ export default function ShowProfile() {
 
   React.useEffect(() => {
     apiService("users/profile/" + username, {}).then((response) => {
-      console.log(response.data);
       if (response.data.success) {
         setUser(response.data["user"]);
         setUserBlogs(response.data["blogs"]);
@@ -62,7 +61,6 @@ export default function ShowProfile() {
                   setUser({ ...user });
                   if (e.target.value.length >= 3) {
                     checkUsernameFree(e.target.value).then((isFree) => {
-                      console.log("IsFree2: " + isFree);
                       if (isFree) {
                         setUsernameChangeError(null);
                       } else {
@@ -178,7 +176,7 @@ export default function ShowProfile() {
             ) : null
           ) : null}
           <p>{user.email}</p>
-                  </div>
+        </div>
       ) : (
         <div>Loading...</div>
       )}

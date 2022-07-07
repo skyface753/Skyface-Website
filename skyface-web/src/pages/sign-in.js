@@ -12,8 +12,6 @@ export default function SignIn() {
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
 
-  
-
   return (
     <div className="sign-in-container">
       <GoogleLoginButton />
@@ -64,7 +62,6 @@ export default function SignIn() {
                     isLoggedIn: true,
                   },
                 });
-                console.log("logged in");
                 window.location.href = "/";
               } else {
                 setError(response.data.message);
