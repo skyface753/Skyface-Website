@@ -7,7 +7,7 @@ import { AuthContext } from "../App";
 
 import { getCookieConsentValue } from "react-cookie-consent";
 
-console.log();
+//console.log();
 
 export const UseSelfTracker = () => {
   const { state, dispatch } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export const UseSelfTracker = () => {
   const analyticEnabled = getCookieConsentValue();
   useEffect(() => {
     if (analyticEnabled !== "false") {
-      console.log("analytic enabled");
+      //console.log("analytic enabled");
       apiService(
         "api/self-tracker",
         {
@@ -33,7 +33,7 @@ export const UseSelfTracker = () => {
         true
       );
     } else {
-      console.log("analytic disabled");
+      //console.log("analytic disabled");
     }
   }, [location]);
 };
