@@ -37,7 +37,8 @@
     "react-toastify": "^9.0.3",
     "reactjs-localstorage": "^1.0.1",
     "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "react-minimal-pie-chart": "^8.3.0"
   },
   "scripts": {
     "predeploy": "npm run build",
