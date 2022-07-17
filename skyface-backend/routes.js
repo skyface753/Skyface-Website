@@ -129,4 +129,5 @@ router.post("/admin/projects/create", ProjectService.createProject);
 router.post("/admin/projects/update/:projectID", ProjectService.updateProject);
 router.post("/admin/projects/delete/:projectID", ProjectService.deleteProject);
 router.post("/admin/self-tracker/get", SelfTrackerService.getSelfTrackerData);
+router.post("/admin/users/get", UserService.getAllUsers);
 module.exports = router;

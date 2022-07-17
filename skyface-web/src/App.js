@@ -40,7 +40,7 @@ import Projects from "./pages/projects";
 import "animate.css"; // https://animate.style/
 import ProjectAdminPage from "./pages/admin-area/project-admin";
 import TextContentPageTEST from "./contentmodels/Content";
-
+import ShowUsersPage from "./pages/admin-area/show-users";
 // import browserSignature from "browser-signature";
 
 // import env from "react-dotenv";
@@ -143,6 +143,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
               <Route path="/deckgl" element={<DeckGl />} />
               <Route path="/test" element={<TextContentPageTEST />} />
+              <Route path="/admin/show-users" element={<ShowUsersPage />} />
             </Routes>
           </div>
           <Footer />

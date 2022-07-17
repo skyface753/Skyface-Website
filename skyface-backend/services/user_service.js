@@ -50,6 +50,13 @@ let UserService = {
       message: "Logged out",
     });
   },
+  getAllUsers: async (req, res) => {
+    var users = await UserModel.find({}).exec();
+    res.json({
+      success: true,
+      users: users,
+    });
+  },
   checkIfUsernameIsFree: async (req, res) => {
     var username = req.params.username;
     if (!username) {
