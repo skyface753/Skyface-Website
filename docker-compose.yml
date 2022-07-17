@@ -10,29 +10,9 @@ services:
       - ./files:/usr/src/app/uploaded-files
     environment:
       - FRONTEND_URL=https://www.skyface.de
+      - JWT_SECRET=replace
+      - JWT_ROUNDS=10
     restart: always
-  # backend:
-  #   image: skyface753/skyblog-backend
-  #   build:
-  #     context: ./skyface-backend
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - "5000:5000"
-    # volumes:
-    #   - ./files:/usr/src/app/uploaded-files
-    # environment:
-    #   - FRONTEND_URL=https://www.skyface.de
-  # web:
-  #   image: skyface753/skyblog-web
-  #   ports:
-  #     - "3000:3000"
-  # backend:
-  #   image: skyface753/skyblog-backend
-  #   ports:
-  #     - "5000:5000"
-  #   environment:
-  #     - FRONTEND_URL=https://www.skyface.de
-      
 
   mongo:
     image: mongo

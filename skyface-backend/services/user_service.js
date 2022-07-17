@@ -3,12 +3,16 @@ const BlogModel = require("../models/blog_model");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 var jwt = require("jsonwebtoken");
+const config = require("../config");
 var cors = require("cors");
 // jwt 30 Tage
 const jwtExpirySeconds = 60 * 60 * 24 * 30;
-const jwtKey = "SkyTokSecretKey!fqiwhdhuwqhdf2uhf2zgu";
-const saltRounds = 11;
+const jwtKey = config.jwt.secret;
+const saltRounds = config.jwt.rounds;
 const bycrypt = require("bcrypt");
+
+console.log("Secret: " + config.jwt.secret);
+console.log("Rounds: " + saltRounds);
 
 var failures = {};
 function onLoginFail(remoteIp) {
@@ -37,8 +41,6 @@ setInterval(function () {
     }
   }
 }, MINS30);
-
-
 
 let UserService = {
   logout: (req, res) => {
@@ -363,11 +365,11 @@ let UserService = {
   verifyTokenExport: verifyToken,
 };
 
-async function initDefaultAdmin(){
+async function initDefaultAdmin() {
   let user = await UserModel.findOne({
     role: "admin",
   });
-  if(!user){
+  if (!user) {
     let hashedPassword = await bycrypt.hash("admin", saltRounds);
     user = new UserModel({
       username: "admin",
