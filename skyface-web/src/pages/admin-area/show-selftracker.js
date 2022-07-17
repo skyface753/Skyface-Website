@@ -42,17 +42,33 @@ export default function ShowSelfTracker() {
     <div>
       <h1>ShowSelfTracker</h1>
       <h2>selfTrackerBySignature</h2>
-      <ul>
-        {selfTrackerBySignature ? (
-          selfTrackerBySignature.map((item) => (
-            <li key={item._id}>
-              {item._id} {item.count}
-            </li>
-          ))
-        ) : (
-          <SkyCloudLoader />
-        )}
-      </ul>
+      {selfTrackerBySignature ? (
+        <table style={{ width: "100%" }}>
+          <thead>
+            <tr>
+              <th>Signature</th>
+              <th>Count</th>
+              <th>User</th>
+            </tr>
+          </thead>
+          <tbody>
+            {selfTrackerBySignature.map((item) => (
+              <tr key={item._id}>
+                <td>{item._id}</td>
+                <td>{item.count}</td>
+                <td>{item.possibleUser ? item.possibleUser.username : "X"}</td>
+              </tr>
+
+              // <li key={item._id}>
+              //   {item._id}  {item.count}
+              //   {" | "}
+              // </li>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <SkyCloudLoader />
+      )}
       {pieDataSignature.length > 0 ? (
         <PieChart
           data={pieDataSignature}

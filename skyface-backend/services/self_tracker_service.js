@@ -1,4 +1,5 @@
 const SelfTrackerModel = require("../models/self_tracker_model");
+const UserModel = require("../models/user_model");
 
 let SelfTrackerService = {
   receiveSelfTrackerData: async (req, res) => {
@@ -36,10 +37,27 @@ let SelfTrackerService = {
       // Get all and group by SIGNATURE
       const selfTrackerBySignature = await SelfTrackerModel.aggregate([
         { $group: { _id: "$SIGNATURE", count: { $sum: 1 } } },
-      ]);
+      ]).sort({ count: -1 });
+      for (let i = 0; i < selfTrackerBySignature.length; i++) {
+        const selfTrackerData = await SelfTrackerModel.aggregate([
+          { $match: { SIGNATURE: selfTrackerBySignature[i]._id } },
+          { $group: { _id: "$stateUserId", count: { $sum: 1 } } },
+        ]);
+        const possibleUser = await UserModel.find({
+          _id: { $in: selfTrackerData.map((x) => x._id) },
+        })
+          .select("_id username")
+          .limit(1);
+        // for (let j = 0; j < selfTrackerData.length; j++) {
+        //   const user = await UserModel.findById(selfTrackerData[j]._id);
+        //   selfTrackerBySignature[i].users = selfTrackerData;
+
+        selfTrackerBySignature[i].selfTrackerData = selfTrackerData;
+        selfTrackerBySignature[i].possibleUser = possibleUser[0];
+      }
       const selfTrackerByPath = await SelfTrackerModel.aggregate([
         { $group: { _id: "$PATH", count: { $sum: 1 } } },
-      ]);
+      ]).sort({ count: -1 });
 
       res.status(200).json({
         selfTrackerBySignature: selfTrackerBySignature,
