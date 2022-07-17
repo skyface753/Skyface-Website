@@ -17,9 +17,12 @@ export default function ShowUsersPage() {
       <table
         style={{
           borderCollapse: "collapse",
-          border: "1px solid black",
+          //   border: "1px solid black",
           width: "100%",
           padding: "10px",
+          display: "block",
+          overflowX: "auto",
+          whiteSpace: "nowrap",
         }}
       >
         <thead>
