@@ -11,6 +11,7 @@ const SearchService = require("./services/search_service.js");
 const SelfTrackerService = require("./services/self_tracker_service.js");
 const Middleware = require("./middleware.js");
 const ProjectService = require("./services/project_service.js");
+const CertificatesService = require("./services/certificates_service.js");
 // Set req.user to logged in user if user is logged in
 router.use(async (req, res, next) => {
   await Middleware.getUserIfCookie(req, res, next);
@@ -51,6 +52,8 @@ router.post("/series", SeriesService.getAllSeries);
 router.post("/series/:seriesUrl", SeriesService.getSeriesWithBlogs);
 
 router.post("/search", SearchService.search);
+
+router.post("/certificates/get", CertificatesService.getCertificates);
 
 //Authentication for user routes
 router.use(async (req, res, next) => {
@@ -130,4 +133,12 @@ router.post("/admin/projects/update/:projectID", ProjectService.updateProject);
 router.post("/admin/projects/delete/:projectID", ProjectService.deleteProject);
 router.post("/admin/self-tracker/get", SelfTrackerService.getSelfTrackerData);
 router.post("/admin/users/get", UserService.getAllUsers);
+router.post(
+  "/admin/certificates/create",
+  CertificatesService.createCertificate
+);
+router.post(
+  "/admin/certificates/delete/:certificateID",
+  CertificatesService.deleteCertificate
+);
 module.exports = router;

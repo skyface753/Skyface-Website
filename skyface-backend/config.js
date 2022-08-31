@@ -7,7 +7,7 @@ const config = {
   frontend_url: env.FRONTEND_URL || "https://skyface.de",
   jwt: {
     secret: env.JWT_SECRET || "secret",
-    rounds: env.JWT_ROUNDS || 10,
+    rounds: parseInt(env.JWT_ROUNDS) || 10,
   },
 };
 

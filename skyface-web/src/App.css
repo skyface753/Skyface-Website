@@ -57,6 +57,7 @@ footer a{
   margin: 0 auto;
   margin-top: 20px;
   padding-bottom: 5px;
+  padding: 0px 0px 5px !important;
   text-align: center;
   background-color: #fafafa;
   border-top: 1px solid #e0e0e0;
@@ -1080,4 +1081,8 @@ section>ol>li{
 .blog-stats-container>div{
   margin-right: 5%;
   margin-left: 1%;
+}
+
+.certificate-container{
+  text-align: left;
 }

@@ -21,6 +21,8 @@ export default function AdminHome() {
       <a href="/admin/project/create">Create Project</a>
       <br />
       <a href="/admin/show-users">Show Users</a>
+      <br />
+      <a href="/admin/certificate/create">Create Certificate</a>
     </div>
   );
 }

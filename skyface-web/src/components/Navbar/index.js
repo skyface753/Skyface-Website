@@ -63,6 +63,10 @@ export default function Navbar() {
           <li>
             <a href="/contact">Contact</a>
           </li>
+          <li>
+            <a href="/certificates">Certificates</a>
+          </li>
+
           {state.isLoggedIn ? (
             state.user.role === "admin" ? (
               <li>

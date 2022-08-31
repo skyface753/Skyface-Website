@@ -41,6 +41,8 @@ import "animate.css"; // https://animate.style/
 import ProjectAdminPage from "./pages/admin-area/project-admin";
 import TextContentPageTEST from "./contentmodels/Content";
 import ShowUsersPage from "./pages/admin-area/show-users";
+import CertificatesSite from "./pages/certificates";
+import CreateCertificateSite from "./pages/admin-area/create-certificate";
 // import browserSignature from "browser-signature";
 
 // import env from "react-dotenv";
@@ -108,6 +110,7 @@ function App() {
               <Route path="/users/:username" element={<ShowProfile />} />
               <Route path="/series" element={<SeriesPage />} />
               <Route path="/series/:seriesUrl" element={<SingleSeries />} />
+              <Route path="/certificates" element={<CertificatesSite />} />
               <Route path="/search" element={<SearchPage />} />
               {/* ADMIN AREA */}
               <Route
@@ -144,6 +147,10 @@ function App() {
               <Route path="/deckgl" element={<DeckGl />} />
               <Route path="/test" element={<TextContentPageTEST />} />
               <Route path="/admin/show-users" element={<ShowUsersPage />} />
+              <Route
+                path="/admin/certificate/create"
+                element={<CreateCertificateSite />}
+              />
             </Routes>
           </div>
           <Footer />
