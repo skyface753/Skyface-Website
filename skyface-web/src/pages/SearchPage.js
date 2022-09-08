@@ -23,17 +23,21 @@ export default function SearchPage() {
     []
   );
   const [seriesSearchResults, setSeriesSearchResults] = React.useState([]);
+  const [certificateSearchResults, setCertificateSearchResults] =
+    React.useState([]);
 
   React.useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const searchStringParams = queryParams.get("searchString");
     if (searchStringParams) {
       setSearchString(searchStringParams);
+
       search(searchStringParams, function (data) {
         setUsersSearchResults(data.users);
         setBlogsSearchResults(data.blogs);
         setCategoriesSearchResults(data.categories);
         setSeriesSearchResults(data.series);
+        setCertificateSearchResults(data.certificates);
       });
     }
   }, [location.search]);
@@ -53,6 +57,7 @@ export default function SearchPage() {
               setBlogsSearchResults(data.blogs);
               setCategoriesSearchResults(data.categories);
               setSeriesSearchResults(data.series);
+              setCertificateSearchResults(data.certificates);
             });
           }}
         />
@@ -92,6 +97,23 @@ export default function SearchPage() {
               return (
                 <a key={series._id} href={`/series/${series.url}`}>
                   <li>{series.name}</li>
+                </a>
+              );
+            })}
+          </ol>
+        </section>
+        <section className="search-certificates">
+          <h2 className="search-titles">Certificates</h2>
+          <ol className="search-certificates-elemets">
+            {certificateSearchResults.map((certificate) => {
+              return (
+                <a
+                  key={certificate._id}
+                  href={`/certificates/${certificate._id}`}
+                >
+                  <li>
+                    {certificate.title} - {certificate.description}
+                  </li>
                 </a>
               );
             })}

@@ -1,41 +1,59 @@
-.search-blogs{
-    
+.search-blogs {
 }
 
-.search-titles{
-    text-align: left;
+.search-titles {
+  text-align: left;
 }
 
-.search-blogs-title{
-                    font-size: 1.5em;   
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    text-align: left;
+.search-blogs-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
 }
-.search-blogs-elemets{
-    padding: 0;
+.search-blogs-elemets {
+  padding: 0;
 }
-.search-blogs-elemets>li{
-    list-style: none;
-    margin-top: 20px;
+.search-blogs-elemets > li {
+  list-style: none;
+  margin-top: 20px;
   padding: 20px;
   border: 1px solid #edf2f5;
   border-radius: 10px;
   box-shadow: 0 0 7px #f1f5f7;
 }
 
-.search-categories-elemets{
-    padding: 0;
+.search-categories-elemets {
+  padding: 0;
 }
 
-.search-categories-elemets>a{
-    list-style: none;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 0 7px #f1f5f7;
-    border-radius: 10px;
-    color: #d80b77;
-    padding: 2%;
-    background-color: #404040;
-    margin-bottom: 20px;
+.search-categories-elemets > a {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 7px #f1f5f7;
+  border-radius: 10px;
+  color: #d80b77;
+  padding: 2%;
+  background-color: #404040;
+  margin-bottom: 20px;
+}
+
+.search-certificates {
+}
+
+.search-certificates-elemets {
+  padding: 0;
+}
+
+.search-certificates-elemets > a {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 7px #f1f5f7;
+  border-radius: 10px;
+  color: #d80b77;
+  padding: 2%;
+  background-color: #404040;
+  margin-bottom: 20px;
 }

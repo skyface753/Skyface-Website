@@ -111,6 +111,8 @@ function App() {
               <Route path="/series" element={<SeriesPage />} />
               <Route path="/series/:seriesUrl" element={<SingleSeries />} />
               <Route path="/certificates" element={<CertificatesSite />} />
+              <Route path="/certificates/:id" element={<CertificatesSite />} />
+
               <Route path="/search" element={<SearchPage />} />
               {/* ADMIN AREA */}
               <Route

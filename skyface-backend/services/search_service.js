@@ -2,6 +2,7 @@ const UserModel = require("../models/user_model");
 const BlogModel = require("../models/blog_model");
 const BlogCategoryModel = require("../models/blog_category_model");
 const SeriesModel = require("../models/series_model");
+const CertificateModel = require("../models/certificates_model");
 
 let SearchService = {
   search: async (req, res) => {
@@ -11,6 +12,7 @@ let SearchService = {
       blogs: [],
       categories: [],
       series: [],
+      certificates: [],
       success: false,
     };
     let users = await UserModel.find({
@@ -30,10 +32,17 @@ let SearchService = {
     let series = await SeriesModel.find({
       name: { $regex: searchString, $options: "i" },
     });
+    let certificates = await CertificateModel.find({
+      $or: [
+        { title: { $regex: searchString, $options: "i" } },
+        { description: { $regex: searchString, $options: "i" } },
+      ],
+    });
     searchResult.users = users;
     searchResult.blogs = blogs;
     searchResult.categories = categories;
     searchResult.series = series;
+    searchResult.certificates = certificates;
     searchResult.success = true;
     res.json(searchResult);
   },
