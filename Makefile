@@ -16,7 +16,10 @@ copy-react-build: ;@echo "Copying React build..."
 docker-start:
 	docker-compose up -d --build
 
-backup: move-backup docker-backup
+backup: move-backup docker-backup delete-old-backups
+
+delete-old-backups: ;@echo "Delete old Backups"; \
+	find ./mongo-backup/ -type f -mtime +30 -name '*.mongo' -execdir rm -- '{}' \;
 
 
 # start: install docker-start docker-restore
