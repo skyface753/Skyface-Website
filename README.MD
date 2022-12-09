@@ -7,14 +7,14 @@ https://www.skyface.de
 
 ## WEB:
 
-./skyface-web/src/consts.js
+./skyface-web/src/consts.js (From ./skyface-web/src/consts.js.example)
 
 - Change BACKENDHOST (With "/" at the end)
 
 ./skyface-web/src/credentials.js
 (Optional for Oauth, but you need to remove it from ./src/App.js and from ./src/components/GitHubLoginButton.js)
 
-- Create the file from ./skyface-web/src/credentials-template.js
+- Create the file from ./skyface-web/src/credentials.js.example
 
 ./skyface-backend/.env (optional for Google and Github Auth)
 

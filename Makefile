@@ -10,7 +10,7 @@ build-react: ;@echo "Building React..."
 
 copy-react-build: ;@echo "Copying React build..."
 	mkdir -p skyface-backend/react_build
-	rm -r skyface-backend/react_build/*
+	rm -r -f skyface-backend/react_build/*
 	mv skyface-web/build/* skyface-backend/react_build
 
 update: ;@echo "Updating ReactJS and NodeJS..."
@@ -35,6 +35,7 @@ docker-backup: ;@echo "Backing up docker ${PROJECT}....."; \
 	docker-compose exec -T mongo sh -c 'mongodump --archive' > latest.mongo
 
 move-backup: ;@echo "Moving backup to folder with date-name....."; \
+	mkdir -p mongo-backup
 	mv latest.mongo mongo-backup/`date +%Y-%m-%d`.mongo
 
 # reactjs-build: ;@echo "Building reactjs ${PROJECT}....."; \
