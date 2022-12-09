@@ -9,9 +9,9 @@ services:
     volumes:
       - ./files:/usr/src/app/uploaded-files
     environment:
-      - FRONTEND_URL=https://www.skyface.de
-      - JWT_SECRET=replace
-      - JWT_ROUNDS=10
+      - FRONTEND_URL=${FRONTEND_URL:-https://www.skyface.de}
+      - JWT_SECRET=${JWT_SECRET:-secret}
+      - JWT_ROUNDS=${JWT_ROUNDS:-10}
     restart: always
 
   mongo:

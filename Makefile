@@ -13,28 +13,20 @@ copy-react-build: ;@echo "Copying React build..."
 	rm -r skyface-backend/react_build/*
 	mv skyface-web/build/* skyface-backend/react_build
 
+update: ;@echo "Updating ReactJS and NodeJS..."
+	npm update -C skyface-web
+	npm update -C skyface-backend
+
 docker-start:
 	docker-compose up -d --build
 
-backup: move-backup docker-backup delete-old-backups
+backup: move-backup docker-backup delete-old-backups backup-files
 
 delete-old-backups: ;@echo "Delete old Backups"; \
 	find ./mongo-backup/ -type f -mtime +30 -name '*.mongo' -execdir rm -- '{}' \;
 
-
-# start: install docker-start docker-restore
-
-# end: move-backup docker-backup
-
-# build: build-web docker-build-web docker-build-backend
-
-# install: ;@echo "Installing NPM ${PROJECT}....."; \
-# 	npm install -C skyface-web
-# 	npm install -C skyface-backend
-# 	npm install -C skyblog_react
-
-# docker-start: ;@echo "Starting docker ${PROJECT}....."; \
-# 	docker-compose -f docker-compose-debug.yml up -d
+backup-files:
+	zip -r files-backup.zip files
 
 restore: ;@echo "Restoring docker ${PROJECT}....."; \
 	docker-compose -f docker-compose-debug.yml exec -T mongo sh -c 'mongorestore --archive' < latest.mongo

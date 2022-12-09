@@ -11,3 +11,6 @@ dryrun.log
 .vscode/dryrun.log
 .vscode/targets.log
 skyface-backend/react_build
+skyface-web/src/consts.js   
+latest.mongo
+mongo-backup/*.mongo
