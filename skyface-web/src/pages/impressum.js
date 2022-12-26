@@ -9,7 +9,7 @@ export default function Impressum() {
           <br />
         </p>
         <h2 id='kontakt'>Kontakt</h2>
-        <p>E-Mail: seppel8546@gmail.com</p>
+        <p>E-Mail: seppel8426@gmail.com</p>
       </div>
     </div>
   );
