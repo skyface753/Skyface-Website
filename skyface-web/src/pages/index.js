@@ -1,10 +1,10 @@
-import React from "react";
-import Star from "../img/star";
-import Arrow from "../img/arrow";
-import apiService from "../services/api-service";
-import { SkyCloudLoader } from "../components/Loader";
-import ProjectsPreview from "../components/ProjectsPreview";
-import BlogPreviewOL from "../components/blog-preview";
+import React from 'react';
+import Star from '../img/star';
+import Arrow from '../img/arrow';
+import apiService from '../services/api-service';
+import { SkyCloudLoader } from '../components/Loader';
+import ProjectsPreview from '../components/ProjectsPreview';
+import BlogPreviewOL from '../components/blog-preview';
 
 const Home = () => {
   const [latestPosts, setLatestPosts] = React.useState(null);
@@ -13,80 +13,80 @@ const Home = () => {
   React.useEffect(() => {
     //Timeout 2 seconds to simulate loading
     // setTimeout(() => {
-    apiService("blogs/last5").then((response) => {
+    apiService('blogs/last5').then((response) => {
       if (response.data.success) {
-        setLatestPosts(response.data["blogs"]);
+        setLatestPosts(response.data['blogs']);
       }
     });
-    apiService("projects/last3").then((response) => {
+    apiService('projects/last3').then((response) => {
       if (response.data.success) {
-        setLast4Projects(response.data["projects"]);
+        setLast4Projects(response.data['projects']);
       }
     });
     // }, 500);
   }, []);
 
-  document.title = "SkyBlog - Home";
+  document.title = 'SkyBlog - Home';
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "flex-start",
+        display: 'flex',
+        justifyContent: 'flex-start',
         // alignItems: "Right",
         // height: "100vh",
-        flexDirection: "column",
+        flexDirection: 'column',
       }}
     >
       {/* <CloudLoader /> */}
       {/* <CloudsRainLoader /> */}
 
-      <h1 className="home-title animate__animated animate__slideInUp">
+      <h1 className='home-title animate__animated animate__slideInUp'>
         Hi, I'm Sebastian
       </h1>
-      <p className="home-description">
+      <p className='home-description'>
         I'm a <strong>computer science student </strong>
-        in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{" "}
-        <strong>fullstack </strong>developer. This is my site,{" "}
+        in <strong>Darmstadt</strong>. I develop web and mobile apps as a hobby{' '}
+        <strong>fullstack </strong>developer. This is my site,{' '}
         <strong>SkyBlog</strong> (build with React and NodeJS), where I blog and
         share whatever side projects I've been working on.
       </p>
       {/* <div className="y"> */}
-      <div className="home-connect">
+      <div className='home-connect'>
         <Star />
         <strong
           style={{
-            marginLeft: "10px",
+            marginLeft: '10px',
           }}
         >
           Socials
         </strong>
-        <p className="home-connect-text">
-          You can find me on{" "}
+        <p className='home-connect-text'>
+          You can find me on{' '}
           <strong>
             <a
-              href="https://twitter.com/skyface_99"
-              target="_blank"
-              rel="noopener noreferrer"
+              href='https://www.instagram.com/_seppel99_/'
+              target='_blank'
+              rel='noopener noreferrer'
             >
-              Twitter
+              Instagram
             </a>
           </strong>
-          ,{" "}
+          ,{' '}
           <strong>
             <a
-              href="https://github.com/skyface753"
-              target="_blank"
-              rel="noopener noreferrer"
+              href='https://github.com/skyface753'
+              target='_blank'
+              rel='noopener noreferrer'
             >
               GitHub
             </a>
           </strong>
-          , and{" "}
+          , and{' '}
           <strong>
             <a
-              href="https://de.linkedin.com/in/sebastian-j%C3%B6rz-01a708232/en?trk=people-guest_people_search-card"
-              target="_blank"
-              rel="noopener noreferrer"
+              href='https://de.linkedin.com/in/sebastian-j%C3%B6rz-01a708232/en?trk=people-guest_people_search-card'
+              target='_blank'
+              rel='noopener noreferrer'
             >
               LinkedIn
             </a>
@@ -95,8 +95,8 @@ const Home = () => {
         </p>
       </div>
       {/* Latest Blogs */}
-      <section className="home-latest-posts">
-        <h2 className="home-latest-posts-title">Latest Blog Posts</h2>
+      <section className='home-latest-posts'>
+        <h2 className='home-latest-posts-title'>Latest Blog Posts</h2>
         {latestPosts ? (
           <BlogPreviewOL blogList={latestPosts} UserIsAdmin={false} />
         ) : (
@@ -120,8 +120,8 @@ const Home = () => {
             "2022-06-04"
           )} */}
         {/* </ol> */}
-        <a href="/blogs/" className="home-latest-posts-more">
-          <span className="home-latest-posts-text">more blog posts</span>{" "}
+        <a href='/blogs/' className='home-latest-posts-more'>
+          <span className='home-latest-posts-text'>more blog posts</span>{' '}
           <Arrow />
         </a>
       </section>

@@ -1,11 +1,12 @@
-[] - Fix TextToSeech
-# DEMO
+# SkyBlog
+
+## DEMO
 
 https://www.skyface.de
 
-# Environment Vars
+## Environment Vars
 
-## WEB:
+### WEB:
 
 ./skyface-web/src/consts.js (From ./skyface-web/src/consts.js.example)
 
@@ -23,9 +24,9 @@ https://www.skyface.de
 - GITHUB_REDIRECT_URI=
 - GOOGLE_CLIENT_ID=
 
-# Develop
+## Develop
 
-## Run Makefile
+### Run Makefile
 
 `make`
 
@@ -33,33 +34,36 @@ https://www.skyface.de
 - Starts Docker-debug
 - Restore from "latest.mongo"
 
-## Ready to develop
+### Ready to develop
 
 Backend: `npm run dev`
 Web: `npm start`
 React: `npm start`
 
-# RUN Prod
+## RUN Prod
+
+`make full` (Does Everything)
 
 Default User:
+
 - Username: admin
 - Password: admin
 
 In Progress
 
-# INFOS
+## INFOS
 
 docker-compose -> backend -> frontendurl = cors & rss
 
-# Build (My Notes :D)
+## Build (My Notes :D)
 
 make build
 
-## Web
+### Web
 
 `cd skyface-web && npm install && npm run build && docker build -t skyface753/skyblog-web .`
 
-## Backend
+### Backend
 
 `docker build -t skyface753/skyblog-backend ./skyface-backend`
 
