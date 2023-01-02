@@ -1,1 +1,1 @@
-{"buildTargets":["all","docker-backup","docker-restore","docker-start","install"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
+{"buildTargets":["backup","backup-files","build","build-react","copy-react-build","delete-old-backups","docker-backup","docker-start","full","make","move-backup","restore","update"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
